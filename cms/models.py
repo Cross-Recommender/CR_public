@@ -106,3 +106,5 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
 class User(AbstractUser):
     class Meta(AbstractUser.Meta):
         swappable = "AUTH_USER_MODEL"
+
+#for Recommendationを作りたい(あるいはUserの中に入れる)
