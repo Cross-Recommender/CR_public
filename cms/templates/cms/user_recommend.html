@@ -1,30 +1,32 @@
 {% extends 'cms/base.html' %}
 
-{% block title %}Home | {% endblock %}
+{% block title %}おすすめ一覧 | {% endblock %}
 
 {% block hero %}
-<section class="hero is-medium is-info is-bold">
+<section class="hero is-small is-link is-bold">
     <div class="hero-body">
-        <div class="container">
-            <h1 class="title">{{ user.last_name }}</h1>
-            <h2 class="subtitle">新しいお気に入りを見つけよう</h2>
-            <a href="#">
-                <button class="button is-info is-inverted is-outlined">
-                    <strong>More Info</strong>
-                </button>
-            </a>
+        <div class="container has-text-centered">
+            <h1 class="title">おすすめ一覧</h1>
+            <h2 class="subtitle">Recommendation List</h2>
         </div>
     </div>
 </section>
 {% endblock %}
 
 {% block content %}
-<section class="section is-medium">
+<section class="section">
     <div class="container">
-        <div class="has-text-centered">
-            <h1 class="title">Section</h1>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        <div class="tile is-ancestor">
+            <div class="tile is-12 is-vertical is-parent">
+                {% for object in object_list %}
+                <div class="tile is-child box">
+                    <a class="title is-4" href="{% url 'cms:user_detail' object.id %}">{{ object.username }}</a>
+                    <p>Lorem ipsum dolor sit</p>
+                </div>
+                {% endfor %}
+            </div>
         </div>
     </div>
 </section>
 {% endblock %}
+
