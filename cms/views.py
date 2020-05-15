@@ -75,3 +75,6 @@ class UserDelete(OnlyYouMixin, DeleteView):
     model = UserModel
     template_name = 'cms/user_delete.html'
     success_url = reverse_lazy('cms:top')
+
+class RecommendView(TemplateView):
+    template_name = 'cms/user_recommend.html'
