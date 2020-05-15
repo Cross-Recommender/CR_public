@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'cms.apps.CmsConfig', #Added
     'polls.apps.PollsConfig', #Added
-    'mkform.apps.MkformConfig', #Added
+    'app.apps.AppConfig',#Added
 ]
 
 MIDDLEWARE = [

@@ -20,6 +20,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('polls/', include('polls.urls')),
     path('cms/', include('cms.urls')),
+    path('app/', include('app.urls')),
     ###ここでurlの形が決まる
     ###'polls/'を''にしたら, polls/が入らないurlになる
 ]
