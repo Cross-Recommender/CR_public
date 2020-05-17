@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'cms.apps.CmsConfig', #Added
     'polls.apps.PollsConfig', #Added
     'app.apps.AppConfig',#Added
+    'mkdata.apps.MkdataConfig',#Added
 ]
 
 MIDDLEWARE = [
