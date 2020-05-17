@@ -14,3 +14,6 @@ class work(models.Model):
     tech_character = models.FloatField(default = 0)
     tech_speech = models.FloatField(default = 0)
     tech_picture = models.FloatField(default = 0)
+
+    def __str__(self):
+        return self.name
