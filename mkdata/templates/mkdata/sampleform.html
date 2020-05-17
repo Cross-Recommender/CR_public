@@ -4,14 +4,12 @@
 
 <h4> データ収集</h4>
 
-
-<h1>{{ work.name }}</h1>
-
 {% block content %}
 <section class="section">
     <div class="container is-mobile">
+        <h1>{{ work.name }}</h1>
         <h1 class="title is-4">データ入力</h1>
-        <h2 class="subtitle is-6">Update your information</h2>
+        <h2 class="subtitle is-6">Enter data</h2>
         <hr>
         <form method="post" action="">
             {% csrf_token %}
@@ -26,16 +24,16 @@
                     <input type="radio" name="like">
                     2
                   </label>
-                  <label class="radio" disabled>
-                    <input type="radio" name="like" disabled>
+                  <label class="radio">
+                    <input type="radio" name="like">
                     3
                   </label>
-                  <label class="radio" disabled>
-                    <input type="radio" name="like" disabled>
+                  <label class="radio">
+                    <input type="radio" name="like">
                     4
                   </label>
-                  <label class="radio" disabled>
-                    <input type="radio" name="like" disabled>
+                  <label class="radio">
+                    <input type="radio" name="like">
                     5
                   </label>
                 </div>
@@ -50,19 +48,217 @@
                     <input type="radio" name="joy">
                     2
                   </label>
-                  <label class="radio" disabled>
-                    <input type="radio" name="joy" disabled>
+                  <label class="radio">
+                    <input type="radio" name="joy">
                     3
                   </label>
-                  <label class="radio" disabled>
-                    <input type="radio" name="joy" disabled>
+                  <label class="radio">
+                    <input type="radio" name="joy">
                     4
                   </label>
-                  <label class="radio" disabled>
-                    <input type="radio" name="joy" disabled>
+                  <label class="radio">
+                    <input type="radio" name="joy">
                     5
                   </label>
                 </div>
+            </div>
+          <div class="field">
+                <label class="label">怒</label><div class="control">
+                  <label class="radio">
+                    <input type="radio" name="joy">
+                    1
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="joy">
+                    2
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="joy">
+                    3
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="joy">
+                    4
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="joy">
+                    5
+                  </label>
+                </div>
+            </div>
+          <div class="field">
+                <label class="label">哀</label><div class="control">
+                  <label class="radio">
+                    <input type="radio" name="joy">
+                    1
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="joy">
+                    2
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="joy">
+                    3
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="joy">
+                    4
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="joy">
+                    5
+                  </label>
+                </div>
+            </div>
+          <div class="field">
+                <label class="label">楽</label><div class="control">
+                  <label class="radio">
+                    <input type="radio" name="joy">
+                    1
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="joy">
+                    2
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="joy">
+                    3
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="joy">
+                    4
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="joy">
+                    5
+                  </label>
+                </div>
+            </div>
+          <div class="field">
+                <label class="label">全体の構成</label><div class="control">
+                  <label class="radio">
+                    <input type="radio" name="joy">
+                    1
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="joy">
+                    2
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="joy">
+                    3
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="joy">
+                    4
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="joy">
+                    5
+                  </label>
+                </div>
+            </div>
+          <div class="field">
+                <label class="label">ストーリーの面白さ</label><div class="control">
+                  <label class="radio">
+                    <input type="radio" name="joy">
+                    1
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="joy">
+                    2
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="joy">
+                    3
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="joy">
+                    4
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="joy">
+                    5
+                  </label>
+                </div>
+            </div>
+          <div class="field">
+                <label class="label">キャラ設定の良さ</label><div class="control">
+                  <label class="radio">
+                    <input type="radio" name="joy">
+                    1
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="joy">
+                    2
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="joy">
+                    3
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="joy">
+                    4
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="joy">
+                    5
+                  </label>
+                </div>
+            </div>
+          <div class="field">
+                <label class="label">セリフの付け方の良さ</label><div class="control">
+                  <label class="radio">
+                    <input type="radio" name="joy">
+                    1
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="joy">
+                    2
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="joy">
+                    3
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="joy">
+                    4
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="joy">
+                    5
+                  </label>
+                </div>
+            </div>
+          <div class="field">
+                <label class="label">作画の良さ</label><div class="control">
+                  <label class="radio">
+                    <input type="radio" name="joy">
+                    1
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="joy">
+                    2
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="joy">
+                    3
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="joy">
+                    4
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="joy">
+                    5
+                  </label>
+                </div>
+            </div>
+          <div class="field">
+                <p class="control">
+                    <input type="submit" value="保存" class="button is-success">
+                    <input type="hidden" name="next" value="{{ next }}" >
+                </p>
             </div>
         </form>
     </div>

@@ -20,9 +20,18 @@ class LoginForm(AuthenticationForm):
 class CollectDataForm(forms.ModelForm):
     class Meta:
         model = Work
-        fields = ('like_average', 'joy')
+        fields = ('like', 'joy','anger','sadness','fun','constitution','story','character','speech','picture')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['like_average'].widget.attrs['class'] = 'input'
+        self.fields['like'].widget.attrs['class'] = 'input'
         self.fields['joy'].widget.attrs['class'] = 'input'
+        self.fields['anger'].widget.attrs['class'] = 'input'
+        self.fields['sadness'].widget.attrs['class'] = 'input'
+        self.fields['fun'].widget.attrs['class'] = 'input'
+        self.fields['constitution'].widget.attrs['class'] = 'input'
+        self.fields['story'].widget.attrs['class'] = 'input'
+        self.fields['charecter'].widget.attrs['class'] = 'input'
+        self.fields['speech'].widget.attrs['class'] = 'input'
+        self.fields['picture'].widget.attrs['class'] = 'input'
+
