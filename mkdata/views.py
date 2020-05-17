@@ -46,4 +46,4 @@ def vote(request, work_id):
         return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
     '''
     #return HttpResponseRedirect(reverse('mkdata:index', args=(work.id+1,)))
-    return HttpResponseRedirect(reverse('mkdata:index'))
+    return HttpResponseRedirect(reverse('mkdata:index', args=(work.id+1,)))

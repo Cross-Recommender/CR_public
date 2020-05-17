@@ -8,28 +8,63 @@
 <h1>{{ work.name }}</h1>
 
 {% block content %}
-
-{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-
-<div class="control">
-  <label class="radio">
-    <input type="radio" name="rsvp">
-    Going
-  </label>
-  <label class="radio">
-    <input type="radio" name="rsvp">
-    Not going
-  </label>
-  <label class="radio" disabled>
-    <input type="radio" name="rsvp" disabled>
-    Maybe
-  </label>
-</div>
-
-<form action="{% url 'mkdata:vote' pk %}" method="post">
-{% csrf_token %}
-  <h4>総合的な好み</h4>
-  <!-- <label>{{ item }}</label><br> -->
-  <input type="submit" value="Vote">
-</form>
+<section class="section">
+    <div class="container is-mobile">
+        <h1 class="title is-4">データ入力</h1>
+        <h2 class="subtitle is-6">Update your information</h2>
+        <hr>
+        <form method="post" action="">
+            {% csrf_token %}
+            <div class="field">
+                <label class="label">総合的な好み</label>
+                <div class="control">
+                  <label class="radio">
+                    <input type="radio" name="like">
+                    1
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="like">
+                    2
+                  </label>
+                  <label class="radio" disabled>
+                    <input type="radio" name="like" disabled>
+                    3
+                  </label>
+                  <label class="radio" disabled>
+                    <input type="radio" name="like" disabled>
+                    4
+                  </label>
+                  <label class="radio" disabled>
+                    <input type="radio" name="like" disabled>
+                    5
+                  </label>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">喜</label><div class="control">
+                  <label class="radio">
+                    <input type="radio" name="joy">
+                    1
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="joy">
+                    2
+                  </label>
+                  <label class="radio" disabled>
+                    <input type="radio" name="joy" disabled>
+                    3
+                  </label>
+                  <label class="radio" disabled>
+                    <input type="radio" name="joy" disabled>
+                    4
+                  </label>
+                  <label class="radio" disabled>
+                    <input type="radio" name="joy" disabled>
+                    5
+                  </label>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
 {% endblock %}
