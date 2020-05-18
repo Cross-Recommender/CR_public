@@ -11,7 +11,7 @@
         <h1 class="title is-4">データ入力</h1>
         <h2 class="subtitle is-6">Enter data</h2>
         <hr>
-        <form method="post" action="">
+        <form method="post" action="{% url 'mkdata:vote' pk %}">
             {% csrf_token %}
             <div class="field">
                 <label class="label">総合的な好み</label>

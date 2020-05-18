@@ -5,7 +5,11 @@ from django.db import models
 
 class Work(models.Model):
     name = models.CharField(max_length=200)
-    like_average = models.FloatField(default=0)
+    num_of_data = models.IntegerField(default=0)
+
+    #sum of the assessment values for all users is recorded
+
+    like = models.FloatField(default=0)
     joy = models.FloatField(default=0)
     anger = models.FloatField(default=0)
     sadness = models.FloatField(default=0)
