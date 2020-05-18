@@ -1,39 +1,41 @@
 {% extends 'cms/base.html' %}
 
+<h1> データ収集</h1>
 {% block title %}データ入力 | {% endblock %}
 
-<h4> データ収集</h4>
-
 {% block content %}
+
 <section class="section">
+    <h1> データ収集</h1>
+    <h1> 作品名: { work.name }</h1>
     <div class="container is-mobile">
         <h1>{{ work.name }}</h1>
         <h1 class="title is-4">データ入力</h1>
         <h2 class="subtitle is-6">Enter data</h2>
         <hr>
-        <form method="post" action="{% url 'mkdata:vote' pk %}">
+        <form method="post" action="">
             {% csrf_token %}
             <div class="field">
                 <label class="label">総合的な好み</label>
                 <div class="control">
                   <label class="radio">
-                    <input type="radio" name="like">
+                    <input type="radio" name="like" value = 1>
                     1
                   </label>
                   <label class="radio">
-                    <input type="radio" name="like">
+                    <input type="radio" name="like" value = 2>
                     2
                   </label>
                   <label class="radio">
-                    <input type="radio" name="like">
+                    <input type="radio" name="like" value = 3>
                     3
                   </label>
                   <label class="radio">
-                    <input type="radio" name="like">
+                    <input type="radio" name="like" value = 4>
                     4
                   </label>
                   <label class="radio">
-                    <input type="radio" name="like">
+                    <input type="radio" name="like" value = 5>
                     5
                   </label>
                 </div>
@@ -41,23 +43,23 @@
             <div class="field">
                 <label class="label">喜</label><div class="control">
                   <label class="radio">
-                    <input type="radio" name="joy">
+                    <input type="radio" name="joy" value = 1>
                     1
                   </label>
                   <label class="radio">
-                    <input type="radio" name="joy">
+                    <input type="radio" name="joy" value = 2>
                     2
                   </label>
                   <label class="radio">
-                    <input type="radio" name="joy">
+                    <input type="radio" name="joy" value = 3>
                     3
                   </label>
                   <label class="radio">
-                    <input type="radio" name="joy">
+                    <input type="radio" name="joy" value = 4>
                     4
                   </label>
                   <label class="radio">
-                    <input type="radio" name="joy">
+                    <input type="radio" name="joy" value = 5>
                     5
                   </label>
                 </div>
@@ -65,23 +67,23 @@
           <div class="field">
                 <label class="label">怒</label><div class="control">
                   <label class="radio">
-                    <input type="radio" name="joy">
+                    <input type="radio" name="anger" value = 1>
                     1
                   </label>
                   <label class="radio">
-                    <input type="radio" name="joy">
+                    <input type="radio" name="anger" value = 2>
                     2
                   </label>
                   <label class="radio">
-                    <input type="radio" name="joy">
+                    <input type="radio" name="anger" value = 3>
                     3
                   </label>
                   <label class="radio">
-                    <input type="radio" name="joy">
+                    <input type="radio" name="anger" value = 4>
                     4
                   </label>
                   <label class="radio">
-                    <input type="radio" name="joy">
+                    <input type="radio" name="anger" value = 5>
                     5
                   </label>
                 </div>
@@ -89,23 +91,23 @@
           <div class="field">
                 <label class="label">哀</label><div class="control">
                   <label class="radio">
-                    <input type="radio" name="joy">
+                    <input type="radio" name="sadness" value = 1>
                     1
                   </label>
                   <label class="radio">
-                    <input type="radio" name="joy">
+                    <input type="radio" name="sadness" value = 2>
                     2
                   </label>
                   <label class="radio">
-                    <input type="radio" name="joy">
+                    <input type="radio" name="sadness" value = 3>
                     3
                   </label>
                   <label class="radio">
-                    <input type="radio" name="joy">
+                    <input type="radio" name="sadness" value = 4>
                     4
                   </label>
                   <label class="radio">
-                    <input type="radio" name="joy">
+                    <input type="radio" name="sadness" value = 5>
                     5
                   </label>
                 </div>
@@ -113,23 +115,23 @@
           <div class="field">
                 <label class="label">楽</label><div class="control">
                   <label class="radio">
-                    <input type="radio" name="joy">
+                    <input type="radio" name="fun" value = 1>
                     1
                   </label>
                   <label class="radio">
-                    <input type="radio" name="joy">
+                    <input type="radio" name="fun" value = 2>
                     2
                   </label>
                   <label class="radio">
-                    <input type="radio" name="joy">
+                    <input type="radio" name="fun" value = 3>
                     3
                   </label>
                   <label class="radio">
-                    <input type="radio" name="joy">
+                    <input type="radio" name="fun" value = 4>
                     4
                   </label>
                   <label class="radio">
-                    <input type="radio" name="joy">
+                    <input type="radio" name="fun" value = 5>
                     5
                   </label>
                 </div>
@@ -137,23 +139,23 @@
           <div class="field">
                 <label class="label">全体の構成</label><div class="control">
                   <label class="radio">
-                    <input type="radio" name="joy">
+                    <input type="radio" name="tech_constitution" value = 1>
                     1
                   </label>
                   <label class="radio">
-                    <input type="radio" name="joy">
+                    <input type="radio" name="tech_constitution" value = 2>
                     2
                   </label>
                   <label class="radio">
-                    <input type="radio" name="joy">
+                    <input type="radio" name="tech_constitution" value = 3>
                     3
                   </label>
                   <label class="radio">
-                    <input type="radio" name="joy">
+                    <input type="radio" name="tech_constitution" value = 4>
                     4
                   </label>
                   <label class="radio">
-                    <input type="radio" name="joy">
+                    <input type="radio" name="tech_constitution" value = 5>
                     5
                   </label>
                 </div>
@@ -161,23 +163,23 @@
           <div class="field">
                 <label class="label">ストーリーの面白さ</label><div class="control">
                   <label class="radio">
-                    <input type="radio" name="joy">
+                    <input type="radio" name="tech_story" value = 1>
                     1
                   </label>
                   <label class="radio">
-                    <input type="radio" name="joy">
+                    <input type="radio" name="tech_story" value = 2>
                     2
                   </label>
                   <label class="radio">
-                    <input type="radio" name="joy">
+                    <input type="radio" name="tech_story" value = 3>
                     3
                   </label>
                   <label class="radio">
-                    <input type="radio" name="joy">
+                    <input type="radio" name="tech_story" value = 4>
                     4
                   </label>
                   <label class="radio">
-                    <input type="radio" name="joy">
+                    <input type="radio" name="tech_story" value = 5>
                     5
                   </label>
                 </div>
@@ -185,23 +187,23 @@
           <div class="field">
                 <label class="label">キャラ設定の良さ</label><div class="control">
                   <label class="radio">
-                    <input type="radio" name="joy">
+                    <input type="radio" name="tech_character" value = 1>
                     1
                   </label>
                   <label class="radio">
-                    <input type="radio" name="joy">
+                    <input type="radio" name="tech_character" value = 2>
                     2
                   </label>
                   <label class="radio">
-                    <input type="radio" name="joy">
+                    <input type="radio" name="tech_character" value = 3>
                     3
                   </label>
                   <label class="radio">
-                    <input type="radio" name="joy">
+                    <input type="radio" name="tech_character" value = 4>
                     4
                   </label>
                   <label class="radio">
-                    <input type="radio" name="joy">
+                    <input type="radio" name="tech_character" value = 5>
                     5
                   </label>
                 </div>
@@ -209,23 +211,23 @@
           <div class="field">
                 <label class="label">セリフの付け方の良さ</label><div class="control">
                   <label class="radio">
-                    <input type="radio" name="joy">
+                    <input type="radio" name="tech_speech" value = 1>
                     1
                   </label>
                   <label class="radio">
-                    <input type="radio" name="joy">
+                    <input type="radio" name="tech_speech" value = 2>
                     2
                   </label>
                   <label class="radio">
-                    <input type="radio" name="joy">
+                    <input type="radio" name="tech_speech" value = 3>
                     3
                   </label>
                   <label class="radio">
-                    <input type="radio" name="joy">
+                    <input type="radio" name="tech_speech" value = 4>
                     4
                   </label>
                   <label class="radio">
-                    <input type="radio" name="joy">
+                    <input type="radio" name="tech_speech" value = 5>
                     5
                   </label>
                 </div>
@@ -233,23 +235,23 @@
           <div class="field">
                 <label class="label">作画の良さ</label><div class="control">
                   <label class="radio">
-                    <input type="radio" name="joy">
+                    <input type="radio" name="tech_picture" value = 1>
                     1
                   </label>
                   <label class="radio">
-                    <input type="radio" name="joy">
+                    <input type="radio" name="tech_picture" value = 2>
                     2
                   </label>
                   <label class="radio">
-                    <input type="radio" name="joy">
+                    <input type="radio" name="tech_picture" value = 3>
                     3
                   </label>
                   <label class="radio">
-                    <input type="radio" name="joy">
+                    <input type="radio" name="tech_picture" value = 4>
                     4
                   </label>
                   <label class="radio">
-                    <input type="radio" name="joy">
+                    <input type="radio" name="tech_picture" value = 5>
                     5
                   </label>
                 </div>

@@ -20,7 +20,7 @@ class LoginForm(AuthenticationForm):
 class CollectDataForm(forms.ModelForm):
     class Meta:
         model = Work
-        fields = ('like', 'joy','anger','sadness','fun','constitution','story','character','speech','picture')
+        fields = ('like', 'joy','anger','sadness','fun','tech_constitution','tech_story','tech_character','tech_speech','tech_picture')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -29,9 +29,13 @@ class CollectDataForm(forms.ModelForm):
         self.fields['anger'].widget.attrs['class'] = 'input'
         self.fields['sadness'].widget.attrs['class'] = 'input'
         self.fields['fun'].widget.attrs['class'] = 'input'
-        self.fields['constitution'].widget.attrs['class'] = 'input'
-        self.fields['story'].widget.attrs['class'] = 'input'
-        self.fields['charecter'].widget.attrs['class'] = 'input'
-        self.fields['speech'].widget.attrs['class'] = 'input'
-        self.fields['picture'].widget.attrs['class'] = 'input'
+        self.fields['tech_constitution'].widget.attrs['class'] = 'input'
+        self.fields['tech_story'].widget.attrs['class'] = 'input'
+        self.fields['tech_character'].widget.attrs['class'] = 'input'
+        self.fields['tech_speech'].widget.attrs['class'] = 'input'
+        self.fields['tech_picture'].widget.attrs['class'] = 'input'
+
+    #def update_database(self):
+    #    for items in self.fields:
+
 
