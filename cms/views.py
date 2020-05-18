@@ -84,3 +84,7 @@ class RecommendView(ListView):
 class WorksView(DetailView): #作品紹介をみるためのページ用
     model = mkdata_models.Work
     template_name = "cms/works.html"
+
+class WorksList(ListView):
+    model = mkdata_models.Work
+    template_name = "cms/works_list.html"
