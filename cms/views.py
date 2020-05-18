@@ -22,6 +22,7 @@ from .forms import (
 )
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
+from mkdata import models as mkdata_models
 
 
 
@@ -79,3 +80,7 @@ class UserDelete(OnlyYouMixin, DeleteView):
 class RecommendView(ListView):
     model = UserModel
     template_name = 'cms/user_recommend.html'
+
+class WorksView(DetailView): #作品紹介をみるためのページ用
+    model = mkdata_models.Work
+    template_name = "cms/works.html"
