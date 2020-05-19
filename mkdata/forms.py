@@ -35,7 +35,13 @@ class CollectDataForm(forms.ModelForm):
         self.fields['tech_speech'].widget.attrs['class'] = 'input'
         self.fields['tech_picture'].widget.attrs['class'] = 'input'
 
-    #def update_database(self):
-    #    for items in self.fields:
+        ###
+        #self.pk = kwargs.pop('pk')
+        #super(CollectDataForm, self).__init__(*args, **kwargs)
+        #####
+
+    def update_database(self):
+        for items in self.fields:
+            self.model.like += self.fields['like'].widget.attrs['class']
 
 

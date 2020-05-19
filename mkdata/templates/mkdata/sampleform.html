@@ -1,41 +1,39 @@
-{% extends 'cms/base.html' %}
+{% extends 'mkdata/base.html' %}
 
-<h1> データ収集</h1>
-{% block title %}データ入力 | {% endblock %}
+{% block title %}{{ work.name }} | {% endblock %}
 
 {% block content %}
 
 <section class="section">
-    <h1> データ収集</h1>
-    <h1> 作品名: { work.name }</h1>
     <div class="container is-mobile">
-        <h1>{{ work.name }}</h1>
         <h1 class="title is-4">データ入力</h1>
         <h2 class="subtitle is-6">Enter data</h2>
         <hr>
-        <form method="post" action="">
+        <form method="post" action="{% url 'mkdata:vote' work.id %}">
             {% csrf_token %}
+            <h1> 作品名: {{ work.name }}</h1>
+            <br>
             <div class="field">
                 <label class="label">総合的な好み</label>
                 <div class="control">
                   <label class="radio">
-                    <input type="radio" name="like" value = 1>
+                    <input type="radio" name="like" id = "1" value = 1>
                     1
                   </label>
                   <label class="radio">
-                    <input type="radio" name="like" value = 2>
+                    <input type="radio" name="like" id = "2" value = 2>
                     2
                   </label>
                   <label class="radio">
-                    <input type="radio" name="like" value = 3>
+                    <input type="radio" name="like" id = "3" value = 3>
                     3
                   </label>
                   <label class="radio">
-                    <input type="radio" name="like" value = 4>
+                    <input type="radio" name="like" id = "4" value = 4>
                     4
                   </label>
                   <label class="radio">
-                    <input type="radio" name="like" value = 5>
+                    <input type="radio" name="like" id = "5" value = 5>
                     5
                   </label>
                 </div>
