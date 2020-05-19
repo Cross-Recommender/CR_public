@@ -1,17 +1,16 @@
 {% extends 'mkdata/base.html' %}
 
-{% block title %}{{ work.name }} | {% endblock %}
+{% block title %} データ入力 - {{ work.name }} | {% endblock %}
 
 {% block content %}
 
 <section class="section">
     <div class="container is-mobile">
-        <h1 class="title is-4">データ入力</h1>
+        <h1 class="title is-4">データ入力 作品名: {{ work.name }}</h1>
         <h2 class="subtitle is-6">Enter data</h2>
         <hr>
         <form method="post" action="{% url 'mkdata:vote' work.id %}">
             {% csrf_token %}
-            <h1> 作品名: {{ work.name }}</h1>
             <br>
             <div class="field">
                 <label class="label">総合的な好み</label>

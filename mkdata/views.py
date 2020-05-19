@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 # Create your views here.
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import generic
@@ -75,6 +75,8 @@ class IndexView(DetailView):
         return super().form_valid(form)
     '''
 
+class ThanksView(TemplateView):
+    template_name = "mkdata/thanks.html"
 
 def vote(request, work_id):
     work = get_object_or_404(Work, pk=work_id)
@@ -93,4 +95,7 @@ def vote(request, work_id):
 
     work.save()
 
-    return HttpResponseRedirect(reverse('mkdata:index', args=(work.id + 1,)))
+    if work.id >= Work.objects.count():
+        return HttpResponseRedirect(reverse('mkdata:thanks',))
+    else:
+        return HttpResponseRedirect(reverse('mkdata:index', args=(work.id + 1,)))
