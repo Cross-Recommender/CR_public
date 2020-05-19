@@ -22,6 +22,7 @@ class CollectDataForm(forms.ModelForm):
         model = Work
         fields = ('like', 'joy','anger','sadness','fun','tech_constitution','tech_story','tech_character','tech_speech','tech_picture')
 
+    '''
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['like'].widget.attrs['class'] = 'input'
@@ -43,5 +44,6 @@ class CollectDataForm(forms.ModelForm):
     def update_database(self):
         for items in self.fields:
             self.model.like += self.fields['like'].widget.attrs['class']
+    '''
 
 
