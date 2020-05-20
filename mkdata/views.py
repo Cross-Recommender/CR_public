@@ -25,6 +25,7 @@ from .forms import (
 )
 '''
 from .models import Work
+from .recommend_for_mkdata import recommendsort
 
 
 class IndexView(DetailView):
@@ -99,3 +100,11 @@ def vote(request, work_id):
         return HttpResponseRedirect(reverse('mkdata:thanks',))
     else:
         return HttpResponseRedirect(reverse('mkdata:index', args=(work.id + 1,)))
+
+
+def recommend(request, work_id):
+    scores = recommendsort(work_id)  # scores[0] == [0,work.id]
+    works = scores[0:6]
+    for work in works:
+        work[1] = Work.objects.get(id=work[1]) # idから作品に置き換え
+    return render(request, 'mkdata/recommend.html', {'works': works})
