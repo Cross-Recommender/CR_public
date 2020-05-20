@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'polls.apps.PollsConfig', #Added
     'app.apps.AppConfig',#Added
     'mkdata.apps.MkdataConfig',#Added
+    'recommend.apps.RecommendConfig',#Added
 ]
 
 MIDDLEWARE = [
