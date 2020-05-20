@@ -8,6 +8,13 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+###ADDED
+from mkdata.models import Work
+from django.contrib.postgres.fields import ArrayField
+
+
+########
+
 
 # User-related
 class UserManager(BaseUserManager):
@@ -45,7 +52,6 @@ class UserManager(BaseUserManager):
 
 
 class AbstractUser(AbstractBaseUser, PermissionsMixin):
-
     username_validator = UnicodeUsernameValidator()
     username = models.CharField(
         _('username'),
@@ -77,8 +83,14 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
         ),
     )
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
-    
+
     twitter = models.CharField(_('Twitter'), max_length=50, blank=True)
+
+    ###ADDED
+    #work_like = ArrayField(models.IntegerField(default=0), size=Work.objects.count(), default=list)
+    #####arrayfieldの使い方がよくわからないのでいったんやめます, データ数が増えてきたらまた実装しなおします
+    work_like = models.CharField(max_length=200, default="".join(['0']*200))
+    ########
 
     objects = UserManager()
 
@@ -107,4 +119,4 @@ class User(AbstractUser):
     class Meta(AbstractUser.Meta):
         swappable = "AUTH_USER_MODEL"
 
-#for Recommendationを作りたい(あるいはUserの中に入れる)
+# for Recommendationを作りたい(あるいはUserの中に入れる)

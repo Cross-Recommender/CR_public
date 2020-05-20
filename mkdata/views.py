@@ -19,6 +19,8 @@ from .forms import CollectDataForm
 
 from django.shortcuts import resolve_url
 
+from cms.models import User
+
 '''
 from .forms import (
     LoginForm,
@@ -29,6 +31,9 @@ from .models import Work
 
 class IndexView(DetailView):
     model = Work
+    ###
+    #model2 = User
+    ###
     #work = get_object_or_404(Work, pk)
     form_class = CollectDataForm
     template_name = 'mkdata/sampleform.html'
@@ -37,12 +42,8 @@ class IndexView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)  # はじめに継承元のメソッドを呼び出す
 
-        ###クラス継承 FormViewに含まれるメソッドget_context_dataを呼んでくる
-        ###kwargsにはmodelも入ってるっぽい
-        ###エラー出たな入ってないんか
-        ###self.modelにしたらいけた
-
         context['name'] = self.model.name
+        #context['username'] = self.model2.username
         '''
         context['num_of_data'] = self.model.num_of_data
         context['like'] = self.model.like
@@ -80,6 +81,7 @@ class ThanksView(TemplateView):
 
 def vote(request, work_id):
     work = get_object_or_404(Work, pk=work_id)
+    user = request.user
 
     work.num_of_data += 1
     work.like += int(request.POST['like'])
@@ -94,6 +96,29 @@ def vote(request, work_id):
     work.tech_picture += int(request.POST["tech_picture"])
 
     work.save()
+
+    obj = user.work_like
+    '''
+    #少し間違いがありそうなので, もし戻すときは注意
+    if len(obj) < 2*work.id:
+        obj = obj[:len(obj) - 1]
+        while len(obj) < 2*(work.id-1):
+            obj.append('0,')
+        obj.append(',')
+        obj.append(request.POST['like'])
+        obj.append('}')
+    else:
+        obj[2*work.id-1] = request.POST['like']
+    '''
+    if len(obj) != 200:
+        obj = "".join(['0']*200)
+
+    obj = list(obj)
+    obj[work_id-1] = request.POST['like']
+
+    user.work_like = "".join(obj)
+
+    user.save()
 
     if work.id >= Work.objects.count():
         return HttpResponseRedirect(reverse('mkdata:thanks',))
