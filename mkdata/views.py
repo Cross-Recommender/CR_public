@@ -44,7 +44,6 @@ class IndexView(DetailView):
         context = super().get_context_data(**kwargs)  # はじめに継承元のメソッドを呼び出す
 
         context['name'] = self.model.name
-        #context['username'] = self.model2.username
         '''
         context['num_of_data'] = self.model.num_of_data
         context['like'] = self.model.like
