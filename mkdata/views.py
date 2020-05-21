@@ -21,11 +21,11 @@ from django.shortcuts import resolve_url
 
 from cms.models import User
 
-'''
+
 from .forms import (
     LoginForm,
 )
-'''
+
 from .models import Work
 from .recommend_for_mkdata import recommendsort
 
@@ -124,7 +124,6 @@ def vote(request, work_id):
         return HttpResponseRedirect(reverse('mkdata:thanks',))
     else:
         return HttpResponseRedirect(reverse('mkdata:index', args=(work.id + 1,)))
-
 
 def recommend(request, work_id):
     scores = recommendsort(work_id)  # scores[0] == [0,work.id]
