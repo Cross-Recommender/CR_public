@@ -3,8 +3,8 @@
         <!- コメントアウト開始　↓表示させようとしたが分からず
 
         コメントアウト終了 ->
-    {% for work in works[1:6] %}
-        <li><a href="{% url 'mkdata:detail' work[1].id %}">{{ work[1].name }}</a></li>
+    {% for work in works %}
+        <li><a href="{% url 'mkdata:index' work.id %}">{{ work.name }}</a></li>
     {% endfor %}
     </ul>
 {% else %}
