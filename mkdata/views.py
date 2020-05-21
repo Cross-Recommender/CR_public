@@ -132,3 +132,6 @@ def recommend(request, work_id):
     for work in works:
         work[1] = Work.objects.get(id=work[1]) # idから作品に置き換え
     return render(request, 'mkdata/recommend.html', {'works': works})
+
+class detail(TemplateView):
+    template_name = "mkdata/index.html"

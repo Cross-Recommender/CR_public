@@ -4,3 +4,8 @@
 　＞ちゃんと番号とか指定してsave()したら治った。完成。
 ・form内で変更する方法＞全然うまくいかん。attr,widgetを理解すればいける？modelのidは取得できる？
     cmsはform.usernameみたいな感じで取得してるんか, それがinput型になってるってことか
+
+def recommend(request, work_id):
+    scores = recommendsort(work_id)  # scores[0] == [0,work.id]
+    works = scores[0:6]
+    return render(request, 'mkdata/recommend.html', {'works': works})
