@@ -105,6 +105,4 @@ def vote(request, work_id):
 def recommend(request, work_id):
     scores = recommendsort(work_id)  # scores[0] == [0,work.id]
     works = scores[0:6]
-    for work in works:
-        work[1] = Work.objects.get(id=work[1]) # idから作品に置き換え
     return render(request, 'mkdata/recommend.html', {'works': works})

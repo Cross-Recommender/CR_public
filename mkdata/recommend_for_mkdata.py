@@ -65,7 +65,10 @@ def recommendsort(work_id):
         scores[i][0] = sum(list(map(lambda x, y, z: abs(x-y)/z, avepoint[i*9:(i+1)*9], basework, stdopint)))
 
     scores.sort()
-    return scores
+    tmp = []
+    for work in scores:
+        tmp.append(Work.objects.get(id=work[1]))  # idから作品に置き換え
+    return tmp
 
 """
 出力例（つもり）
