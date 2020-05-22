@@ -32,6 +32,9 @@ UserModel = get_user_model()
 class TopView(TemplateView):
     template_name = 'cms/top.html'
 
+class InfomationView(TemplateView):
+    template_name = 'cms/infomation.html'
+
 
 class Login(LoginView):
     form_class = LoginForm
