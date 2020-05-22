@@ -254,11 +254,19 @@
                 </div>
             </div>
 
+          {% if isLast %}
+          <div class="field">
+                <p class="control">
+                    <input type="submit" value="オススメ作品をチェック！" class="button is-success">
+                </p>
+          </div>
+          {% else %}
           <div class="field">
                 <p class="control">
                     <input type="submit" value="次へ" class="button is-success">
                 </p>
           </div>
+          {% endif %}
         </form>
     </div>
 </section>

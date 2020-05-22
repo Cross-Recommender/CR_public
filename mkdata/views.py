@@ -38,7 +38,7 @@ def IndexView(request, work_id):
 
     context = {
         'work': work,
-        #'isLast': isLast,
+        'isLast': isLast,
     }
 
     return HttpResponse(template.render(context, request))
