@@ -23,8 +23,9 @@ from django.shortcuts import resolve_url
 from cms.models import User
 
 from .models import Work
+
 # from .recommend_for_mkdata import recommendsort
-from .recommend_for_mkdata import recommendsort
+
 def IndexView(request, work_id):
     try:
         work = Work.objects.get(pk=work_id)
