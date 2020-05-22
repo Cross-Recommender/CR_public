@@ -1,6 +1,6 @@
 {% extends 'mkdata/base.html' %}
 
-{% block title %} データ入力 - {{ work.name }} | {% endblock %}
+{% block title %} データ入力 - {{ work.name }} | Cross Recommender{% endblock %}
 
 {% block content %}
 
@@ -253,12 +253,12 @@
                   </label>
                 </div>
             </div>
+
           <div class="field">
                 <p class="control">
-                    <input type="submit" value="保存" class="button is-success">
-                    <input type="hidden" name="next" value="{{ next }}" >
+                    <input type="submit" value="次へ" class="button is-success">
                 </p>
-            </div>
+          </div>
         </form>
     </div>
 </section>

@@ -34,8 +34,11 @@ def IndexView(request, work_id):
 
     template = loader.get_template('mkdata/sampleform.html')
 
+    isLast = (work_id == Work.objects.all().order_by("-id")[0].id)
+
     context = {
         'work': work,
+        #'isLast': isLast,
     }
 
     return HttpResponse(template.render(context, request))
@@ -119,8 +122,8 @@ def vote(request, work_id):
     else:
         obj[2*work.id-1] = request.POST['like']
     '''
-    if len(obj) != 200:
-        obj = "".join(['0'] * 200)
+    if len(obj) != 100000:
+        obj = "".join(['0'] * 100000)
 
     obj = list(obj)
     obj[work_id - 1] = request.POST['like']
