@@ -2,6 +2,7 @@ from django.shortcuts import render
 
 # Create your views here.
 from django.http import HttpResponseRedirect, HttpResponse
+from django.template import loader
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import generic
@@ -21,18 +22,30 @@ from django.shortcuts import resolve_url
 
 from cms.models import User
 
-
-
-
 from .models import Work
+
+
 from .recommend_for_mkdata import recommendsort
 
+def IndexView(request, work_id):
+    try:
+        work = Work.objects.get(pk=work_id)
+    except:
+        return HttpResponseRedirect(reverse('mkdata:index', args=(work_id + 1,)))
 
+    template = loader.get_template('mkdata/sampleform.html')
+
+    context = {
+        'work': work,
+    }
+
+    return HttpResponse(template.render(context, request))
+
+
+'''汎用ビュー上では難しいか
 class IndexView(DetailView):
     model = Work
-    ###
     #model2 = User
-    ###
     #work = get_object_or_404(Work, pk)
     form_class = CollectDataForm
     template_name = 'mkdata/sampleform.html'
@@ -42,19 +55,17 @@ class IndexView(DetailView):
         context = super().get_context_data(**kwargs)  # はじめに継承元のメソッドを呼び出す
 
         context['name'] = self.model.name
-        '''
-        context['num_of_data'] = self.model.num_of_data
-        context['like'] = self.model.like
-        context['joy'] = self.model.joy
-        context['anger'] = self.model.anger
-        context['sadness'] = self.model.sadness
-        context['fun'] = self.model.fun
-        context['tech_constitution'] = self.model.tech_constitution
-        context['tech_story'] = self.model.tech_story
-        context['tech_character'] = self.model.tech_character
-        context['tech_speech'] = self.model.tech_speech
-        context['tech_picture'] = self.model.tech_picture
-        '''
+        #context['num_of_data'] = self.model.num_of_data
+        #context['like'] = self.model.like
+        #context['joy'] = self.model.joy
+        #context['anger'] = self.model.anger
+        #context['sadness'] = self.model.sadness
+        #context['fun'] = self.model.fun
+        #context['tech_constitution'] = self.model.tech_constitution
+        #context['tech_story'] = self.model.tech_story
+        #context['tech_character'] = self.model.tech_character
+        #context['tech_speech'] = self.model.tech_speech
+        #context['tech_picture'] = self.model.tech_picture
 
         return context
 
@@ -65,17 +76,18 @@ class IndexView(DetailView):
     #    return kwargs
     #####
 
-    '''
-    def get_success_url(self):
-        return resolve_url('mkdata:vote', work_id=self.kwargs['pk'])
+
+    #def get_success_url(self):
+    #    return resolve_url('mkdata:vote', work_id=self.kwargs['pk'])
 
 
-    def form_valid(self, form):
-        return super().form_valid(form)
-    '''
+    #def form_valid(self, form):
+    #    return super().form_valid(form)
 
+'''
 class ThanksView(TemplateView):
     template_name = "mkdata/thanks.html"
+
 
 def vote(request, work_id):
     work = get_object_or_404(Work, pk=work_id)
@@ -109,17 +121,17 @@ def vote(request, work_id):
         obj[2*work.id-1] = request.POST['like']
     '''
     if len(obj) != 200:
-        obj = "".join(['0']*200)
+        obj = "".join(['0'] * 200)
 
     obj = list(obj)
-    obj[work_id-1] = request.POST['like']
+    obj[work_id - 1] = request.POST['like']
 
     user.work_like = "".join(obj)
 
     user.save()
 
-    if work.id >= Work.objects.count():
-        return HttpResponseRedirect(reverse('mkdata:thanks',))
+    if work.id >= Work.objects.all().order_by("-id")[0].id:
+        return HttpResponseRedirect(reverse('mkdata:thanks', ))
     else:
         return HttpResponseRedirect(reverse('mkdata:index', args=(work.id + 1,)))
 
