@@ -89,7 +89,7 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
     ###ADDED
     #work_like = ArrayField(models.IntegerField(default=0), size=Work.objects.count(), default=list)
     #####arrayfieldの使い方がよくわからないのでいったんやめます, データ数が増えてきたらまた実装しなおします
-    work_like = models.CharField(max_length=200, default="".join(['0']*200))
+    work_like = models.TextField(default="".join(['0']*100000))
     ########
 
     objects = UserManager()
