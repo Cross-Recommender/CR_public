@@ -27,7 +27,7 @@ from .forms import (
 )
 '''
 from .models import Work
-from .recommend_for_mkdata import recommendsort
+# from .recommend_for_mkdata import recommendsort
 
 
 class IndexView(DetailView):
@@ -127,6 +127,6 @@ def vote(request, work_id):
 
 
 def recommend(request, work_id):
-    scores = recommendsort(work_id)  # scores[0] == [0,work.id]
-    works = scores[0:6]
+    work = get_object_or_404(Work, pk=work_id)
+    works = work.recommendsort(5)
     return render(request, 'mkdata/recommend.html', {'works': works})
