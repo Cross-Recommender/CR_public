@@ -80,9 +80,22 @@ class UserDelete(OnlyYouMixin, DeleteView):
     template_name = 'cms/user_delete.html'
     success_url = reverse_lazy('cms:top')
 
+"""
 class RecommendView(ListView):
     model = UserModel
     template_name = 'cms/user_recommend.html'
+
+"""
+class RecommendView(DetailView):
+    model = UserModel
+    template_name = 'cms/user_recommend.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['pk'] = self.kwargs['pk']
+        user = context['object']
+        context['recommends'] = mkdata_models.mkbaseWorks(user.work_like)
+        return context
 
 class WorksView(DetailView): #作品紹介をみるためのページ用
     model = mkdata_models.Work

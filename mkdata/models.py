@@ -82,3 +82,13 @@ class Work(models.Model):
         for i in range(1, min(n, num_of_works)):
             works.append(Work.objects.get(id=scores[i][1]))
         return works
+
+# work_like を元にユーザーの高評価作品順に並んだ　works　を返す
+# 都合がいいので仮置き　cms/views.py で使用
+def mkbaseWorks(string):
+    arr = list(map(lambda x: int(x), list(string[:Work.objects.count()])))
+    arr = list(enumerate(arr, 1))
+    arr.sort(key=lambda x: x[1])
+    arr = list(map(lambda x: x[0], arr))
+    Works = list(map(lambda x: Work.objects.get(id=x), arr))
+    return Works
