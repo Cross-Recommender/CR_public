@@ -7,7 +7,7 @@ class Work(models.Model):
     name = models.CharField(max_length=200)
     num_of_data = models.IntegerField(default=0)
 
-    #sum of the assessment values for all users is recorded
+    # sum of the assessment values for all users is recorded
 
     like = models.IntegerField(default=0)
     joy = models.IntegerField(default=0)
@@ -23,7 +23,6 @@ class Work(models.Model):
     def __str__(self):
         return self.name
 
-
     # 作品ごとに評価項目の平均点を出す（評価データ数で割る）
     # 評価項目ごとに作品全体の標準偏差を出す
     # ある作品Aのスコアは評価項目ごとに
@@ -33,7 +32,7 @@ class Work(models.Model):
     def recommendsort(self, n):
         num_of_works = Work.objects.count()
         works = Work.objects.all()
-        work_ids=[]
+        work_ids = []
         avepoint = []
         squarepoint = []
         sumpoint = [0 for i in range(num_of_works)]
@@ -61,21 +60,22 @@ class Work(models.Model):
         avesqupoint = list(map(lambda x: x / num_of_works, sumsqupoint))
         stdopint = list(map(lambda x, y: (x - y ** 2) ** (-1 / 2), avesqupoint, aveavepoint))
         avebasework = list(map(lambda x: x / self.num_of_data,
-                                 [self.joy,
-                                  self.anger,
-                                  self.sadness,
-                                  self.fun,
-                                  self.tech_constitution,
-                                  self.tech_story,
-                                  self.tech_character,
-                                  self.tech_speech,
-                                  self.tech_picture
-                                  ]))
+                               [self.joy,
+                                self.anger,
+                                self.sadness,
+                                self.fun,
+                                self.tech_constitution,
+                                self.tech_story,
+                                self.tech_character,
+                                self.tech_speech,
+                                self.tech_picture
+                                ]))
 
         scores = []
         for i in range(num_of_works):
-            scores += [[sum(list(map(lambda x, y, z: abs(x - y) / z, avepoint[i * 9:(i + 1) * 9], avebasework, stdopint))),
-                       work_ids[i]]]
+            scores += [
+                [sum(list(map(lambda x, y, z: abs(x - y) / z, avepoint[i * 9:(i + 1) * 9], avebasework, stdopint))),
+                 work_ids[i]]]
 
         scores.sort()
         works = []
@@ -98,6 +98,11 @@ def mkbaseWorks(string):
     ・enumerateはindexを0から指定するのに対して, idは1からスタートする
 
     以上を踏まえて若干修正します。
+
+    追記(20200524/12:40)
+    · enumerateは第二引数で1から開始するよう指定しているのでそれに合わせて修正しました
+    · 例外処理を加えました
+    · 降順にするのを忘れていたので降順にしました
     '''
 
     '''
@@ -109,8 +114,15 @@ def mkbaseWorks(string):
     '''
     arr = list(map(lambda x: int(x), list(string[:Work.objects.all().order_by("-id")[0].id])))
     arr = list(enumerate(arr, 1))
-    arr.sort(key=lambda x: x[1])
+    arr.sort(key=lambda x: x[1], reverse=True)
     arr = list(map(lambda x: x[0], arr))
     ###次の行に修正の必要あり(idが取得できなかった場合の例外処理が必要)
-    Works = list(map(lambda x: Work.objects.get(id=x+1), arr))
+    Works = list(map(lambda x: try_Work_get(x), arr))
+    Works = [x for x in Works if x is not None]
     return Works
+
+def try_Work_get(id):
+    try:
+        return Work.objects.get(id=id)
+    except Work.DoesNotExist:
+        return None
