@@ -29,7 +29,8 @@ from .models import Work
 def IndexView(request, work_id):
     user = request.user
 
-    if user.work_read[work_id - 1] != "2":
+    #if user.work_read[work_id - 1] != "2":
+    if user.work_read[work_id - 1] < "2":
         return HttpResponseRedirect(reverse('mkdata:index', args=(work_id + 1,)))
 
     try:
@@ -39,7 +40,8 @@ def IndexView(request, work_id):
 
     template = loader.get_template('mkdata/sampleform.html')
 
-    isLast = (work_id == Work.objects.all().order_by("-id")[0].id)
+    #isLast = (work_id == Work.objects.all().order_by("-id")[0].id)
+    isLast = (user.work_read[work_id - 1] == "3")
 
     context = {
         'work': work,
@@ -137,7 +139,8 @@ def vote(request, work_id):
 
     user.save()
 
-    if work.id >= Work.objects.all().order_by("-id")[0].id:
+    #if work.id >= Work.objects.all().order_by("-id")[0].id:
+    if user.work_read[work_id - 1] == "3":
         return HttpResponseRedirect(reverse('mkdata:thanks', ))
     else:
         return HttpResponseRedirect(reverse('mkdata:index', args=(work.id + 1,)))
@@ -169,6 +172,7 @@ def UserRead(request):
     for num in isRead:
         print(num)
         X[int(num) - 1] = "2"
+    X[int(max(isRead))-1] = "3"  # isLastに使いたい
 
     user.work_read = "".join(X)
     user.save()
