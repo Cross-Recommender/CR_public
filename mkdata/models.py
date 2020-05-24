@@ -86,9 +86,31 @@ class Work(models.Model):
 # work_like を元にユーザーの高評価作品順に並んだ　works　を返す
 # 都合がいいので仮置き　cms/views.py で使用
 def mkbaseWorks(string):
+    '''
+    ・Work.objects.count()は必ずしもWorkのidの最大値に一致するとは限らない
+    (削除されたオブジェクトがあったときに, そのオブジェクトのidは補間されないので,
+     idを飛ばしてオブジェクトが設定される場合が存在する)
+
+    ・work_likeはデフォルトで各作品について'0'で設定しているので, 仮に
+    Works = list(map(lambda x: Work.objects.get(id=x), arr))
+    において指定したidに対応するオブジェクトが(上と同じ理由で)存在していなかった場合にバグってしまう
+
+    ・enumerateはindexを0から指定するのに対して, idは1からスタートする
+
+    以上を踏まえて若干修正します。
+    '''
+
+    '''
     arr = list(map(lambda x: int(x), list(string[:Work.objects.count()])))
     arr = list(enumerate(arr, 1))
     arr.sort(key=lambda x: x[1])
     arr = list(map(lambda x: x[0], arr))
     Works = list(map(lambda x: Work.objects.get(id=x), arr))
+    '''
+    arr = list(map(lambda x: int(x), list(string[:Work.objects.all().order_by("-id")[0].id])))
+    arr = list(enumerate(arr, 1))
+    arr.sort(key=lambda x: x[1])
+    arr = list(map(lambda x: x[0], arr))
+    ###次の行に修正の必要あり(idが取得できなかった場合の例外処理が必要)
+    Works = list(map(lambda x: Work.objects.get(id=x+1), arr))
     return Works
