@@ -12,4 +12,6 @@ urlpatterns = [
     path('thanks/', views.ThanksView.as_view(), name='thanks'),
     path('<int:work_id>/recommend/', views.recommend, name='recommend'),
     #path('detail/', views.detail,name='detail'),
+    path('start/',views.StartView, name='start'),
+    path('userread/',views.UserRead, name='userread'),
 ]

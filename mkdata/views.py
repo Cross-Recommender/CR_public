@@ -141,3 +141,34 @@ def recommend(request, work_id):
     work = get_object_or_404(Work, pk=work_id)
     works = work.recommendsort(5)
     return render(request, 'mkdata/recommend.html', {'works': works})
+
+def StartView(request):
+    works = Work.objects.all()
+    user = request.user
+    return render(request, 'mkdata/start_mkdata.html', {'works': works, 'user': user, })
+
+def UserRead(request):
+    user = request.user
+    works = Work.objects.all()
+
+    if user.work_read == None:
+        X = ['0']*100000
+    else:
+        X = list(user.work_read)
+
+    for work in works:
+        X[work.id - 1] = "1"
+
+    isRead = request.POST.getlist('isRead')
+
+    for num in isRead:
+        print(num)
+        X[int(num) - 1] = "2"
+
+    user.work_read = "".join(X)
+    user.save()
+
+    return HttpResponseRedirect(reverse('mkdata:index', args = (1,)))
+
+
+
