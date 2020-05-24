@@ -48,7 +48,7 @@
                     {% if user.pk == request.user.pk %}
                         {% for work in recommends %}
                         <div class="tile is-child box">
-                            <a class="title is-4" href="{% url 'mkdata:recommend' work.id %}">{{ work.name }}</a>
+                            <a class="title is-4" href="{% url 'mkdata:recommend' work.id %}"><font color = "black"> {{ work.name }} </font></a>
                         </div>
                         {% endfor %}
                     {% endif %}
