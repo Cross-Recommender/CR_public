@@ -27,6 +27,11 @@ from .models import Work
 # from .recommend_for_mkdata import recommendsort
 
 def IndexView(request, work_id):
+    user = request.user
+
+    if user.work_read[work_id - 1] != "2":
+        return HttpResponseRedirect(reverse('mkdata:index', args=(work_id + 1,)))
+
     try:
         work = Work.objects.get(pk=work_id)
     except:
