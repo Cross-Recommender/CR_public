@@ -46,6 +46,7 @@ def IndexView(request, work_id):
     context = {
         'work': work,
         'isLast': isLast,
+        'user': user,
     }
 
     return HttpResponse(template.render(context, request))
@@ -159,7 +160,7 @@ def UserRead(request):
     user = request.user
     works = Work.objects.all()
 
-    if user.work_read == None:
+    if user.work_read is None:
         X = ['0']*100000
     else:
         X = list(user.work_read)
