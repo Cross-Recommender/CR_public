@@ -22,14 +22,15 @@ from django.shortcuts import resolve_url
 
 from cms.models import User
 
-from .models import Work
+from .models import Work, mkbaseWorks
+
 
 # from .recommend_for_mkdata import recommendsort
 
 def IndexView(request, work_id):
     user = request.user
 
-    #if user.work_read[work_id - 1] != "2":
+    # if user.work_read[work_id - 1] != "2":
     if user.work_read[work_id - 1] < "2":
         return HttpResponseRedirect(reverse('mkdata:index', args=(work_id + 1,)))
 
@@ -40,7 +41,7 @@ def IndexView(request, work_id):
 
     template = loader.get_template('mkdata/sampleform.html')
 
-    #isLast = (work_id == Work.objects.all().order_by("-id")[0].id)
+    # isLast = (work_id == Work.objects.all().order_by("-id")[0].id)
     isLast = (user.work_read[work_id - 1] == "3")
 
     context = {
@@ -95,6 +96,8 @@ class IndexView(DetailView):
     #    return super().form_valid(form)
 
 '''
+
+
 class ThanksView(TemplateView):
     template_name = "mkdata/thanks.html"
 
@@ -140,28 +143,57 @@ def vote(request, work_id):
 
     user.save()
 
-    #if work.id >= Work.objects.all().order_by("-id")[0].id:
+    # if work.id >= Work.objects.all().order_by("-id")[0].id:
     if user.work_read[work_id - 1] == "3":
         return HttpResponseRedirect(reverse('mkdata:thanks', ))
     else:
         return HttpResponseRedirect(reverse('mkdata:index', args=(work.id + 1,)))
 
+
+'''
 def recommend(request, work_id):
     work = get_object_or_404(Work, pk=work_id)
     works = work.recommendsort(5)
     return render(request, 'mkdata/recommend.html', {'works': works})
+'''
+
+
+###フォーム入力後にすぐにオススメ5作品のページへ飛べるよう改良
+def recommend(request):
+    user = request.user
+    OrderedWork = mkbaseWorks(user.work_like)
+    #print(OrderedWork)
+    works = []
+    num = 0
+    while len(works) <= 5:
+        cand_works = OrderedWork[num].recommendsort(5)
+        #print(OrderedWork[num], cand_works)
+        cnt = 0
+        for i in range(1, 4):
+            #print((cand_works[i] in works) == False,user.work_like[cand_works[i].id-1] == '0')
+            if (cand_works[i] in works) == False and user.work_like[cand_works[i].id-1] == '0':
+                works.append(cand_works[i])
+            if cnt == 2 or len(works)==5:
+                break
+        num += 1
+        if num == 4:
+            break
+
+    return render(request, 'mkdata/recommend.html', {'works': works})
+
 
 def StartView(request):
     works = Work.objects.all()
     user = request.user
     return render(request, 'mkdata/start_mkdata.html', {'works': works, 'user': user, })
 
+
 def UserRead(request):
     user = request.user
     works = Work.objects.all()
 
     if user.work_read is None:
-        X = ['0']*100000
+        X = ['0'] * 100000
     else:
         X = list(user.work_read)
 
@@ -173,12 +205,9 @@ def UserRead(request):
     for num in isRead:
         print(num)
         X[int(num) - 1] = "2"
-    X[int(max(isRead))-1] = "3"  # isLastに使いたい
+    X[int(max(isRead)) - 1] = "3"  # isLastに使いたい
 
     user.work_read = "".join(X)
     user.save()
 
-    return HttpResponseRedirect(reverse('mkdata:index', args = (1,)))
-
-
-
+    return HttpResponseRedirect(reverse('mkdata:index', args=(1,)))
