@@ -145,7 +145,7 @@ def vote(request, work_id):
 
     # if work.id >= Work.objects.all().order_by("-id")[0].id:
     if user.work_read[work_id - 1] == "3":
-        return HttpResponseRedirect(reverse('mkdata:thanks', ))
+        return HttpResponseRedirect(reverse('mkdata:recommend', ))
     else:
         return HttpResponseRedirect(reverse('mkdata:index', args=(work.id + 1,)))
 
@@ -179,7 +179,7 @@ def recommend(request):
         if num == 4:
             break
 
-    return render(request, 'mkdata/recommend.html', {'works': works})
+    return render(request, 'mkdata/recommend.html', {'works': works, 'user': user})
 
 
 def StartView(request):

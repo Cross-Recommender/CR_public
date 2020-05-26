@@ -2,16 +2,35 @@
 
 {% block title %} レコメンド作品一覧 | Cross Recommender {% endblock %}
 
+{% block hero %}
+<section class="hero is-small is-link is-bold">
+    <div class="hero-body">
+        <div class="container has-text-centered">
+            <h1 class="title">{{ user.username }}さんへのオススメ作品</h1>
+            <h2 class="subtitle">Recommendation List</h2>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
 {% block content %}
-
-{% if works %}
-    <ul>
-    {% for work in works %}
-        <li><a href="{% url 'mkdata:index' work.id %}">{{ work.name }}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No polls are available.</p>
-{% endif %}
-
+<section class="section">
+    <div class="container">
+        <div class="tile is-ancestor">
+            <div class="tile is-12 is-vertical is-parent">
+                {% if works %}
+                <ul>
+                    {% for work in works %}
+                        <div class="tile is-child box">
+                            <a class="title is-4" href="#">{{ work.name }}</a>
+                        </div>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p>オススメできる作品がありません</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
 {% endblock %}
