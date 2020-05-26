@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.template import loader
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
+from django.urls import reverse_lazy
 from django.views import generic
 
 from django.contrib.auth import get_user_model
@@ -15,14 +16,15 @@ from django.views.generic.base import TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import FormView
 from django.views.generic.edit import UpdateView
+from django.views.generic.edit import CreateView
 
-from .forms import CollectDataForm
+from .forms import CollectDataForm, AddWorkForm
 
 from django.shortcuts import resolve_url
 
 from cms.models import User
 
-from .models import Work, mkbaseWorks
+from .models import Work, mkbaseWorks, AddedWork
 
 
 # from .recommend_for_mkdata import recommendsort
@@ -148,6 +150,18 @@ def vote(request, work_id):
         return HttpResponseRedirect(reverse('mkdata:recommend', ))
     else:
         return HttpResponseRedirect(reverse('mkdata:index', args=(work.id + 1,)))
+
+
+class AddWorkView(CreateView):
+    model = AddedWork
+    form_class = AddWorkForm
+    template_name = 'mkdata/addwork.html'
+    success_url = reverse_lazy('mkdata:thanks')
+
+    def form_valid(self, form):
+        work = form.save()
+        self.object = work
+        return HttpResponseRedirect(self.get_success_url())
 
 
 '''

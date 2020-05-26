@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 
-from mkdata.models import Work
+from mkdata.models import Work, AddedWork
 
 UserModel = get_user_model()
 
@@ -47,3 +47,13 @@ class CollectDataForm(forms.ModelForm):
     '''
 
 
+
+class AddWorkForm(forms.ModelForm):
+    class Meta:
+        model = AddedWork
+        fields = ('name', 'user', 'like', 'joy', 'anger', 'sadness', 'fun', 'tech_constitution', 'tech_story', 'tech_character', 'tech_speech', 'tech_picture')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'input'
