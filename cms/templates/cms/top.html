@@ -21,6 +21,16 @@
             </a>
             {% endif %}
         </div>
+        <div class="container">
+            {% if user.is_authenticated %}
+            <a href="{% url 'cms:user_recommend' user.pk %}">
+                <button class="button is-info is-inverted is-outlined">
+                    <strong>おすすめ作品一覧</strong>
+                </button>
+            </a>
+            {% endif %}
+
+        </div>
     </div>
 </section>
 {% endblock %}
