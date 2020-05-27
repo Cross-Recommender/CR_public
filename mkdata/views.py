@@ -168,8 +168,13 @@ class AddWorkView(CreateView):
         #createviewの場合オブジェクトの保存は自動で行われる。
         work = form.save()
         self.object = work
+        追記
+        super().form_valid(form)
+        について理解しましたがuseridを追加する方法がわからずこちらの方法にしました。
         '''
-        return super().form_valid(form)
+        self.object = form.save()
+        self.object.userid = self.request.user.id
+        return HttpResponseRedirect(self.get_success_url())
 
 
 '''

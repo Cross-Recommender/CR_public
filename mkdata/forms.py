@@ -51,7 +51,7 @@ class CollectDataForm(forms.ModelForm):
 class AddWorkForm(forms.ModelForm):
     class Meta:
         model = AddedWork
-        fields = ('name', 'userid', 'like', 'joy', 'anger', 'sadness', 'fun', 'tech_constitution', 'tech_story', 'tech_character', 'tech_speech', 'tech_picture' )
+        fields = ('name', 'like', 'joy', 'anger', 'sadness', 'fun', 'tech_constitution', 'tech_story', 'tech_character', 'tech_speech', 'tech_picture' )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
