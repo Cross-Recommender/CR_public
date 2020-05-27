@@ -153,15 +153,19 @@ def vote(request, work_id):
 
 
 class AddWorkView(CreateView):
-    model = AddedWork
+    #print("1")
+    #model = AddedWork
     form_class = AddWorkForm
     template_name = 'mkdata/addwork.html'
     success_url = reverse_lazy('mkdata:thanks')
 
     def form_valid(self, form):
+        '''
+        #createviewの場合オブジェクトの保存は自動で行われる。
         work = form.save()
         self.object = work
-        return HttpResponseRedirect(self.get_success_url())
+        '''
+        return super().form_valid(form)
 
 
 '''

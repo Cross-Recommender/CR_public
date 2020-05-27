@@ -83,6 +83,7 @@ class Work(models.Model):
             works.append(Work.objects.get(id=scores[i][1]))
         return works
 
+
 # work_like を元にユーザーの高評価作品順に並んだ　works　を返す
 # 都合がいいので仮置き　cms/views.py で使用
 def mkbaseWorks(string):
@@ -121,6 +122,7 @@ def mkbaseWorks(string):
     Works = [x for x in Works if x is not None]
     return Works
 
+
 def try_Work_get(id):
     try:
         return Work.objects.get(id=id)
@@ -130,7 +132,7 @@ def try_Work_get(id):
 
 class AddedWork(models.Model):
     name = models.CharField(max_length=200)
-    user = models.IntegerField(default=0)
+    userid = models.IntegerField(default=0)
 
     # sum of the assessment values for all users is recorded
 
