@@ -147,6 +147,8 @@ def vote(request, work_id):
 
     # if work.id >= Work.objects.all().order_by("-id")[0].id:
     if user.work_read[work_id - 1] == "3":
+        user.data_entered = True
+        user.save()
         return HttpResponseRedirect(reverse('mkdata:recommend', ))
     else:
         return HttpResponseRedirect(reverse('mkdata:index', args=(work.id + 1,)))
@@ -181,6 +183,13 @@ def recommend(request, work_id):
 ###フォーム入力後にすぐにオススメ5作品のページへ飛べるよう改良
 def recommend(request):
     user = request.user
+    if user.data_entered is None:
+        user.data_entered = False
+        user.save()
+
+    if user.data_entered == False:
+        return render(request, 'mkdata/no_recommendation.html')
+
     OrderedWork = mkbaseWorks(user.work_like)
     #print(OrderedWork)
     works = []
