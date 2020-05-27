@@ -201,8 +201,10 @@ def recommend(request):
         for i in range(1, 4):
             #print((cand_works[i] in works) == False,user.work_like[cand_works[i].id-1] == '0')
             if (cand_works[i] in works) == False and user.work_like[cand_works[i].id-1] == '0':
+                ###work_readは一時的な記録に過ぎないため, ユーザが読んだかどうかの判定は
+                ###user.work_like[cand_works[i].id-1] == '0'で行う
                 works.append(cand_works[i])
-            if cnt == 2 or len(works)==5:
+            if cnt == 2 or len(works) > 5:
                 break
         num += 1
         if num == 4:
@@ -230,6 +232,11 @@ def UserRead(request):
         X[work.id - 1] = "1"
 
     isRead = request.POST.getlist('isRead')
+
+    if isRead == []:
+        user.data_entered = True
+        user.save()
+        return HttpResponseRedirect(reverse('mkdata:recommend',))
 
     for num in isRead:
         print(num)
