@@ -234,7 +234,7 @@ def UserRead(request):
     for num in isRead:
         print(num)
         X[int(num) - 1] = "2"
-    X[int(max(map(int,isRead))) - 1] = "3"  # isLastに使いたい
+    X[max(map(int,isRead)) - 1] = "3"  # isLastに使いたい
 
     user.work_read = "".join(X)
     user.save()
