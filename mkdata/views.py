@@ -27,7 +27,7 @@ from cms.models import User
 from .models import Work, mkbaseWorks, AddedWork
 
 
-# from .recommend_for_mkdata import recommendsort
+from .recommend import recommendsort
 
 def IndexView(request, work_id):
     user = request.user
@@ -196,21 +196,24 @@ def recommend(request):
         return render(request, 'mkdata/no_recommendation.html')
 
     OrderedWork = mkbaseWorks(user.work_like)
+    ###AddedWork用order動くには動くが、入力作品数が少ないと下のwhileで死ぬ可能性アリ
+    #OrderedWork = AddedWork.objects.filter(userid=user.id).order_by('-like')
     #print(OrderedWork)
     works = []
     num = 0
     while len(works) <= 5:
-        cand_works = OrderedWork[num].recommendsort(5)
+        cand_works = recommendsort(OrderedWork[num], 5)
         #print(OrderedWork[num], cand_works)
         cnt = 0
         for i in range(1, 4):
             #print((cand_works[i] in works) == False,user.work_like[cand_works[i].id-1] == '0')
-            if (cand_works[i] in works) == False and user.work_like[cand_works[i].id-1] == '0':
+            if (cand_works[i] in works) == False :#and user.work_like[cand_works[i].id-1] == '0':
                 ###work_readは一時的な記録に過ぎないため, ユーザが読んだかどうかの判定は
                 ###user.work_like[cand_works[i].id-1] == '0'で行う
                 works.append(cand_works[i])
             if cnt == 2 or len(works) > 5:
                 break
+            cnt += 1
         num += 1
         if num == 4:
             break
