@@ -33,7 +33,7 @@ def IndexView(request, work_id):
     user = request.user
 
     # if user.work_read[work_id - 1] != "2":
-    if user.work_read[work_id - 1] < "2":
+    if int(user.work_read[work_id - 1]) <= 1:
         return HttpResponseRedirect(reverse('mkdata:index', args=(work_id + 1,)))
 
     try:
@@ -234,7 +234,7 @@ def UserRead(request):
     for num in isRead:
         print(num)
         X[int(num) - 1] = "2"
-    X[int(max(isRead)) - 1] = "3"  # isLastに使いたい
+    X[int(max(map(int,isRead))) - 1] = "3"  # isLastに使いたい
 
     user.work_read = "".join(X)
     user.save()
