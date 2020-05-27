@@ -155,9 +155,11 @@ def vote(request, work_id):
 class AddWorkView(CreateView):
     #print("1")
     #model = AddedWork
+    #modelはAddWorkFormで指定しているのでいらない
     form_class = AddWorkForm
     template_name = 'mkdata/addwork.html'
     success_url = reverse_lazy('mkdata:thanks')
+
 
     def form_valid(self, form):
         '''
