@@ -18,14 +18,17 @@
         <form method="post" action="{% url 'mkdata:userread'%}">
             {% csrf_token %}
             <br>
-            <label class="checkbox">
-                {% for work in works %}
-                <input type="checkbox" name = "isRead" value = "{{ work.id }}">
-                  {{ work.name }}
+
+            {% for work in works %}
+                <label class="checkbox">
+                    <input type="checkbox" name = "isRead" value = "{{ work.id }}">
+                        {{ work.name }}
+                    <br>
+                    <br>
+                </label>
                 <br>
-                <br>
-                {% endfor %}
-            </label>
+            {% endfor %}
+
             <div class="field">
                 <p class="control">
                     <input type="submit" value="次へ" class="button is-success">
