@@ -18,9 +18,9 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('polls/', include('polls.urls')),
+    #path('polls/', include('polls.urls')),
     path('cms/', include('cms.urls')),
-    path('app/', include('app.urls')),
+    #path('app/', include('app.urls')),
     path('mkdata/', include('mkdata.urls')),
     path('recommend/', include('recommend.urls')),
     ###ここでurlの形が決まる
