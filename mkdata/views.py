@@ -234,8 +234,8 @@ def recommend(request):
     #print(OrderedWork)
     if OrderedWork is None:
         OrderedWork = AddedWork.objects.filter(userid=user.id).order_by('-like')
-    if OrderedWork.count() == 0:
-        return render(request, 'mkdata/no_recommendation.html')
+        if OrderedWork.count() == 0:
+            return render(request, 'mkdata/no_recommendation.html')
     works = []
     num = 0
     for work in OrderedWork:
