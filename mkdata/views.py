@@ -229,15 +229,15 @@ def recommend(request):
         user.data_entered = False
         user.save()
 
-    OrderedWork = mkbaseWorks(user.work_like)[:4]
+    OrderedWork = mkbaseWorks(user.work_like)
     #print(user.work_like[:10])
     #print(OrderedWork)
     if OrderedWork is None:
-        OrderedWork = AddedWork.objects.filter(userid=user.id).order_by('-like')[0:3]
-    #print(OrderedWork)
-    if OrderedWork is None:
+        OrderedWork = AddedWork.objects.filter(userid=user.id).order_by('-like')
+    if OrderedWork.count() == 0:
         return render(request, 'mkdata/no_recommendation.html')
     works = []
+    num = 0
     for work in OrderedWork:
         #print(len(works))#なぜか作品が6つ以上表示された時のバグ確認用
         cand_works = recommendsort(work, 5)
@@ -252,6 +252,10 @@ def recommend(request):
                 break
         if len(works) >= 5:
             break
+        num += 1
+        if num == 4:
+            break
+
 
     return render(request, 'mkdata/recommend.html', {'works': works, 'user': user})
 
@@ -282,7 +286,7 @@ def UserRead(request):
         return HttpResponseRedirect(reverse('mkdata:recommend', ))
 
     for num in isRead:
-        print(num)
+        #print(num)
         X[int(num) - 1] = "2"
     X[max(map(int, isRead)) - 1] = "3"  # isLastに使いたい
 
