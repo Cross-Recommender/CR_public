@@ -13,11 +13,8 @@
                 </div>
                 <div class="media-content">
                     <h1 class="title">
-                        {{ request.user.last_name }} {{ request.user.first_name }}
-                    </h1>
-                    <h2 class="subtitle">
                         {{ request.user.username }}
-                    </h2>
+                    </h1>
                     
                     <a href="{% url 'cms:user_update' request.user.pk %}">
                         <button class="button is-small is-info is-inverted is-outlined">
