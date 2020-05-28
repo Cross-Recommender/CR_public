@@ -24,6 +24,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from mkdata import models as mkdata_models
 
+from django.urls import reverse
 
 
 UserModel = get_user_model()
@@ -49,6 +50,21 @@ class UserCreate(CreateView):
     success_url = reverse_lazy('cms:top')
 
     def form_valid(self, form):
+        if not self.request.POST.getlist('isOK'):
+            return HttpResponseRedirect(reverse('cms:signupagain', ))
+        user = form.save()
+        login(self.request, user)
+        self.object = user
+        return HttpResponseRedirect(self.get_success_url())
+
+class UserCreateAgain(CreateView):
+    form_class = UserCreateForm
+    template_name = 'cms/signupagain.html'
+    success_url = reverse_lazy('cms:top')
+
+    def form_valid(self, form):
+        if not self.request.POST.getlist('isOK'):
+            return HttpResponseRedirect(reverse('cms:signupagain', ))
         user = form.save()
         login(self.request, user)
         self.object = user
