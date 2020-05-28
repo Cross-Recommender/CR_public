@@ -188,7 +188,7 @@ def vote(request, work_id):
                 else:
                     next += 1
 
-        return HttpResponseRedirect(reverse('mkdata:index_again', args=(next,)))
+        return HttpResponseRedirect(reverse('mkdata:index', args=(next,)))
 
 
 class AddWorkView(CreateView):
