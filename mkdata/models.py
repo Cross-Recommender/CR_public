@@ -62,11 +62,14 @@ def mkbaseWorks(string):
     arr = list(map(lambda x: int(x), list(string[:Work.objects.all().order_by("-id")[0].id])))
     arr = list(enumerate(arr, 1))
     arr.sort(key=lambda x: x[1], reverse=True)
+    arr = [x for x in arr if x[1] != 0]
     arr = list(map(lambda x: x[0], arr))
+    #print(arr)
     ###次の行に修正の必要あり(idが取得できなかった場合の例外処理が必要)
     Works = list(map(lambda x: try_Work_get(x), arr))
     Works = [x for x in Works if x is not None]
-    return Works
+    #print(Works)
+    return None if Works == [] else Works
 
 
 def try_Work_get(id):

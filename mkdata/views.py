@@ -178,6 +178,7 @@ class AddWorkView(CreateView):
         '''
         self.object = form.save()
         self.object.userid = self.request.user.id
+        self.object.save()
         return HttpResponseRedirect(self.get_success_url())
 
 
@@ -196,31 +197,28 @@ def recommend(request):
         user.data_entered = False
         user.save()
 
-    if user.data_entered == False:
-        return render(request, 'mkdata/no_recommendation.html')
-
     OrderedWork = mkbaseWorks(user.work_like)
-    ###AddedWork用order動くには動くが、入力作品数が少ないと下のwhileで死ぬ可能性アリ
-    # OrderedWork = AddedWork.objects.filter(userid=user.id).order_by('-like')
-    # print(OrderedWork)
+    #print(user.work_like[:10])
+    #print(OrderedWork)
+    if OrderedWork is None:
+        OrderedWork = AddedWork.objects.filter(userid=user.id).order_by('-like')
+    #print(OrderedWork)
+    if OrderedWork is None:
+        return render(request, 'mkdata/no_recommendation.html')
     works = []
-    num = 0
-    while len(works) <= 5:
+    for work in OrderedWork:
         #print(len(works))#なぜか作品が6つ以上表示された時のバグ確認用
-        cand_works = recommendsort(OrderedWork[num], 5)
+        cand_works = recommendsort(work, 5)
         # print(OrderedWork[num], cand_works)
-        cnt = 0
-        for i in range(1, 4):
+        for i in range(4):
             # print((cand_works[i] in works) == False,user.work_like[cand_works[i].id-1] == '0')
             if (cand_works[i] in works) == False and user.work_like[cand_works[i].id-1] == '0':
                 ###work_readは一時的な記録に過ぎないため, ユーザが読んだかどうかの判定は
                 ###user.work_like[cand_works[i].id-1] == '0'で行う
                 works.append(cand_works[i])
-            if cnt == 3 or len(works) > 5:
+            if len(works) >= 5:
                 break
-            cnt += 1
-        num += 1
-        if num == 4:
+        if len(works) >= 5:
             break
 
     return render(request, 'mkdata/recommend.html', {'works': works, 'user': user})
