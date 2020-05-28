@@ -123,18 +123,7 @@ def vote(request, work_id):
     work.save()
 
     obj = user.work_like
-    '''
-    #少し間違いがありそうなので, もし戻すときは注意
-    if len(obj) < 2*work.id:
-        obj = obj[:len(obj) - 1]
-        while len(obj) < 2*(work.id-1):
-            obj.append('0,')
-        obj.append(',')
-        obj.append(request.POST['like'])
-        obj.append('}')
-    else:
-        obj[2*work.id-1] = request.POST['like']
-    '''
+
     if len(obj) != 100000:
         obj = "".join(['0'] * 100000)
 
