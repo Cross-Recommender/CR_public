@@ -18,14 +18,14 @@
                     <h2 class="subtitle">
                         {{ request.user.username }}
                     </h2>
-                    <!--{% if user.pk == request.user.pk %}-->
+                    
                     <a href="{% url 'cms:user_update' request.user.pk %}">
                         <button class="button is-small is-info is-inverted is-outlined">
                             <span class="icon is-small is-left"><i class="fas fa-user-edit"></i></span>
                             <strong>プロフィールを追加する</strong>
                         </button>
                     </a>
-                    <!--{% endif %}-->
+                    
                 </div>
             </div>
         </div>
