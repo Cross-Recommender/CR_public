@@ -29,12 +29,13 @@
                 <div class="navbar-end">
                     {% if user.is_authenticated %}
                     <!--#####added#####-->
-                    <a class="button is-info navbar-item" href="{% url 'cms:user_detail' user.pk %}"><strong>Detail</strong></a>
-                    <!--<a class="navbar-item" href="{% url 'cms:user_detail' user.pk %}"><strong>Detail</strong></a>-->
-                    <!--###############-->
-                    <a class="navbar-item" href="{% url 'cms:logout' %}">Log out</a>
+                    <div class="buttons">
+                        <a class="button is-info navbar-item" href="{% url 'cms:user_detail' user.pk %}"><strong>Detail</strong></a>
+                        <!--<a class="navbar-item" href="{% url 'cms:user_detail' user.pk %}"><strong>Detail</strong></a>-->
+                        <!--###############-->
+                        <a class="button is-light navbar-item" href="{% url 'cms:logout' %}">Log out</a>
+                    </div>
                     {% else %}
-                    <a class="navbar-item is-grey" href="#">About</a>
                     <div class="buttons">
                         <a class="button is-info navbar-item" href="{% url 'cms:signup' %}"><strong>Sign up</strong></a>
                         <a class="button is-light navbar-item" href="{% url 'cms:login' %}"><strong>Log in</strong></a>
