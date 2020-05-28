@@ -107,3 +107,6 @@ class WorksList(ListView):
 
 class TermsView(TemplateView):
     template_name = "cms/terms.html"
+
+class PolicyView(TemplateView):
+    template_name = 'cms/policy.html'
