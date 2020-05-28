@@ -8,6 +8,7 @@ app_name = 'mkdata'
 urlpatterns = [
     #path('<int:pk>/', views.IndexView.as_view(), name='index'),
     path('<int:work_id>/', views.IndexView, name='index'),
+    path('<int:work_id>/again/', views.IndexAgainView, name='index_again'),
     path('<int:work_id>/vote/', views.vote, name='vote'),
     path('freevote/', views.AddWorkView.as_view(), name='freevote'),
     path('thanks/', views.ThanksView.as_view(), name='thanks'),

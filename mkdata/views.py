@@ -58,6 +58,35 @@ def IndexView(request, work_id):
 
     return HttpResponse(template.render(context, request))
 
+###入力でエラーが出た時用, 汎用ビューとかをうまく使えば要らなくなるかも
+def IndexAgainView(request, work_id):
+    user = request.user
+
+    '''
+    # if user.work_read[work_id - 1] != "2":
+    if int(user.work_read[work_id - 1]) <= 1:
+        return HttpResponseRedirect(reverse('mkdata:index', args=(work_id + 1,)))
+
+    try:
+        work = Work.objects.get(pk=work_id)
+    except:
+        return HttpResponseRedirect(reverse('mkdata:index', args=(work_id + 1,)))
+    '''
+
+    work = Work.objects.get(pk=work_id)
+
+    template = loader.get_template('mkdata/againform.html')
+
+    # isLast = (work_id == Work.objects.all().order_by("-id")[0].id)
+    isLast = (user.work_read[work_id - 1] == "3")
+
+    context = {
+        'work': work,
+        'isLast': isLast,
+        'user': user,
+    }
+
+    return HttpResponse(template.render(context, request))
 
 '''汎用ビュー上では難しいか
 class IndexView(DetailView):
@@ -111,18 +140,21 @@ class ThanksView(TemplateView):
 def vote(request, work_id):
     work = get_object_or_404(Work, pk=work_id)
     user = request.user
+    try:
+        work.num_of_data += 1
+        work.like += int(request.POST['like'])
+        work.joy += int(request.POST["joy"])
+        work.anger += int(request.POST["anger"])
+        work.sadness += int(request.POST["sadness"])
+        work.fun += int(request.POST["fun"])
+        work.tech_constitution += int(request.POST["tech_constitution"])
+        work.tech_story += int(request.POST["tech_story"])
+        work.tech_character += int(request.POST["tech_character"])
+        work.tech_speech += int(request.POST["tech_speech"])
+        work.tech_picture += int(request.POST["tech_picture"])
 
-    work.num_of_data += 1
-    work.like += int(request.POST['like'])
-    work.joy += int(request.POST["joy"])
-    work.anger += int(request.POST["anger"])
-    work.sadness += int(request.POST["sadness"])
-    work.fun += int(request.POST["fun"])
-    work.tech_constitution += int(request.POST["tech_constitution"])
-    work.tech_story += int(request.POST["tech_story"])
-    work.tech_character += int(request.POST["tech_character"])
-    work.tech_speech += int(request.POST["tech_speech"])
-    work.tech_picture += int(request.POST["tech_picture"])
+    except:
+        return HttpResponseRedirect(reverse('mkdata:index_again', args=(work_id,)))
 
     work.save()
 
@@ -156,7 +188,7 @@ def vote(request, work_id):
                 else:
                     next += 1
 
-        return HttpResponseRedirect(reverse('mkdata:index', args=(next,)))
+        return HttpResponseRedirect(reverse('mkdata:index_again', args=(next,)))
 
 
 class AddWorkView(CreateView):
