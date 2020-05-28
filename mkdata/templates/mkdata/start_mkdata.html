@@ -15,6 +15,7 @@
         <hr>
         <p>ここでは, {{ user.username }}さんにオススメな作品をご紹介するために, {{ user.username }}さんが読んだことがある漫画について入力していただきます。</p>
         <p>まずは, 以下の中から{{ user.username }}さんが読んだことがある漫画<b>全てに</b>チェックをつけてください。</p>
+        <p><strong><font color = "red">この一覧のうち、{{ user.username }}さんが読んだことのない作品からおすすめされますので、全ての作品を読んだことがある場合おすすめ作品が表示されません。ご注意ください。</font></strong></p>
         <form method="post" action="{% url 'mkdata:userread'%}">
             {% csrf_token %}
             <br>
