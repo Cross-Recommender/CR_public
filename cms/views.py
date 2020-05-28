@@ -104,3 +104,6 @@ class WorksView(DetailView): #作品紹介をみるためのページ用
 class WorksList(ListView):
     model = mkdata_models.Work
     template_name = "cms/works_list.html"
+
+class TermsView(TemplateView):
+    template_name = "cms/terms.html"
