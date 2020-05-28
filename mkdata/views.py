@@ -26,12 +26,13 @@ from cms.models import User
 
 from .models import Work, mkbaseWorks, AddedWork
 
-
 from .recommend import recommendsort
+
 
 def IndexView(request, work_id):
     user = request.user
 
+    '''
     # if user.work_read[work_id - 1] != "2":
     if int(user.work_read[work_id - 1]) <= 1:
         return HttpResponseRedirect(reverse('mkdata:index', args=(work_id + 1,)))
@@ -40,6 +41,9 @@ def IndexView(request, work_id):
         work = Work.objects.get(pk=work_id)
     except:
         return HttpResponseRedirect(reverse('mkdata:index', args=(work_id + 1,)))
+    '''
+
+    work = Work.objects.get(pk=work_id)
 
     template = loader.get_template('mkdata/sampleform.html')
 
@@ -140,17 +144,28 @@ def vote(request, work_id):
         user.save()
         return HttpResponseRedirect(reverse('mkdata:recommend', ))
     else:
-        return HttpResponseRedirect(reverse('mkdata:index', args=(work.id + 1,)))
+        next = work.id + 1
+        while next <= Work.objects.all().order_by("-id")[0].id:
+            try:
+                x = Work.objects.get(id=next)
+            except:
+                next += 1
+            else:
+                if int(user.work_read[next-1])  >= 2:
+                    break
+                else:
+                    next += 1
+
+        return HttpResponseRedirect(reverse('mkdata:index', args=(next,)))
 
 
 class AddWorkView(CreateView):
-    #print("1")
-    #model = AddedWork
-    #modelはAddWorkFormで指定しているのでいらない
+    # print("1")
+    # model = AddedWork
+    # modelはAddWorkFormで指定しているのでいらない
     form_class = AddWorkForm
     template_name = 'mkdata/addwork.html'
     success_url = reverse_lazy('mkdata:thanks')
-
 
     def form_valid(self, form):
         '''
@@ -186,17 +201,17 @@ def recommend(request):
 
     OrderedWork = mkbaseWorks(user.work_like)
     ###AddedWork用order動くには動くが、入力作品数が少ないと下のwhileで死ぬ可能性アリ
-    #OrderedWork = AddedWork.objects.filter(userid=user.id).order_by('-like')
-    #print(OrderedWork)
+    # OrderedWork = AddedWork.objects.filter(userid=user.id).order_by('-like')
+    # print(OrderedWork)
     works = []
     num = 0
     while len(works) <= 5:
         cand_works = recommendsort(OrderedWork[num], 5)
-        #print(OrderedWork[num], cand_works)
+        # print(OrderedWork[num], cand_works)
         cnt = 0
         for i in range(1, 4):
-            #print((cand_works[i] in works) == False,user.work_like[cand_works[i].id-1] == '0')
-            if (cand_works[i] in works) == False :#and user.work_like[cand_works[i].id-1] == '0':
+            # print((cand_works[i] in works) == False,user.work_like[cand_works[i].id-1] == '0')
+            if (cand_works[i] in works) == False:  # and user.work_like[cand_works[i].id-1] == '0':
                 ###work_readは一時的な記録に過ぎないため, ユーザが読んだかどうかの判定は
                 ###user.work_like[cand_works[i].id-1] == '0'で行う
                 works.append(cand_works[i])
@@ -233,14 +248,25 @@ def UserRead(request):
     if isRead == []:
         user.data_entered = True
         user.save()
-        return HttpResponseRedirect(reverse('mkdata:recommend',))
+        return HttpResponseRedirect(reverse('mkdata:recommend', ))
 
     for num in isRead:
         print(num)
         X[int(num) - 1] = "2"
-    X[max(map(int,isRead)) - 1] = "3"  # isLastに使いたい
+    X[max(map(int, isRead)) - 1] = "3"  # isLastに使いたい
 
     user.work_read = "".join(X)
     user.save()
 
-    return HttpResponseRedirect(reverse('mkdata:index', args=(1,)))
+    first = 1
+    while first <= Work.objects.all().order_by("-id")[0].id:
+        try:
+            x = Work.objects.get(id=first)
+        except:
+            first += 1
+        else:
+            if int(user.work_read[first-1]) >= 2:
+                break
+            else:
+                first += 1
+    return HttpResponseRedirect(reverse('mkdata:index', args=(first,)))
