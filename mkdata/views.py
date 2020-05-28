@@ -229,11 +229,11 @@ def recommend(request):
         user.data_entered = False
         user.save()
 
-    OrderedWork = mkbaseWorks(user.work_like)
+    OrderedWork = mkbaseWorks(user.work_like)[:4]
     #print(user.work_like[:10])
     #print(OrderedWork)
     if OrderedWork is None:
-        OrderedWork = AddedWork.objects.filter(userid=user.id).order_by('-like')
+        OrderedWork = AddedWork.objects.filter(userid=user.id).order_by('-like')[0:3]
     #print(OrderedWork)
     if OrderedWork is None:
         return render(request, 'mkdata/no_recommendation.html')
