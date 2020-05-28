@@ -10,6 +10,10 @@
         <hr>
         <p class="help">アカウントをお持ちの方へ：ログインは<a href="{% url 'cms:login' %}">こちら</a></p>
         <br>
+        <div class="container is-mobile">
+        <p class="has-text-danger">アカウントの作成には利用規約への同意が必須です。</p>
+        </div>
+        <br>
         <form method="post" action="">
             {% csrf_token %}
             <div class="field">

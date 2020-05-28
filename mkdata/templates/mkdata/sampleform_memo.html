@@ -1,0 +1,37 @@
+{% url 'mkdata:vote' pk %}
+
+
+<style type="text/css">
+  #1 {
+  }
+</style>
+<!--
+{% block content %}
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<div class="control">
+  <label class="radio">
+    <input type="radio" name="rsvp">
+    Going
+  </label>
+  <label class="radio">
+    <input type="radio" name="rsvp">
+    Not going
+  </label>
+  <label class="radio" disabled>
+    <input type="radio" name="rsvp" disabled>
+    Maybe
+  </label>
+</div>
+
+<section class = "section">
+<form action="{% url 'mkdata:vote' pk %}" method="post">
+{% csrf_token %}
+  <h4>総合的な好み</h4>
+  <label>{{ item }}</label><br>
+  <input type="submit" value="Vote">
+</form>
+</section>
+{% endblock %}
+-->

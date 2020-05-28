@@ -8,6 +8,13 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+###ADDED
+from mkdata.models import Work
+from django.contrib.postgres.fields import ArrayField
+
+
+########
+
 
 # User-related
 class UserManager(BaseUserManager):
@@ -45,7 +52,6 @@ class UserManager(BaseUserManager):
 
 
 class AbstractUser(AbstractBaseUser, PermissionsMixin):
-
     username_validator = UnicodeUsernameValidator()
     username = models.CharField(
         _('username'),
@@ -77,8 +83,19 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
         ),
     )
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
-    
+
     twitter = models.CharField(_('Twitter'), max_length=50, blank=True)
+
+    ###ADDED
+    #Arrayfieldは使いにくそうだったのでTextfieldで代用しました。今後これを変更することはないと思います。
+    work_like = models.TextField(default="".join(['0']*100000))
+
+    #userが各idの漫画を読んだことがあるかどうかを判定。'0': 未判定, '1': 読んだことなし '2': あり, '3':isLast
+    work_read = models.TextField(default="".join(['0']*100000))
+
+    ###データは入力済み？
+    data_entered = models.BooleanField(default=False)
+    ########
 
     objects = UserManager()
 
@@ -106,3 +123,5 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
 class User(AbstractUser):
     class Meta(AbstractUser.Meta):
         swappable = "AUTH_USER_MODEL"
+
+# for Recommendationを作りたい(あるいはUserの中に入れる)

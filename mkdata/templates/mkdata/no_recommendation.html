@@ -1,0 +1,21 @@
+{% extends 'mkdata/base.html' %}
+
+{% block title %} レコメンド作品一覧 | Cross Recommender {% endblock %}
+
+{% block hero %}
+<section class="hero is-small is-link is-bold">
+    <div class="hero-body">
+        <div class="container has-text-centered">
+            <h1 class="title">{{ user.username }}さんへのオススメ作品</h1>
+            <h2 class="subtitle">Recommendation List</h2>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block content %}
+<section class="section">
+    <p>データが入力されていないため, オススメ作品がありません。</p>
+    <p>データ入力は<a href="/mkdata/start">こちら</a>から！</p>
+</section>
+{% endblock %}

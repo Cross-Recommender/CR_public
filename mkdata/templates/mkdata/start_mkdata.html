@@ -1,0 +1,46 @@
+{% extends 'mkdata/base.html' %}
+
+{% block title %} データ入力 | Cross Recommender {% endblock %}
+
+{% block content %}
+<main class="columns">
+  <div class="column">
+
+  </div>
+</main>
+<section class="section">
+    <div class="container is-mobile">
+        <h1 class="title is-4">データ入力</h1>
+        <h2 class="subtitle is-6">Enter data</h2>
+        <hr>
+        <p>ここでは, {{ user.username }}さんにオススメな作品をご紹介するために, {{ user.username }}さんが読んだことがある漫画について入力していただきます。</p>
+        <p>まずは, 以下の中から{{ user.username }}さんが読んだことがある漫画<b>全てに</b>チェックをつけてください。</p>
+        <p><strong><font color = "red">この一覧のうち、{{ user.username }}さんが読んだことのない作品からおすすめされますので、全ての作品を読んだことがある場合おすすめ作品が表示されません。ご注意ください。</font></strong></p>
+        <form method="post" action="{% url 'mkdata:userread'%}">
+            {% csrf_token %}
+            <br>
+
+            {% for work in works %}
+                <label class="checkbox">
+                    <input type="checkbox" name = "isRead" value = "{{ work.id }}">
+                        {{ work.name }}
+                    <br>
+                    <br>
+                </label>
+                <br>
+            {% endfor %}
+
+            <div class="field">
+                <p class="control">
+                    <input type="submit" value="次へ" class="button is-success">
+                </p>
+            </div>
+        </form>
+    </div>
+    <br>
+    <div class="container is-mobile">
+        <p>上記40作品に読んだことのある漫画がない方は、申し訳ありませんが下記ページより作品名をご自分で入力して評価してください。</p>
+        <a href="{% url 'mkdata:freevote' %}" class="button is-light is-small">自由入力はこちら</a>
+    </div>
+</section>
+{% endblock %}

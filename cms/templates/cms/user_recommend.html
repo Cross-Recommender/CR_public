@@ -1,0 +1,60 @@
+{% extends 'cms/base.html' %}
+
+{% block title %}おすすめ一覧 | {% endblock %}
+
+{% block hero %}
+<section class="hero is-small is-link is-bold">
+    <div class="hero-body">
+        <div class="container has-text-centered">
+            <h1 class="title">おすすめ一覧</h1>
+            <h2 class="subtitle">Recommendation List</h2>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <div class="tile is-ancestor">
+            <div class="tile is-12 is-vertical is-parent">
+                {% for object in object_list %}
+                <div class="tile is-child box">
+                    <a class="title is-4" href="{% url 'cms:user_detail' object.id %}">{{ object.work_like }}</a>
+
+                </div>
+                <br>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+<section class="hero is-link is-bold">
+    <div class="hero-body">
+        <div class="container">
+            <div class="media">
+                <div class="media-left">
+                    <figure class="image is-64x64 is-left">
+                        <img class="is-rounded" src="https://bulma.io/images/placeholders/128x128.png">
+                    </figure>
+                </div>
+                <div class="media-content">
+                    <h1 class="title">
+                        {{ user.last_name }} {{ user.first_name }}
+                    </h1>
+                    <h2 class="subtitle">
+                        {{ user.username }}
+                    </h2>
+                    {% if user.pk == request.user.pk %}
+                        {% for work in recommends %}
+                        <div class="tile is-child box">
+                            <a class="title is-4" href="{% url 'mkdata:recommend' work.id %}"><font color = "black"> {{ work.name }} </font></a>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
