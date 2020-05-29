@@ -3,7 +3,7 @@ from django.core.management import call_command
 from django.db import migrations
 
 def load_fixture(apps, schema_editor):
-    call_command('loaddata', 'mkdata/fixture/work.json', app_label='mkdata')
+    call_command('loaddata', 'mkdata/fixture/works_ver00.json', app_label='mkdata')
 
 class Migration(migrations.Migration):
 
