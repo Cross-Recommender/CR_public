@@ -17,5 +17,5 @@ urlpatterns = [
     #path('detail/', views.detail,name='detail'),
     path('start/',views.StartView, name='start'),
     path('userread/',views.UserRead, name='userread'),
-    path('upload/', views.upload, name='upload'),
+    #path('upload/', views.upload, name='upload'),
 ]
