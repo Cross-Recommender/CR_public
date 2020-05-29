@@ -309,27 +309,3 @@ def UserRead(request):
                 first += 1
     return HttpResponseRedirect(reverse('mkdata:index', args=(first,)))
 
-def upload(request):
-    if 'csv' in request.FILES:
-        form_data = TextIOWrapper(request.FILES['csv'].file, encoding='utf-8')
-        csv_file = csv.reader(form_data)
-        for line in csv_file:
-            work, created = Work.objects.get_or_create(name=line[1])
-            work.name = line[0]
-            work.num_of_data = line[1]
-            work.like = line[2]
-            work.joy = line[3]
-            work.anger = line[4]
-            work.sadness = line[5]
-            work.fun = line[6]
-            work.tech_constitution = line[7]
-            work.tech_story = line[8]
-            work.tech_character = line[9]
-            work.tech_speech = line[10]
-            work.tech_picture = line[11]
-            work.save()
-
-        return render(request, 'mkdata/work_upload.html')
-
-    else:
-        return render(request, 'mkdata/work_upload.html')
