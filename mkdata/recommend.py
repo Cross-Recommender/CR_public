@@ -18,8 +18,14 @@ def get_std():
     sumpoint = [0 for i in range(num)]
     sumsqupoint = [0 for i in range(num)]
     for work in get_works():
-        sumpoint = list(map(lambda x, y: x + y, sumpoint, work.get_average()))
-        sumsqupoint = list(map(lambda x, y: x + y ** 2, sumsqupoint, work.get_average()))
+        work_ave = work.get_average()
+        if work_ave == None:
+            num -= 1
+        else:
+            sumpoint = list(map(lambda x, y: x + y, sumpoint, work_ave))
+            sumsqupoint = list(map(lambda x, y: x + y ** 2, sumsqupoint, work_ave))
+    if num == 0:
+        print("No Works are registered.")
     avepoint = list(map(lambda x: x / num, sumpoint))
     avesqupoint = list(map(lambda x: x / num, sumsqupoint))
     stdopint = list(map(lambda x, y: (x - y ** 2) ** (-1 / 2), avesqupoint, avepoint))
