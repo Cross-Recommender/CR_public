@@ -19,7 +19,7 @@ def get_std():
     sumsqupoint = [0 for i in range(num)]
     for work in get_works():
         work_ave = work.get_average()
-        if work_ave == None:
+        if work_ave is None:
             num -= 1
         else:
             sumpoint = list(map(lambda x, y: x + y, sumpoint, work_ave))
@@ -32,7 +32,7 @@ def get_std():
     return stdopint
 
 
-def recommendsort(object, n):
+def recommendsort(obj, n):
     """
     作品Aのスコアは　|Aの平均 - ベース作品の平均|/標準偏差　の全評価項目総和
     スコアは小さいほどおすすめ作品であり、ベース作品がWorkオブジェクトならばスコア0でindex0がベース作品になる。
@@ -41,18 +41,20 @@ def recommendsort(object, n):
     """
     try:
         ###Workの場合
-        basepoint=object.get_average()
-    except:
+        basepoint = obj.get_average()
+    except AttributeError:
         ###AddedWorkの場合
-        basepoint=[object.joy,object.anger,object.sadness,object.fun,object.tech_constitution,object.tech_story,object.tech_character,object.tech_speech,object.tech_picture]
+        basepoint=[obj.joy,obj.anger,obj.sadness,obj.fun,obj.tech_constitution,obj.tech_story,obj.tech_character,obj.tech_speech,obj.tech_picture]
     scores = []
     for work in get_works():
-        scores += [
-            [sum(list(map(lambda x, y, z: abs(x - y) / z, work.get_average(), basepoint, get_std()))),
-             work]]
-    scores.sort()
+        if work.num_of_data != 0:
+            scores += [
+                [sum(list(map(lambda x, y, z: abs(x - y) / z, work.get_average(), basepoint, get_std()))),
+                 work]]
+    scores.sort(key=lambda x: x[0])
     works = []
     for score, work in scores:
         works.append(work)
-        if(len(works)>=n):break
+        if len(works) >= n:
+            break
     return works
