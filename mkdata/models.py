@@ -24,6 +24,8 @@ class Work(models.Model):
         return self.name
 
     def get_average(self):
+        if self.num_of_data == 0:
+            return None
         average = list(map(lambda x: x / self.num_of_data,
                            [self.joy,self.anger,self.sadness,self.fun,self.tech_constitution,self.tech_story,self.tech_character,self.tech_speech,self.tech_picture]))
         return average
