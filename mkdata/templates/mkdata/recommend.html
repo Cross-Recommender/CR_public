@@ -37,7 +37,9 @@
 
 <section>
     <div class="container">
-        <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-size="large" data-text="{{ user.username }}さんへのオススメ作品は{% for work in works %}「{{ work.name }}」{% endfor %}です！" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        {% if works %}
+            <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-size="large" data-text="{{ user.username }}さんへのオススメ作品は{% for work in works %}「{{ work.name }}」{% endfor %}です！" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        {% endif %}
         <p>上記の結果は、{{ user.username }}さんの読んだことがある漫画に対する好みと、全ユーザーの回答履歴に基づいて算出されており、{{ user.username }}さんが好きな漫画と同様の傾向を持っています。私たちがオススメした漫画を読んだら、ぜひまた評価を教えてください。それをもとに、さらに精度の高いレコメンドを提供いたします。</p>
         <br>
         <p>現在私たちは、皆さんにオススメできる作品の数を増やすべく、他の漫画についてもデータを集めています。</p>
