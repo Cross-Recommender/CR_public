@@ -291,10 +291,17 @@ def UserRead(request):
     for num in isRead:
         #print(num)
         X[int(num) - 1] = "2"
-    X[max(map(int, isRead)) - 1] = "3"  # isLastに使いたい
+
 
     user.work_read = "".join(X)
     user.save()
+
+    ###データ入力方式変更に伴い追加
+    if len(isRead) >= 6:
+        return HttpResponseRedirect(reverse('mkdata:selectfavorite', ))
+    ######
+
+    X[max(map(int, isRead)) - 1] = "3"  # isLastに使いたい
 
     first = 1
     while first <= Work.objects.all().order_by("-id")[0].id:
@@ -307,5 +314,66 @@ def UserRead(request):
                 break
             else:
                 first += 1
+
     return HttpResponseRedirect(reverse('mkdata:index', args=(first,)))
 
+def SelectFavoriteView(request):
+    works = Work.objects.all()
+    user = request.user
+    read_works = []
+
+    for work in works:
+        if int(user.work_read[work.id-1])>=2:
+            read_works.append(work)
+
+    return render(request, 'mkdata/select_favorite.html', {'read_works': read_works, 'user': user, })
+
+def SelectFavoriteAgainView(request):
+    works = Work.objects.all()
+    user = request.user
+    read_works = []
+
+    for work in works:
+        if int(user.work_read[work.id-1]) >= 2:
+            read_works.append(work)
+
+    return render(request, 'mkdata/select_favorite_again.html', {'read_works': read_works, 'user': user, })
+
+def UserSelected(request):
+    user = request.user
+    works = Work.objects.all()
+
+    isSelected = request.POST.getlist('isSelected')
+    isSelected = list(map(int,isSelected))
+
+    X = list(user.work_read)
+    #print('X[:20]', X[:20])
+
+    if len(isSelected) != 5:
+        return HttpResponseRedirect(reverse('mkdata:selectfavoriteagain', ))
+
+    for work in works:
+        if X[work.id-1] == '2' and ((work.id in isSelected) == False):
+            ###回答しないので1に戻す
+            X[work.id - 1] = '1'
+
+    X[max(isSelected) - 1] = "3"  # isLastに使いたい
+
+    user.work_read = "".join(X)
+    user.save()
+
+    #print('X[:20]',X[:20])
+
+    first = 1
+    while first <= Work.objects.all().order_by("-id")[0].id:
+        try:
+            x = Work.objects.get(id=first)
+        except:
+            first += 1
+        else:
+            if int(user.work_read[first - 1]) >= 2:
+                break
+            else:
+                first += 1
+
+    return HttpResponseRedirect(reverse('mkdata:index', args=(first,)))

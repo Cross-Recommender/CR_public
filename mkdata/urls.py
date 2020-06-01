@@ -17,5 +17,8 @@ urlpatterns = [
     #path('detail/', views.detail,name='detail'),
     path('start/',views.StartView, name='start'),
     path('userread/',views.UserRead, name='userread'),
+    path('selectfavorite/', views.SelectFavoriteView, name='selectfavorite'),
+    path('selectfavoriteagain/', views.SelectFavoriteAgainView, name='selectfavoriteagain'),
+    path('userselected/', views.UserSelected, name='userselected'),
     #path('upload/', views.upload, name='upload'),
 ]

@@ -90,7 +90,7 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
     #Arrayfieldは使いにくそうだったのでTextfieldで代用しました。今後これを変更することはないと思います。
     work_like = models.TextField(default="".join(['0']*100000))
 
-    #userが各idの漫画を読んだことがあるかどうかを判定。'0': 未判定, '1': 読んだことなし '2': あり, '3':isLast
+    #userが各idの漫画を読んだことがあるかどうかを判定。'0': 未判定, '1': 読んだことなし '2': あり '3':isLast
     work_read = models.TextField(default="".join(['0']*100000))
 
     ###データは入力済み？

@@ -9,16 +9,23 @@ class Work(models.Model):
 
     # sum of the assessment values for all users is recorded
 
-    like = models.IntegerField(default=0)
-    joy = models.IntegerField(default=0)
-    anger = models.IntegerField(default=0)
-    sadness = models.IntegerField(default=0)
-    fun = models.IntegerField(default=0)
-    tech_constitution = models.IntegerField(default=0)
-    tech_story = models.IntegerField(default=0)
-    tech_character = models.IntegerField(default=0)
-    tech_speech = models.IntegerField(default=0)
-    tech_picture = models.IntegerField(default=0)
+    like = models.FloatField(default=0)
+    joy = models.FloatField(default=0)
+    anger = models.FloatField(default=0)
+    sadness = models.FloatField(default=0)
+    fun = models.FloatField(default=0)
+    tech_constitution = models.FloatField(default=0)
+    tech_story = models.FloatField(default=0)
+    tech_character = models.FloatField(default=0)
+    tech_speech = models.FloatField(default=0)
+    tech_picture = models.FloatField(default=0)
+
+    #映画特有の技術的評価軸
+    mov_tech_audio = models.FloatField(default=0)
+    mov_tech_acting = models.FloatField(default=0)
+
+    ###ジャンルを表す　1: 漫画　2: 映画
+    genre = models.IntegerField(default=1)
 
     def __str__(self):
         return self.name

@@ -1,0 +1,39 @@
+{% extends 'mkdata/base.html' %}
+
+{% block title %} データ入力 | Cross Recommender {% endblock %}
+
+{% block content %}
+<main class="columns">
+  <div class="column">
+
+  </div>
+</main>
+<section class="section">
+    <div class="container is-mobile">
+        <h1 class="title is-4">データ入力</h1>
+        <h2 class="subtitle is-6">Enter data</h2>
+        <hr>
+        <p>次に, {{ user.username }}さんが読んだことがある作品の中で特に好きだったもの5つを選んでください。</p>
+        <form method="post" action="{% url 'mkdata:userselected' %}">
+            {% csrf_token %}
+            <br>
+
+            {% for work in read_works %}
+                <label class="checkbox">
+                    <input type="checkbox" name = "isSelected" value = "{{ work.id }}">
+                        {{ work.name }}
+                    <br>
+                    <br>
+                </label>
+                <br>
+            {% endfor %}
+
+            <div class="field">
+                <p class="control">
+                    <input type="submit" value="次へ" class="button is-success">
+                </p>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}
