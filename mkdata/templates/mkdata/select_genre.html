@@ -1,0 +1,45 @@
+{% extends 'mkdata/base.html' %}
+
+{% block title %} データ入力 - 自由入力 | Cross Recommender{% endblock %}
+
+{% block content %}
+
+<section class="section">
+    <div class="container is-mobile">
+        <h1 class="title is-4">データ入力（自由入力）</h1>
+        <h2 class="subtitle is-6">Free Review</h2>
+        <hr>
+        <p>{{ user.username }}さんのおすすめの漫画, 映画について{{ user.username }}さんの評価を教えてください。</p>
+        <p>まず, 入力する作品のジャンルと名前を入力してください。</p>
+
+        <form method="post" action="{% url 'mkdata:mkaddwork'%}">
+            {% csrf_token %}
+            <div class="field">
+                <label class="label">ジャンル</label>
+                <div class="control">
+                  <label class="radio">
+                    <input type="radio" name="genre" value = 1>
+                    漫画
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="genre" value = 2>
+                    映画
+                  </label>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">作品名</label>
+                <div class="control">
+                    <input class="input" type="text" name ="name" placeholder="作品名を入力してください。">
+                </div>
+            </div>
+            <div class="field">
+                <p class="control">
+                    <input type="submit" value="次へ" class="button is-success">
+                </p>
+            </div>
+
+        </form>
+    </div>
+</section>
+{% endblock %}

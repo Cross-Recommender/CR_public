@@ -91,6 +91,7 @@ def try_Work_get(id):
 class AddedWork(models.Model):
     name = models.CharField(max_length=200)
     userid = models.IntegerField(default=0)
+    genre = models.IntegerField(default=1)
 
     # sum of the assessment values for all users is recorded
 

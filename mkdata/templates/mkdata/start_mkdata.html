@@ -15,21 +15,31 @@
         <hr>
         <p>ここでは, {{ user.username }}さんにオススメな作品をご紹介するために, {{ user.username }}さんが読んだことがある漫画について入力していただきます。</p>
         <p>まずは, 以下の中から{{ user.username }}さんが読んだことがある漫画<b>全てに</b>チェックをつけてください。</p>
-        <p><strong><font color = "red">この一覧のうち、{{ user.username }}さんが読んだことのない作品からおすすめされますので、全ての作品を読んだことがある場合おすすめ作品が表示されません。ご注意ください。</font></strong></p>
+        <p><strong><font color = "red">この一覧のうち、{{ user.username }}さんが触れたことのない作品からおすすめされますので、全ての作品を読んだことがある場合おすすめ作品が表示されません。ご注意ください。</font></strong></p>
         <form method="post" action="{% url 'mkdata:userread'%}">
             {% csrf_token %}
             <br>
 
-            {% for work in works %}
+            <h2 class="subtitle is-6"><b>漫画</b></h2>
+            {% for comic in comics %}
                 <label class="checkbox">
-                    <input type="checkbox" name = "isRead" value = "{{ work.id }}">
-                        {{ work.name }}
+                    <input type="checkbox" name = "isRead" value = "{{ comic.id }}">
+                        {{ comic.name }}
                     <br>
                     <br>
                 </label>
                 <br>
             {% endfor %}
-
+            <h2 class="subtitle is-6"><b>邦画</b></h2>
+            {% for jp_movie in jp_movies %}
+                <label class="checkbox">
+                    <input type="checkbox" name = "isRead" value = "{{ jp_movie.id }}">
+                        {{ jp_movie.name }}
+                    <br>
+                    <br>
+                </label>
+                <br>
+            {% endfor %}
             <div class="field">
                 <p class="control">
                     <input type="submit" value="次へ" class="button is-success">
@@ -39,8 +49,8 @@
     </div>
     <br>
     <div class="container is-mobile">
-        <p>上記40作品に読んだことのある漫画がない方は、申し訳ありませんが下記ページより作品名をご自分で入力して評価してください。</p>
-        <a href="{% url 'mkdata:freevote' %}" class="button is-light is-small">自由入力はこちら</a>
+        <p>上記作品に読んだことのある漫画も見たことがある映画もない方は、申し訳ありませんが下記ページより作品名をご自分で入力して評価してください。</p>
+        <a href="{% url 'mkdata:selectgenre' %}" class="button is-light is-small">自由入力はこちら</a>
     </div>
 </section>
 {% endblock %}

@@ -18,7 +18,7 @@ from django.views.generic.edit import FormView
 from django.views.generic.edit import UpdateView
 from django.views.generic.edit import CreateView
 
-from .forms import CollectDataForm, AddWorkForm
+from .forms import CollectDataForm, AddWorkForm#, SelectGenreForm
 
 from django.shortcuts import resolve_url
 
@@ -47,6 +47,10 @@ def IndexView(request, work_id):
     '''
 
     work = Work.objects.get(pk=work_id)
+
+    if work.genre is None:
+        work.genre = 1
+        work.save()
 
     template = loader.get_template('mkdata/sampleform.html')
 
@@ -186,21 +190,50 @@ def vote(request, work_id):
             except:
                 next += 1
             else:
-                if int(user.work_read[next-1])  >= 2:
+                if int(user.work_read[next-1]) >= 2:
                     break
                 else:
                     next += 1
 
         return HttpResponseRedirect(reverse('mkdata:index', args=(next,)))
 
+def SelectGenreView(request):
+    user = request.user
 
-class AddWorkView(CreateView):
-    # print("1")
-    # model = AddedWork
+    template = loader.get_template('mkdata/select_genre.html')
+
+    context = {
+        'user': user,
+    }
+
+    return HttpResponse(template.render(context, request))
+
+def mkaddwork(request):
+    addwork = AddedWork(genre=int(request.POST['genre']))
+    addwork.name = request.POST['name']
+    addwork.save()
+    # print(addwork.name)
+    # print(addwork.id)
+
+    return HttpResponseRedirect(reverse('mkdata:freevote', args=(addwork.id,)))
+
+class AddWorkView(UpdateView):
+    # フィールドに書いてあるのに質問項目を作らないと「この項目は必須です」になる
+    model = AddedWork
     # modelはAddWorkFormで指定しているのでいらない
+    # UpdateViewでは必要らしいです。
     form_class = AddWorkForm
     template_name = 'mkdata/addwork.html'
-    success_url = reverse_lazy('mkdata:thanks')
+
+    '''
+    def get_success_url(self):
+        return resolve_url('mkdata:thanks')
+    '''
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)###継承
+        context['addwork'] = AddedWork.objects.get(id=self.kwargs['pk'])###contextの追加
+        return context
 
     def form_valid(self, form):
         '''
@@ -214,8 +247,19 @@ class AddWorkView(CreateView):
         self.object = form.save()
         self.object.userid = self.request.user.id
         self.object.save()
-        return HttpResponseRedirect(self.get_success_url())
+        return HttpResponseRedirect(reverse_lazy('mkdata:thanks'))
 
+'''
+class SelectGenreView(CreateView):
+    form_class = SelectGenreForm
+    template_name = 'mkdata/select_genre.html'
+    success_url = reverse_lazy('mkdata:freevote')
+
+    def form_valid(self, form):
+        self.object = form.save()
+        self.object.save()
+        return resolve_url('cms:user_detail', pk=self.kwargs['pk'])
+'''
 
 '''
 def recommend(request, work_id):
@@ -264,9 +308,16 @@ def recommend(request):
 
 
 def StartView(request):
+    comics = []
+    jp_movies = []
     works = Work.objects.all()
+    for work in works:
+        if work.genre == 1:
+            comics.append(work)
+        else:
+            jp_movies.append(work)
     user = request.user
-    return render(request, 'mkdata/start_mkdata.html', {'works': works, 'user': user, })
+    return render(request, 'mkdata/start_mkdata.html', {'comics': comics, 'jp_movies': jp_movies, 'user': user, })
 
 
 def UserRead(request):
@@ -322,8 +373,10 @@ def SelectFavoriteView(request):
     user = request.user
     read_works = []
 
+    #print('selectfavoriteview, user.work_read[:100]',user.work_read[:100])
+
     for work in works:
-        if int(user.work_read[work.id-1])>=2:
+        if int(user.work_read[work.id-1]) >= 2:
             read_works.append(work)
 
     return render(request, 'mkdata/select_favorite.html', {'read_works': read_works, 'user': user, })
@@ -332,6 +385,8 @@ def SelectFavoriteAgainView(request):
     works = Work.objects.all()
     user = request.user
     read_works = []
+
+    #print('selectfavoriteagainview, user.work_read[:100]', user.work_read[:100])
 
     for work in works:
         if int(user.work_read[work.id-1]) >= 2:
@@ -343,13 +398,14 @@ def UserSelected(request):
     user = request.user
     works = Work.objects.all()
 
+    #print('userselected, user.work_read[:100]',user.work_read[:100])
     isSelected = request.POST.getlist('isSelected')
     isSelected = list(map(int,isSelected))
 
     X = list(user.work_read)
-    #print('X[:20]', X[:20])
 
     if len(isSelected) != 5:
+        #print('userselected, user.work_read[:100]',user.work_read[:100])
         return HttpResponseRedirect(reverse('mkdata:selectfavoriteagain', ))
 
     for work in works:

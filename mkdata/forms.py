@@ -51,9 +51,21 @@ class CollectDataForm(forms.ModelForm):
 class AddWorkForm(forms.ModelForm):
     class Meta:
         model = AddedWork
-        fields = ('name', 'like', 'joy', 'anger', 'sadness', 'fun', 'tech_constitution', 'tech_story', 'tech_character', 'tech_speech', 'tech_picture' )
+        fields = ('like', 'joy', 'anger', 'sadness', 'fun', 'tech_constitution', 'tech_story', 'tech_character', 'tech_speech', 'tech_picture' )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs['class'] = 'input'
+
+'''
+class SelectGenreForm(forms.ModelForm):
+    class Meta:
+        model = AddedWork
+        fields = ('genre',)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'input'
+'''
