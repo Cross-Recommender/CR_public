@@ -1,7 +1,5 @@
-
-#これは遺物. 現行はmodels.py のWorkに移植
-#今なら作れる気がする
-from .models import Work, AddedWork, mkbaseWorks
+from .models import Work, AddedWork, try_Work_get
+import random
 
 #import numpy as np
 # numpyのimportの仕方分からず
@@ -46,6 +44,8 @@ def recommendsort(obj, n):
         ###AddedWorkの場合
         basepoint=[obj.joy,obj.anger,obj.sadness,obj.fun,obj.tech_constitution,obj.tech_story,obj.tech_character,obj.tech_speech,obj.tech_picture]
     scores = []
+    if basepoint is None:
+        return None
     for work in get_works():
         if work.num_of_data != 0:
             scores += [
@@ -65,17 +65,23 @@ def recommendselect(user):
     OrderedWork = mkbaseWorks(user.work_like)
     #print(user.work_like[:10])
     #print(OrderedWork)
-    print(OrderedWork is None)
-    if OrderedWork is None:
-        OrderedWork = AddedWork.objects.filter(userid=user.id).order_by('-like')[:5].order_by('?')
-        if OrderedWork.count() == 0:
-            return None
+    #print(not OrderedWork)
+    OrderedAddedWork = mkbaseAddedWorks(user.id)
+    #print(OrderedAddedWork)
+    #print(not OrderedAddedWork)
+    OrderedWork += OrderedAddedWork
+    if not OrderedWork:  #これで空っぽ判定になるらしい
+        user.work_recommend = None
+        user.save()
+        return
 
     works = []
     num = 0
     for work in OrderedWork:
         # print(len(works))#なぜか作品が6つ以上表示された時のバグ確認用
         cand_works = recommendsort(work, 5)
+        if cand_works is None:
+            continue
         # print(OrderedWork[num], cand_works)
         for i in range(4):
             # print((cand_works[i] in works) == False,user.work_like[cand_works[i]-1] == '0')
@@ -90,8 +96,34 @@ def recommendselect(user):
         num += 1
         if num == 4:
             break
+    if not works:
+        works = [0]*5
     user.work_recommend = works
     user.save()
-
-
     return
+
+def mkbaseWorks(string):
+    """
+    work_like をもとにユーザーの高評価作品順に並んだ　works　を返す
+    評価点が同じ作品の順序はランダムに決まる
+    この関数を呼び出すたびに順番は変わる
+    """
+    ###Workデータベースの最大IDはobjects.all().count()で得られない
+    arr = list(map(lambda x: int(x)+random.random(), list(string[:Work.objects.all().order_by("-id")[0].id])))
+    arr = list(enumerate(arr, 1))
+    arr.sort(key=lambda x: x[1], reverse=True)
+    arr = [x for x in arr if x[1] >= 1]
+    arr = list(map(lambda x: x[0], arr))
+    #print(arr)
+    ###オブジェクト削除によりオブジェクトがない場合があるので例外処理
+    Works = list(map(lambda x: try_Work_get(x), arr))
+    Works = [x for x in Works if x is not None]
+    #print(Works)
+    return Works
+
+
+def mkbaseAddedWorks(userid):
+    AddedWorks = list(map(lambda x: [x, x.like + random.random()], AddedWork.objects.filter(userid=userid)))
+    AddedWorks.sort(key=lambda x: x[1], reverse=True)
+    AddedWorks = list(map(lambda x: x[0], AddedWorks))
+    return AddedWorks

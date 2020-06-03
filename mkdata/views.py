@@ -23,8 +23,9 @@ from .forms import CollectDataForm, AddWorkForm#, SelectGenreForm
 from django.shortcuts import resolve_url
 
 from cms.models import User
+from cms.mixins import OnlyYouMixin
 
-from .models import Work, mkbaseWorks, AddedWork
+from .models import Work, AddedWork, try_Work_get
 
 from .recommend import recommendselect
 
@@ -218,7 +219,7 @@ def mkaddwork(request):
 
     return HttpResponseRedirect(reverse('mkdata:freevote', args=(addwork.id,)))
 
-class AddWorkView(UpdateView):
+class AddWorkView(OnlyYouMixin,UpdateView):
     # フィールドに書いてあるのに質問項目を作らないと「この項目は必須です」になる
     model = AddedWork
     # modelはAddWorkFormで指定しているのでいらない
@@ -279,11 +280,10 @@ def recommend(request):
         user.save()
 
     works = user.work_recommend
-    if works == [0]*5 or works is None:
-        user.work_recommend = [0]*5
-        user.save()
+    if works is None:
         return render(request, 'mkdata/no_recommendation.html')
-    works = list(map(lambda x:Work.objects.get(id=x), works))
+    works = list(map(lambda x: try_Work_get(x), works))
+    works = [x for x in works if x is not None]
     return render(request, 'mkdata/recommend.html', {'works': works, 'user': user})
 
 
