@@ -343,6 +343,7 @@ def UserRead(request):
         #print(num)
         X[int(num) - 1] = "2"
 
+    X[max(map(int, isRead)) - 1] = "3"  # isLastに使いたい
 
     user.work_read = "".join(X)
     user.save()
@@ -351,8 +352,6 @@ def UserRead(request):
     if len(isRead) >= 6:
         return HttpResponseRedirect(reverse('mkdata:selectfavorite', ))
     ######
-
-    X[max(map(int, isRead)) - 1] = "3"  # isLastに使いたい
 
     first = 1
     while first <= Work.objects.all().order_by("-id")[0].id:
@@ -409,7 +408,7 @@ def UserSelected(request):
         return HttpResponseRedirect(reverse('mkdata:selectfavoriteagain', ))
 
     for work in works:
-        if X[work.id-1] == '2' and ((work.id in isSelected) == False):
+        if int(X[work.id-1]) >= 2 and ((work.id in isSelected) == False):
             ###回答しないので1に戻す
             X[work.id - 1] = '1'
 
