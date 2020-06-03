@@ -1,4 +1,5 @@
 from django.db import models
+import  random
 
 
 # Create your models here.
@@ -42,7 +43,10 @@ class Work(models.Model):
 # work_like を元にユーザーの高評価作品順に並んだ　works　を返す
 # 都合がいいので仮置き　cms/views.py で使用
 def mkbaseWorks(string):
-    '''
+    """
+    work_like をもとにユーザーの高評価作品順に並んだ　works　を返す
+    評価点が同じ作品の順序はランダムに決まる
+    この関数を呼び出すたびに順番は変わる
     ・Work.objects.count()は必ずしもWorkのidの最大値に一致するとは限らない
     (削除されたオブジェクトがあったときに, そのオブジェクトのidは補間されないので,
      idを飛ばしてオブジェクトが設定される場合が存在する)
@@ -59,7 +63,7 @@ def mkbaseWorks(string):
     · enumerateは第二引数で1から開始するよう指定しているのでそれに合わせて修正しました
     · 例外処理を加えました
     · 降順にするのを忘れていたので降順にしました
-    '''
+    """
 
     '''
     arr = list(map(lambda x: int(x), list(string[:Work.objects.count()])))
@@ -68,16 +72,16 @@ def mkbaseWorks(string):
     arr = list(map(lambda x: x[0], arr))
     Works = list(map(lambda x: Work.objects.get(id=x), arr))
     '''
-    arr = list(map(lambda x: int(x), list(string[:Work.objects.all().order_by("-id")[0].id])))
+    arr = list(map(lambda x: int(x)+random.random(), list(string[:Work.objects.all().order_by("-id")[0].id])))
     arr = list(enumerate(arr, 1))
     arr.sort(key=lambda x: x[1], reverse=True)
-    arr = [x for x in arr if x[1] != 0]
+    arr = [x for x in arr if x[1] >= 1]
     arr = list(map(lambda x: x[0], arr))
     #print(arr)
     ###次の行に修正の必要あり(idが取得できなかった場合の例外処理が必要)
     Works = list(map(lambda x: try_Work_get(x), arr))
     Works = [x for x in Works if x is not None]
-    #print(Works)
+    print(Works)
     return None if Works == [] else Works
 
 

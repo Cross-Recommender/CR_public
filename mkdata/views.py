@@ -26,7 +26,7 @@ from cms.models import User
 
 from .models import Work, mkbaseWorks, AddedWork
 
-from .recommend import recommendsort
+from .recommend import recommendselect
 
 import csv
 from io import TextIOWrapper, StringIO
@@ -181,6 +181,7 @@ def vote(request, work_id):
     if user.work_read[work_id - 1] == "3":
         user.data_entered = True
         user.save()
+        recommendselect(request.user)
         return HttpResponseRedirect(reverse('mkdata:recommend', ))
     else:
         next = work.id + 1
@@ -247,6 +248,7 @@ class AddWorkView(UpdateView):
         self.object = form.save()
         self.object.userid = self.request.user.id
         self.object.save()
+        recommendselect(self.request.user)
         return HttpResponseRedirect(reverse_lazy('mkdata:thanks'))
 
 '''
@@ -276,34 +278,12 @@ def recommend(request):
         user.data_entered = False
         user.save()
 
-    OrderedWork = mkbaseWorks(user.work_like)
-    #print(user.work_like[:10])
-    #print(OrderedWork)
-    if OrderedWork is None:
-        OrderedWork = AddedWork.objects.filter(userid=user.id).order_by('-like')
-        if OrderedWork.count() == 0:
-            return render(request, 'mkdata/no_recommendation.html')
-    works = []
-    num = 0
-    for work in OrderedWork:
-        #print(len(works))#なぜか作品が6つ以上表示された時のバグ確認用
-        cand_works = recommendsort(work, 5)
-        # print(OrderedWork[num], cand_works)
-        for i in range(4):
-            # print((cand_works[i] in works) == False,user.work_like[cand_works[i].id-1] == '0')
-            if (cand_works[i] in works) == False and user.work_like[cand_works[i].id-1] == '0':
-                ###work_readは一時的な記録に過ぎないため, ユーザが読んだかどうかの判定は
-                ###user.work_like[cand_works[i].id-1] == '0'で行う
-                works.append(cand_works[i])
-            if len(works) >= 5:
-                break
-        if len(works) >= 5:
-            break
-        num += 1
-        if num == 4:
-            break
-
-
+    works = user.work_recommend
+    if works == [0]*5 or works is None:
+        user.work_recommend = [0]*5
+        user.save()
+        return render(request, 'mkdata/no_recommendation.html')
+    works = list(map(lambda x:Work.objects.get(id=x), works))
     return render(request, 'mkdata/recommend.html', {'works': works, 'user': user})
 
 

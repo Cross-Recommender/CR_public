@@ -1,7 +1,7 @@
 
 #これは遺物. 現行はmodels.py のWorkに移植
 #今なら作れる気がする
-from .models import Work
+from .models import Work, AddedWork, mkbaseWorks
 
 #import numpy as np
 # numpyのimportの仕方分からず
@@ -50,11 +50,48 @@ def recommendsort(obj, n):
         if work.num_of_data != 0:
             scores += [
                 [sum(list(map(lambda x, y, z: abs(x - y) / z, work.get_average(), basepoint, get_std()))),
-                 work]]
+                 work.id]]
     scores.sort(key=lambda x: x[0])
     works = []
-    for score, work in scores:
-        works.append(work)
+    for score, workid in scores:
+        works.append(workid)
         if len(works) >= n:
             break
     return works
+
+
+def recommendselect(user):
+
+    OrderedWork = mkbaseWorks(user.work_like)
+    #print(user.work_like[:10])
+    #print(OrderedWork)
+    print(OrderedWork is None)
+    if OrderedWork is None:
+        OrderedWork = AddedWork.objects.filter(userid=user.id).order_by('-like')[:5].order_by('?')
+        if OrderedWork.count() == 0:
+            return None
+
+    works = []
+    num = 0
+    for work in OrderedWork:
+        # print(len(works))#なぜか作品が6つ以上表示された時のバグ確認用
+        cand_works = recommendsort(work, 5)
+        # print(OrderedWork[num], cand_works)
+        for i in range(4):
+            # print((cand_works[i] in works) == False,user.work_like[cand_works[i]-1] == '0')
+            if (cand_works[i] in works) is False and user.work_like[cand_works[i] - 1] == '0':
+                ###work_readは一時的な記録に過ぎないため, ユーザが読んだかどうかの判定は
+                ###user.work_like[cand_works[i]-1] == '0'で行う
+                works.append(cand_works[i])
+            if len(works) >= 5:
+                break
+        if len(works) >= 5:
+            break
+        num += 1
+        if num == 4:
+            break
+    user.work_recommend = works
+    user.save()
+
+
+    return
