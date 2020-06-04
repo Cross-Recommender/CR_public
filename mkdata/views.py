@@ -23,7 +23,7 @@ from .forms import CollectDataForm, AddWorkForm#, SelectGenreForm
 from django.shortcuts import resolve_url
 
 from cms.models import User
-from cms.mixins import OnlyYouMixin
+from .mixins import OnlyRegistererMixin
 
 from .models import Work, AddedWork, try_Work_get
 
@@ -213,13 +213,14 @@ def SelectGenreView(request):
 def mkaddwork(request):
     addwork = AddedWork(genre=int(request.POST['genre']))
     addwork.name = request.POST['name']
+    addwork.userid = request.user.id
     addwork.save()
     # print(addwork.name)
     # print(addwork.id)
 
     return HttpResponseRedirect(reverse('mkdata:freevote', args=(addwork.id,)))
 
-class AddWorkView(OnlyYouMixin,UpdateView):
+class AddWorkView(OnlyRegistererMixin,UpdateView):
     # フィールドに書いてあるのに質問項目を作らないと「この項目は必須です」になる
     model = AddedWork
     # modelはAddWorkFormで指定しているのでいらない
