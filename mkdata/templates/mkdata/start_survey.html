@@ -1,0 +1,45 @@
+{% extends 'mkdata/base.html' %}
+
+{% block title %} アンケート | Cross Recommender {% endblock %}
+
+{% block content %}
+<main class="columns">
+  <div class="column">
+
+  </div>
+</main>
+<section class="section">
+    <div class="container is-mobile">
+        <h1 class="title is-4">サービス開発のためのアンケート</h1>
+        <h2 class="subtitle is-6">Enter data</h2>
+        <hr>
+        <p>ここでは, サービス開発のため, 見たことのある邦画について入力していただきます。</p>
+        <p>まずは, 以下の中から見たことがある邦画にチェックをつけてください。</p>
+        <form method="post" action="{% url 'mkdata:userread'%}">
+            {% csrf_token %}
+            <br>
+            <h2 class="subtitle is-6"><b>邦画</b></h2>
+            {% for jp_movie in jp_movies %}
+                <label class="checkbox">
+                    <input type="checkbox" name = "isRead" value = "{{ jp_movie.id }}">
+                        {{ jp_movie.name }}
+                    <br>
+                    <br>
+                </label>
+                <br>
+            {% endfor %}
+            <div class="field">
+                <p class="control">
+                    <input type="submit" value="次へ" class="button is-success">
+                </p>
+            </div>
+        </form>
+    </div>
+    <br>
+    <div class="container is-mobile">
+        <p>上記作品に見たことがある映画がない方は、申し訳ありませんが下記ページより作品名をご自分で入力して評価してください。</p>
+        <a href="{% url 'mkdata:selectgenre' %}" class="button is-light is-small">自由入力はこちら</a>
+        <!--上のリンク先を直す-->
+    </div>
+</section>
+{% endblock %}

@@ -300,6 +300,13 @@ def StartView(request):
     user = request.user
     return render(request, 'mkdata/start_mkdata.html', {'comics': comics, 'jp_movies': jp_movies, 'user': user, })
 
+def StartSurveyView(request):
+    jp_movies = []
+    works = Work.objects.all()
+    for work in works:
+        if work.genre == 2:
+            jp_movies.append(work)
+    return render(request, 'mkdata/start_survey.html', {'jp_movies': jp_movies})
 
 def UserRead(request):
     user = request.user

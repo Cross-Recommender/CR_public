@@ -22,5 +22,7 @@ urlpatterns = [
     path('selectfavorite/', views.SelectFavoriteView, name='selectfavorite'),
     path('selectfavoriteagain/', views.SelectFavoriteAgainView, name='selectfavoriteagain'),
     path('userselected/', views.UserSelected, name='userselected'),
+    path('startSurvey/', views.StartSurveyView, name="startSurvey"),
+    #path('usersee/', views.UserSee, name='usersee')
     #path('upload/', views.upload, name='upload'),
 ]
