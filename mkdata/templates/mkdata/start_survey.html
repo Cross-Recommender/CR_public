@@ -16,6 +16,7 @@
         <p>ここでは, サービス開発のため, 見たことのある邦画について入力していただきます。</p>
         <p>まずは, 以下の中から見たことがある邦画にチェックをつけてください。</p>
         <form method="post" action="{% url 'mkdata:userread'%}">
+            <!--ここのリンク先も後で変える-->
             {% csrf_token %}
             <br>
             <h2 class="subtitle is-6"><b>邦画</b></h2>
