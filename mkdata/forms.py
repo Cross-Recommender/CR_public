@@ -64,8 +64,7 @@ class AddWorkForm(forms.ModelForm):
 class StartFreevoteForm(forms.ModelForm):
     class Meta:
         model = AddedWork
-        # fields = ('genre','name',)
-        fields = ('name',)
+        fields = ('genre','name',)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
