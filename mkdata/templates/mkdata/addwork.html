@@ -464,8 +464,10 @@
                 </div>
             </div>
 
-
-          {% endif %}
+            {% else %}
+                {{ form.tech_audio.as_hidden }}
+                {{ form.tech_acting.as_hidden }}
+            {% endif %}
 
           <div class="field">
                 <p class="control">
