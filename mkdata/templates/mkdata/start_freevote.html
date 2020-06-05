@@ -10,7 +10,10 @@
         <h2 class="subtitle is-6">Free Review</h2>
         <hr>
         <p>{{ user.username }}さんのおすすめの漫画, 映画について{{ user.username }}さんの評価を教えてください。</p>
+        <!--
         <p>まず, 入力する作品のジャンルと名前を入力してください。</p>
+        -->
+        <p>まず, 入力する作品の名前を入力してください。</p>
 
         <form method="post" action="">
             {% csrf_token %}
