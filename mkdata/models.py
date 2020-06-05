@@ -64,6 +64,8 @@ class AddedWork(models.Model):
     tech_character = models.IntegerField(default=0)
     tech_speech = models.IntegerField(default=0)
     tech_picture = models.IntegerField(default=0)
+    tech_audio = models.IntegerField(default=0)
+    tech_acting = models.IntegerField(default=0)
 
     def __str__(self):
         return self.name

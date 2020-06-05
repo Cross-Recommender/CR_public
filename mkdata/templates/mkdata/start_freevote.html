@@ -39,7 +39,7 @@
             <div class="field">
                 <label class="label">作品名</label>
                 {% for field, errors in form.errors.items %}
-                    {% if field == "genre" %}
+                    {% if field == "name" %}
                     <article class="message is-warning">
                         {% for error in errors %}
                             <p class = "has-text-danger"><strong>{{ error }}</strong></p>

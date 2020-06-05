@@ -1,4 +1,4 @@
-{% extends 'mkdata/base.html' %}
+{% extends 'mkdata/basex.html' %}
 
 {% block title %} データ入力 - 自由入力 |{% endblock %}
 
@@ -43,6 +43,15 @@
             <br>
             <div class="field">
                 <label class="label">総合的な好み</label>
+                {% for field, errors in form.errors.items %}
+                    {% if field == "like" %}
+                    <article class="message is-warning">
+                        {% for error in errors %}
+                            <p class = "has-text-danger"><strong>{{ error }}</strong></p>
+                        {% endfor %}
+                    </article>
+                    {% endif %}
+                {% endfor %}
                 <div class="control">
                   <label class="radio">
                     <input type="radio" name="like" id = "1" value = 1>
@@ -67,7 +76,17 @@
                 </div>
             </div>
             <div class="field">
-                <label class="label">喜</label><div class="control">
+                <label class="label">喜</label>
+              {% for field, errors in form.errors.items %}
+                    {% if field == "joy" %}
+                    <article class="message is-warning">
+                        {% for error in errors %}
+                            <p class = "has-text-danger"><strong>{{ error }}</strong></p>
+                        {% endfor %}
+                    </article>
+                    {% endif %}
+                {% endfor %}
+              <div class="control">
                   <label class="radio">
                     <input type="radio" name="joy" value = 1>
                     1
@@ -91,7 +110,17 @@
                 </div>
             </div>
           <div class="field">
-                <label class="label">怒</label><div class="control">
+                <label class="label">怒</label>
+                {% for field, errors in form.errors.items %}
+                    {% if field == "anger" %}
+                    <article class="message is-warning">
+                        {% for error in errors %}
+                            <p class = "has-text-danger"><strong>{{ error }}</strong></p>
+                        {% endfor %}
+                    </article>
+                    {% endif %}
+                {% endfor %}
+            <div class="control">
                   <label class="radio">
                     <input type="radio" name="anger" value = 1>
                     1
@@ -115,7 +144,17 @@
                 </div>
             </div>
           <div class="field">
-                <label class="label">哀</label><div class="control">
+                <label class="label">哀</label>
+            {% for field, errors in form.errors.items %}
+                    {% if field == "sadness" %}
+                    <article class="message is-warning">
+                        {% for error in errors %}
+                            <p class = "has-text-danger"><strong>{{ error }}</strong></p>
+                        {% endfor %}
+                    </article>
+                    {% endif %}
+                {% endfor %}
+            <div class="control">
                   <label class="radio">
                     <input type="radio" name="sadness" value = 1>
                     1
@@ -139,7 +178,17 @@
                 </div>
             </div>
           <div class="field">
-                <label class="label">楽</label><div class="control">
+                <label class="label">楽</label>
+            {% for field, errors in form.errors.items %}
+                    {% if field == "fun" %}
+                    <article class="message is-warning">
+                        {% for error in errors %}
+                            <p class = "has-text-danger"><strong>{{ error }}</strong></p>
+                        {% endfor %}
+                    </article>
+                    {% endif %}
+                {% endfor %}
+            <div class="control">
                   <label class="radio">
                     <input type="radio" name="fun" value = 1>
                     1
@@ -163,7 +212,17 @@
                 </div>
             </div>
           <div class="field">
-                <label class="label">全体の構成</label><div class="control">
+                <label class="label">全体の構成</label>
+            {% for field, errors in form.errors.items %}
+                    {% if field == "tech_constitution" %}
+                    <article class="message is-warning">
+                        {% for error in errors %}
+                            <p class = "has-text-danger"><strong>{{ error }}</strong></p>
+                        {% endfor %}
+                    </article>
+                    {% endif %}
+                {% endfor %}
+            <div class="control">
                   <label class="radio">
                     <input type="radio" name="tech_constitution" value = 1>
                     1
@@ -187,7 +246,17 @@
                 </div>
             </div>
           <div class="field">
-                <label class="label">ストーリーの面白さ</label><div class="control">
+                <label class="label">ストーリーの面白さ</label>
+            {% for field, errors in form.errors.items %}
+                    {% if field == "tech_story" %}
+                    <article class="message is-warning">
+                        {% for error in errors %}
+                            <p class = "has-text-danger"><strong>{{ error }}</strong></p>
+                        {% endfor %}
+                    </article>
+                    {% endif %}
+                {% endfor %}
+            <div class="control">
                   <label class="radio">
                     <input type="radio" name="tech_story" value = 1>
                     1
@@ -212,10 +281,20 @@
             </div>
             <div class="field">
                 {% if addwork.genre == 1 %}
-                <label class="label">キャラ設定の良さ</label><div class="control">
+                <label class="label">キャラ設定の良さ</label>
                 {% else %}
-                <label class="label">登場人物に関する設定の良さ</label><div class="control">
+                <label class="label">登場人物に関する設定の良さ</label>
                 {% endif %}
+              {% for field, errors in form.errors.items %}
+                    {% if field == "tech_character" %}
+                    <article class="message is-warning">
+                        {% for error in errors %}
+                            <p class = "has-text-danger"><strong>{{ error }}</strong></p>
+                        {% endfor %}
+                    </article>
+                    {% endif %}
+                {% endfor %}
+              <div class="control">
                   <label class="radio">
                     <input type="radio" name="tech_character" value = 1>
                     1
@@ -238,12 +317,23 @@
                   </label>
                 </div>
             </div>
+
             <div class="field">
                 {% if addwork.genre == 1 %}
-                <label class="label">セリフの付け方の良さ</label><div class="control">
+                <label class="label">セリフの付け方の良さ</label>
                 {% else %}
-                <label class="label">セリフの良さ</label><div class="control">
+                <label class="label">セリフの良さ</label>
                 {% endif %}
+              {% for field, errors in form.errors.items %}
+                    {% if field == "tech_speech" %}
+                    <article class="message is-warning">
+                        {% for error in errors %}
+                            <p class = "has-text-danger"><strong>{{ error }}</strong></p>
+                        {% endfor %}
+                    </article>
+                    {% endif %}
+                {% endfor %}
+              <div class="control">
                   <label class="radio">
                     <input type="radio" name="tech_speech" value = 1>
                     1
@@ -268,10 +358,20 @@
             </div>
           <div class="field">
                 {% if addwork.genre == 1 %}
-                <label class="label">作画の良さ</label><div class="control">
+                <label class="label">作画の良さ</label>
                 {% else %}
-                <label class="label">視覚的な良さ</label><div class="control">
+                <label class="label">視覚的な良さ</label>
                 {% endif %}
+            {% for field, errors in form.errors.items %}
+                    {% if field == "tech_picture" %}
+                    <article class="message is-warning">
+                        {% for error in errors %}
+                            <p class = "has-text-danger"><strong>{{ error }}</strong></p>
+                        {% endfor %}
+                    </article>
+                    {% endif %}
+                {% endfor %}
+              <div class="control">
                   <label class="radio">
                     <input type="radio" name="tech_picture" value = 1>
                     1
@@ -296,7 +396,17 @@
             </div>
           {% if addwork.genre == 2 %}
           <div class="field">
-                <label class="label">音響効果の良さ</label><div class="control">
+                <label class="label">音響効果の良さ</label>
+            {% for field, errors in form.errors.items %}
+                    {% if field == "tech_audio" %}
+                    <article class="message is-warning">
+                        {% for error in errors %}
+                            <p class = "has-text-danger"><strong>{{ error }}</strong></p>
+                        {% endfor %}
+                    </article>
+                    {% endif %}
+                {% endfor %}
+            <div class="control">
                   <label class="radio">
                     <input type="radio" name="tech_audio" value = 1>
                     1
@@ -320,7 +430,17 @@
                 </div>
             </div>
           <div class="field">
-                <label class="label">役者の演技のうまさ</label><div class="control">
+                <label class="label">役者の演技のうまさ</label>
+            {% for field, errors in form.errors.items %}
+                    {% if field == "tech_acting" %}
+                    <article class="message is-warning">
+                        {% for error in errors %}
+                            <p class = "has-text-danger"><strong>{{ error }}</strong></p>
+                        {% endfor %}
+                    </article>
+                    {% endif %}
+                {% endfor %}
+            <div class="control">
                   <label class="radio">
                     <input type="radio" name="tech_acting" value = 1>
                     1
