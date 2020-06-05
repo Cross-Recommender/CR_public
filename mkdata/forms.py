@@ -58,14 +58,15 @@ class AddWorkForm(forms.ModelForm):
         for field in self.fields.values():
             field.widget.attrs['class'] = 'input'
 
-'''
-class SelectGenreForm(forms.ModelForm):
+
+class StartFreevoteForm(forms.ModelForm):
+
     class Meta:
         model = AddedWork
-        fields = ('genre',)
+        fields = ('genre','name',)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs['class'] = 'input'
-'''
+
