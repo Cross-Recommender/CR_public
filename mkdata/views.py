@@ -18,7 +18,7 @@ from django.views.generic.edit import FormView
 from django.views.generic.edit import UpdateView
 from django.views.generic.edit import CreateView
 
-from .forms import CollectDataForm, AddWorkForm#, SelectGenreForm
+from .forms import CollectDataForm, AddWorkForm, StartFreevoteForm#, SelectGenreForm
 
 from django.shortcuts import resolve_url
 
@@ -28,6 +28,8 @@ from .mixins import OnlyRegistererMixin
 from .models import Work, AddedWork, try_Work_get
 
 from .recommend import recommendselect
+
+from django.contrib import messages
 
 import csv
 from io import TextIOWrapper, StringIO
@@ -219,6 +221,43 @@ def mkaddwork(request):
     # print(addwork.id)
 
     return HttpResponseRedirect(reverse('mkdata:freevote', args=(addwork.id,)))
+
+class StartFreevoteView(CreateView):
+    form_class = StartFreevoteForm
+    template_name = 'mkdata/start_freevote.html'
+    #success_url = reverse_lazy('cms:top')
+
+    def form_valid(self, form):
+        user = self.request.user
+        addwork = form.save()
+        self.object = addwork
+        #messages.success(self.request, "保存しました")
+        return HttpResponseRedirect(reverse('mkdata:freevote', args=(self.object.id,)))
+
+    def form_invalid(self,form):
+        #messages.warning(self.request, "保存できませんでした")
+        return super().form_invalid(form)
+
+    """
+    template_name = 'mkdata/start_freevote.html'
+    form_class = StartFreevoteForm
+    #success_url = reverse_lazy('mkdata:mkaddwork')
+
+    '''
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs) # はじめに継承元のメソッドを呼び出す
+        context["user"] = self.request.user.id
+        return context
+    '''
+
+    def form_valid(self, form):
+        addwork = AddedWork(name=form.name)
+        addwork.genre = form.genre
+        addwork.userid = self.request.user.id
+        addwork.save()
+
+        return HttpResponseRedirect(reverse('mkdata:freevote', args=(addwork.id,)))
+    """
 
 class AddWorkView(OnlyRegistererMixin,UpdateView):
     # フィールドに書いてあるのに質問項目を作らないと「この項目は必須です」になる
