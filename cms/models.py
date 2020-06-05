@@ -90,7 +90,13 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
     #Arrayfieldは使いにくそうだったのでTextfieldで代用しました。今後これを変更することはないと思います。
     work_like = models.TextField(default="".join(['0']*100000))
 
-    #userが各idの漫画を読んだことがあるかどうかを判定。'0': 未判定, '1': 読んだことなし '2': あり, '3':isLast
+    #recommendする作品のid
+    #unique:他のユーザとの被りを許すか。Falseなら許す。ユーザ名とかはTrue
+    #null:空っぽでもいいか、ユーザ登録時に空っぽになるのでとりあえずTrueにしとく。Falseだとエラー
+    #default=0:ということは働いてないらしいなこいつ？
+    work_recommend = ArrayField(models.IntegerField(default=0), size=5,unique=False,null=True)
+
+    #userが各idの漫画を読んだことがあるかどうかを判定。'0': 未判定, '1': 読んだことなし '2': あり '3':isLast
     work_read = models.TextField(default="".join(['0']*100000))
 
     ###データは入力済み？

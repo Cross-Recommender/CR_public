@@ -22,7 +22,7 @@ urlpatterns = [
     path('cms/', include('cms.urls')),
     #path('app/', include('app.urls')),
     path('mkdata/', include('mkdata.urls')),
-    path('recommend/', include('recommend.urls')),
+    #path('recommend/', include('recommend.urls')),
     ###ここでurlの形が決まる
     ###'polls/'を''にしたら, polls/が入らないurlになる
 ]

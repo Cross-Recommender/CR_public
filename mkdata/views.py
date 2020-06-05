@@ -18,15 +18,18 @@ from django.views.generic.edit import FormView
 from django.views.generic.edit import UpdateView
 from django.views.generic.edit import CreateView
 
-from .forms import CollectDataForm, AddWorkForm
+from .forms import CollectDataForm, AddWorkForm, StartFreevoteForm#, SelectGenreForm
 
 from django.shortcuts import resolve_url
 
 from cms.models import User
+from .mixins import OnlyRegistererMixin
 
-from .models import Work, mkbaseWorks, AddedWork
+from .models import Work, AddedWork, try_Work_get
 
-from .recommend import recommendsort
+from .recommend import recommendselect
+
+from django.contrib import messages
 
 import csv
 from io import TextIOWrapper, StringIO
@@ -47,6 +50,10 @@ def IndexView(request, work_id):
     '''
 
     work = Work.objects.get(pk=work_id)
+
+    if work.genre is None:
+        work.genre = 1
+        work.save()
 
     template = loader.get_template('mkdata/sampleform.html')
 
@@ -177,6 +184,7 @@ def vote(request, work_id):
     if user.work_read[work_id - 1] == "3":
         user.data_entered = True
         user.save()
+        recommendselect(request.user)
         return HttpResponseRedirect(reverse('mkdata:recommend', ))
     else:
         next = work.id + 1
@@ -186,21 +194,88 @@ def vote(request, work_id):
             except:
                 next += 1
             else:
-                if int(user.work_read[next-1])  >= 2:
+                if int(user.work_read[next-1]) >= 2:
                     break
                 else:
                     next += 1
 
         return HttpResponseRedirect(reverse('mkdata:index', args=(next,)))
 
+def SelectGenreView(request):
+    user = request.user
 
-class AddWorkView(CreateView):
-    # print("1")
-    # model = AddedWork
+    template = loader.get_template('mkdata/select_genre.html')
+
+    context = {
+        'user': user,
+    }
+
+    return HttpResponse(template.render(context, request))
+
+def mkaddwork(request):
+    addwork = AddedWork(genre=int(request.POST['genre']))
+    addwork.name = request.POST['name']
+    addwork.userid = request.user.id
+    addwork.save()
+    # print(addwork.name)
+    # print(addwork.id)
+
+    return HttpResponseRedirect(reverse('mkdata:freevote', args=(addwork.id,)))
+
+class StartFreevoteView(CreateView):
+    form_class = StartFreevoteForm
+    template_name = 'mkdata/start_freevote.html'
+    #success_url = reverse_lazy('cms:top')
+
+    def form_valid(self, form):
+        user = self.request.user
+        addwork = form.save()
+        self.object = addwork
+        #messages.success(self.request, "保存しました")
+        return HttpResponseRedirect(reverse('mkdata:freevote', args=(self.object.id,)))
+
+    def form_invalid(self,form):
+        #messages.warning(self.request, "保存できませんでした")
+        return super().form_invalid(form)
+
+    """
+    template_name = 'mkdata/start_freevote.html'
+    form_class = StartFreevoteForm
+    #success_url = reverse_lazy('mkdata:mkaddwork')
+
+    '''
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs) # はじめに継承元のメソッドを呼び出す
+        context["user"] = self.request.user.id
+        return context
+    '''
+
+    def form_valid(self, form):
+        addwork = AddedWork(name=form.name)
+        addwork.genre = form.genre
+        addwork.userid = self.request.user.id
+        addwork.save()
+
+        return HttpResponseRedirect(reverse('mkdata:freevote', args=(addwork.id,)))
+    """
+
+class AddWorkView(OnlyRegistererMixin,UpdateView):
+    # フィールドに書いてあるのに質問項目を作らないと「この項目は必須です」になる
+    model = AddedWork
     # modelはAddWorkFormで指定しているのでいらない
+    # UpdateViewでは必要らしいです。
     form_class = AddWorkForm
     template_name = 'mkdata/addwork.html'
-    success_url = reverse_lazy('mkdata:thanks')
+
+    '''
+    def get_success_url(self):
+        return resolve_url('mkdata:thanks')
+    '''
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)###継承
+        context['addwork'] = AddedWork.objects.get(id=self.kwargs['pk'])###contextの追加
+        return context
 
     def form_valid(self, form):
         '''
@@ -214,8 +289,20 @@ class AddWorkView(CreateView):
         self.object = form.save()
         self.object.userid = self.request.user.id
         self.object.save()
-        return HttpResponseRedirect(self.get_success_url())
+        recommendselect(self.request.user)
+        return HttpResponseRedirect(reverse_lazy('mkdata:thanks'))
 
+'''
+class SelectGenreView(CreateView):
+    form_class = SelectGenreForm
+    template_name = 'mkdata/select_genre.html'
+    success_url = reverse_lazy('mkdata:freevote')
+
+    def form_valid(self, form):
+        self.object = form.save()
+        self.object.save()
+        return resolve_url('cms:user_detail', pk=self.kwargs['pk'])
+'''
 
 '''
 def recommend(request, work_id):
@@ -232,42 +319,33 @@ def recommend(request):
         user.data_entered = False
         user.save()
 
-    OrderedWork = mkbaseWorks(user.work_like)
-    #print(user.work_like[:10])
-    #print(OrderedWork)
-    if OrderedWork is None:
-        OrderedWork = AddedWork.objects.filter(userid=user.id).order_by('-like')
-        if OrderedWork.count() == 0:
-            return render(request, 'mkdata/no_recommendation.html')
-    works = []
-    num = 0
-    for work in OrderedWork:
-        #print(len(works))#なぜか作品が6つ以上表示された時のバグ確認用
-        cand_works = recommendsort(work, 5)
-        # print(OrderedWork[num], cand_works)
-        for i in range(4):
-            # print((cand_works[i] in works) == False,user.work_like[cand_works[i].id-1] == '0')
-            if (cand_works[i] in works) == False and user.work_like[cand_works[i].id-1] == '0':
-                ###work_readは一時的な記録に過ぎないため, ユーザが読んだかどうかの判定は
-                ###user.work_like[cand_works[i].id-1] == '0'で行う
-                works.append(cand_works[i])
-            if len(works) >= 5:
-                break
-        if len(works) >= 5:
-            break
-        num += 1
-        if num == 4:
-            break
-
-
+    works = user.work_recommend
+    if works is None:
+        return render(request, 'mkdata/no_recommendation.html')
+    works = list(map(lambda x: try_Work_get(x), works))
+    works = [x for x in works if x is not None]
     return render(request, 'mkdata/recommend.html', {'works': works, 'user': user})
 
 
 def StartView(request):
+    comics = []
+    jp_movies = []
     works = Work.objects.all()
+    for work in works:
+        if work.genre == 1:
+            comics.append(work)
+        else:
+            jp_movies.append(work)
     user = request.user
-    return render(request, 'mkdata/start_mkdata.html', {'works': works, 'user': user, })
+    return render(request, 'mkdata/start_mkdata.html', {'comics': comics, 'jp_movies': jp_movies, 'user': user, })
 
+def StartSurveyView(request):
+    jp_movies = []
+    works = Work.objects.all()
+    for work in works:
+        if work.genre == 2:
+            jp_movies.append(work)
+    return render(request, 'mkdata/start_survey.html', {'jp_movies': jp_movies})
 
 def UserRead(request):
     user = request.user
@@ -291,10 +369,16 @@ def UserRead(request):
     for num in isRead:
         #print(num)
         X[int(num) - 1] = "2"
+
     X[max(map(int, isRead)) - 1] = "3"  # isLastに使いたい
 
     user.work_read = "".join(X)
     user.save()
+
+    ###データ入力方式変更に伴い追加
+    if len(isRead) >= 6:
+        return HttpResponseRedirect(reverse('mkdata:selectfavorite', ))
+    ######
 
     first = 1
     while first <= Work.objects.all().order_by("-id")[0].id:
@@ -307,5 +391,71 @@ def UserRead(request):
                 break
             else:
                 first += 1
+
     return HttpResponseRedirect(reverse('mkdata:index', args=(first,)))
 
+def SelectFavoriteView(request):
+    works = Work.objects.all()
+    user = request.user
+    read_works = []
+
+    #print('selectfavoriteview, user.work_read[:100]',user.work_read[:100])
+
+    for work in works:
+        if int(user.work_read[work.id-1]) >= 2:
+            read_works.append(work)
+
+    return render(request, 'mkdata/select_favorite.html', {'read_works': read_works, 'user': user, })
+
+def SelectFavoriteAgainView(request):
+    works = Work.objects.all()
+    user = request.user
+    read_works = []
+
+    #print('selectfavoriteagainview, user.work_read[:100]', user.work_read[:100])
+
+    for work in works:
+        if int(user.work_read[work.id-1]) >= 2:
+            read_works.append(work)
+
+    return render(request, 'mkdata/select_favorite_again.html', {'read_works': read_works, 'user': user, })
+
+def UserSelected(request):
+    user = request.user
+    works = Work.objects.all()
+
+    #print('userselected, user.work_read[:100]',user.work_read[:100])
+    isSelected = request.POST.getlist('isSelected')
+    isSelected = list(map(int,isSelected))
+
+    X = list(user.work_read)
+
+    if len(isSelected) != 5:
+        #print('userselected, user.work_read[:100]',user.work_read[:100])
+        return HttpResponseRedirect(reverse('mkdata:selectfavoriteagain', ))
+
+    for work in works:
+        if int(X[work.id-1]) >= 2 and ((work.id in isSelected) == False):
+            ###回答しないので1に戻す
+            X[work.id - 1] = '1'
+
+    X[max(isSelected) - 1] = "3"  # isLastに使いたい
+
+    user.work_read = "".join(X)
+    user.save()
+
+    #print('X[:20]',X[:20])
+
+    first = 1
+    while first <= Work.objects.all().order_by("-id")[0].id:
+        try:
+            x = Work.objects.get(id=first)
+        except:
+            first += 1
+        else:
+            if int(user.work_read[first - 1]) >= 2:
+                break
+            else:
+                first += 1
+
+    return HttpResponseRedirect(reverse('mkdata:index', args=(first,)))

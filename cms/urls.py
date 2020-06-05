@@ -17,7 +17,7 @@ urlpatterns = [
     path('user/<int:pk>/', views.UserDetail.as_view(), name='user_detail'),
     #path('user/', views.UserList.as_view(), name='user_list'),
     path('user/<int:pk>/delete/', views.UserDelete.as_view(), name='user_delete'),
-    path('user/<int:pk>/recommend/', views.RecommendView.as_view(), name='user_recommend'),
-    path('works/<int:pk>/', views.WorksView.as_view(), name='works'),
-    path('works/', views.WorksList.as_view(), name='works_list'),
+    #path('user/<int:pk>/recommend/', views.RecommendView.as_view(), name='user_recommend'),
+    #path('works/<int:pk>/', views.WorksView.as_view(), name='works'),
+    #path('works/', views.WorksList.as_view(), name='works_list'),
 ]

@@ -3,8 +3,8 @@
 {% block title %}Home | {% endblock %}
 
 {% block hero %}
-<section class="hero is-large is-info" style="background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1567&q=80')"><!--修正-->
-  <div class="hero-body">
+<section class="hero is-medium is-info is-bold">
+    <div class="hero-body">
         <div class="container">
             <h1 class="title">Cross Recommender</h1>
             <h2 class="subtitle">新しいお気に入りを見つけよう</h2>
@@ -22,14 +22,6 @@
             {% endif %}
         </div>
         <div class="container">
-            <br>
-            <a href="https://forms.gle/76CfeAkMs4fiAN3GA" target="_blank">
-                <button class="button is-info is-inverted is-outlined">
-                    <strong>邦画作品のデータ入力ご協力のお願い</strong>
-                </button>
-            </a>
-        </div>
-        <div class="container">
             {% if user.is_authenticated %}
             <br>
             <a href="/mkdata/recommend">
@@ -38,6 +30,7 @@
                 </button>
             </a>
             {% endif %}
+
         </div>
     </div>
 </section>
@@ -75,7 +68,6 @@
             <h1 class="title">NEWS</h1>
             <ul>
                 <li>2020.05.29　version 0.1をリリース。</li>
-                <li>2020.06.06　version 0.2をリリース。レコメンドできる作品数が大幅に増加しました！</li>
             </ul>
         </div>
     </div>

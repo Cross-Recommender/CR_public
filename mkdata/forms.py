@@ -20,7 +20,9 @@ class LoginForm(AuthenticationForm):
 class CollectDataForm(forms.ModelForm):
     class Meta:
         model = Work
-        fields = ('like', 'joy','anger','sadness','fun','tech_constitution','tech_story','tech_character','tech_speech','tech_picture')
+        fields = (
+        'like', 'joy', 'anger', 'sadness', 'fun', 'tech_constitution', 'tech_story', 'tech_character', 'tech_speech',
+        'tech_picture')
 
     '''
     def __init__(self, *args, **kwargs):
@@ -47,11 +49,22 @@ class CollectDataForm(forms.ModelForm):
     '''
 
 
-
 class AddWorkForm(forms.ModelForm):
     class Meta:
         model = AddedWork
-        fields = ('name', 'like', 'joy', 'anger', 'sadness', 'fun', 'tech_constitution', 'tech_story', 'tech_character', 'tech_speech', 'tech_picture' )
+        fields = ('like', 'joy', 'anger', 'sadness', 'fun', 'tech_constitution', 'tech_story', 'tech_character',
+                  'tech_speech', 'tech_picture', 'tech_audio', 'tech_acting')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'input'
+
+
+class StartFreevoteForm(forms.ModelForm):
+    class Meta:
+        model = AddedWork
+        fields = ('genre','name',)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
