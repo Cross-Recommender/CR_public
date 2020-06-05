@@ -1,0 +1,356 @@
+{% extends 'mkdata/base.html' %}
+
+{% block title %} アンケート入力 - {{ work.name }} |{% endblock %}
+
+{% block content %}
+
+<section class="section">
+    <div class="container is-mobile">
+        <h1 class="title is-4">アンケート入力 作品名: {{ work.name }}</h1>
+        <hr>
+        <p>映画『{{ work.name }}』について評価を教えてください。</p>
+        <p>以下に記す各尺度について、5段階評価で点数をつけてください。</p>
+        <br>
+        <li><b>総合的な好み</b></li>
+        <li><b>作品全体に現れる感情</b></li>
+        <ul>
+          <li>「喜」＝作品全体が喜びにあふれている, 雰囲気が明るい</li>
+          <li>「怒」＝登場人物の怒りを題材にしている, 読んでいて一部の登場人物（悪役など）に対し怒りを感じる</li>
+          <li>「哀」＝作品中の雰囲気が哀しい, 暗い</li>
+          <li>「楽」＝その作品を観賞していて楽しい, 笑える, コメディ要素が強い</li>
+        </ul>
+        <li><b>映画としての技術的良さ</b></li>
+        <ul>
+          <li>「全体の構成」</li>
+          <li>「ストーリの面白さ」</li>
+          <li>「登場人物に関する設定の良さ」</li>
+          <li>「セリフの良さ」</li>
+          <li>「（映像技術や, 画の切り取り方などの）視覚的な良さ」</li>
+          <li>「（BGMや映画内の場面における周囲の音などの）音響効果の良さ」</li>
+          <li>「登場人物とそれを演じる役者の相性の良さ, 役者の演技のうまさ」</li>
+        </ul>
+        <form method="post" action="{% url 'mkdata:vote' work.id %}">
+            {% csrf_token %}
+            <br>
+            <div class="field">
+                <label class="label">総合的な好み</label>
+                <div class="control">
+                  <label class="radio">
+                    <input type="radio" name="like" id = "1" value = 1>
+                    1
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="like" id = "2" value = 2>
+                    2
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="like" id = "3" value = 3>
+                    3
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="like" id = "4" value = 4>
+                    4
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="like" id = "5" value = 5>
+                    5
+                  </label>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">喜</label><div class="control">
+                  <label class="radio">
+                    <input type="radio" name="joy" value = 1>
+                    1
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="joy" value = 2>
+                    2
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="joy" value = 3>
+                    3
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="joy" value = 4>
+                    4
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="joy" value = 5>
+                    5
+                  </label>
+                </div>
+            </div>
+          <div class="field">
+                <label class="label">怒</label><div class="control">
+                  <label class="radio">
+                    <input type="radio" name="anger" value = 1>
+                    1
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="anger" value = 2>
+                    2
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="anger" value = 3>
+                    3
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="anger" value = 4>
+                    4
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="anger" value = 5>
+                    5
+                  </label>
+                </div>
+            </div>
+          <div class="field">
+                <label class="label">哀</label><div class="control">
+                  <label class="radio">
+                    <input type="radio" name="sadness" value = 1>
+                    1
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="sadness" value = 2>
+                    2
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="sadness" value = 3>
+                    3
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="sadness" value = 4>
+                    4
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="sadness" value = 5>
+                    5
+                  </label>
+                </div>
+            </div>
+          <div class="field">
+                <label class="label">楽</label><div class="control">
+                  <label class="radio">
+                    <input type="radio" name="fun" value = 1>
+                    1
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="fun" value = 2>
+                    2
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="fun" value = 3>
+                    3
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="fun" value = 4>
+                    4
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="fun" value = 5>
+                    5
+                  </label>
+                </div>
+            </div>
+          <div class="field">
+                <label class="label">全体の構成</label><div class="control">
+                  <label class="radio">
+                    <input type="radio" name="tech_constitution" value = 1>
+                    1
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="tech_constitution" value = 2>
+                    2
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="tech_constitution" value = 3>
+                    3
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="tech_constitution" value = 4>
+                    4
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="tech_constitution" value = 5>
+                    5
+                  </label>
+                </div>
+            </div>
+          <div class="field">
+                <label class="label">ストーリーの面白さ</label><div class="control">
+                  <label class="radio">
+                    <input type="radio" name="tech_story" value = 1>
+                    1
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="tech_story" value = 2>
+                    2
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="tech_story" value = 3>
+                    3
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="tech_story" value = 4>
+                    4
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="tech_story" value = 5>
+                    5
+                  </label>
+                </div>
+            </div>
+            <div class="field">
+                {% if work.genre == 1 %}
+                <label class="label">キャラ設定の良さ</label><div class="control">
+                {% else %}
+                <label class="label">登場人物に関する設定の良さ</label><div class="control">
+                {% endif %}
+                  <label class="radio">
+                    <input type="radio" name="tech_character" value = 1>
+                    1
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="tech_character" value = 2>
+                    2
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="tech_character" value = 3>
+                    3
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="tech_character" value = 4>
+                    4
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="tech_character" value = 5>
+                    5
+                  </label>
+                </div>
+            </div>
+            <div class="field">
+                {% if work.genre == 1 %}
+                <label class="label">セリフの付け方の良さ</label><div class="control">
+                {% else %}
+                <label class="label">セリフの良さ</label><div class="control">
+                {% endif %}
+                  <label class="radio">
+                    <input type="radio" name="tech_speech" value = 1>
+                    1
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="tech_speech" value = 2>
+                    2
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="tech_speech" value = 3>
+                    3
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="tech_speech" value = 4>
+                    4
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="tech_speech" value = 5>
+                    5
+                  </label>
+                </div>
+            </div>
+          <div class="field">
+                {% if work.genre == 1 %}
+                <label class="label">作画の良さ</label><div class="control">
+                {% else %}
+                <label class="label">視覚的な良さ</label><div class="control">
+                {% endif %}
+                  <label class="radio">
+                    <input type="radio" name="tech_picture" value = 1>
+                    1
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="tech_picture" value = 2>
+                    2
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="tech_picture" value = 3>
+                    3
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="tech_picture" value = 4>
+                    4
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="tech_picture" value = 5>
+                    5
+                  </label>
+                </div>
+            </div>
+          {% if work.genre == 2 %}
+          <div class="field">
+                <label class="label">音響効果の良さ</label><div class="control">
+                  <label class="radio">
+                    <input type="radio" name="tech_audio" value = 1>
+                    1
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="tech_audio" value = 2>
+                    2
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="tech_audio" value = 3>
+                    3
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="tech_audio" value = 4>
+                    4
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="tech_audio" value = 5>
+                    5
+                  </label>
+                </div>
+            </div>
+          <div class="field">
+                <label class="label">役者の演技のうまさ</label><div class="control">
+                  <label class="radio">
+                    <input type="radio" name="tech_acting" value = 1>
+                    1
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="tech_acting" value = 2>
+                    2
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="tech_acting" value = 3>
+                    3
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="tech_acting" value = 4>
+                    4
+                  </label>
+                  <label class="radio">
+                    <input type="radio" name="tech_acting" value = 5>
+                    5
+                  </label>
+                </div>
+            </div>
+
+
+          {% endif %}
+          {% if isLast %}
+          <div class="field">
+                <p class="control">
+                    <input type="submit" value="オススメ作品をチェック！" class="button is-success">
+                </p>
+          </div>
+          {% else %}
+          <div class="field">
+                <p class="control">
+                    <input type="submit" value="次へ" class="button is-success">
+                </p>
+          </div>
+          {% endif %}
+        </form>
+    </div>
+</section>
+{% endblock %}
