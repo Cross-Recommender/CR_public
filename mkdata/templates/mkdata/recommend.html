@@ -22,7 +22,9 @@
                 <ul>
                     {% for work in works %}
                         <div class="tile is-child box">
-                            <p class="title is-4" >{{ work.name }}</p>
+                            <p class="title is-4" >{{ work.name }}
+                            <a class="button is-light media-right" href="{% url 'mkdata:haveread' work.id%}">読んだ</a>
+                            </p>
                         </div>
                     {% endfor %}
                 </ul>
