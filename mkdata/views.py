@@ -59,7 +59,7 @@ def IndexView(request, work_id):
     template = loader.get_template('mkdata/sampleform.html')
 
     # isLast = (work_id == Work.objects.all().order_by("-id")[0].id)
-    isLast = (user.work_read[work_id - 1] == "3")
+    isLast = (user.work_read[work_id - 1] == "4")
 
     context = {
         'work': work,
@@ -89,7 +89,7 @@ def IndexAgainView(request, work_id):
     template = loader.get_template('mkdata/againform.html')
 
     # isLast = (work_id == Work.objects.all().order_by("-id")[0].id)
-    isLast = (user.work_read[work_id - 1] == "3")
+    isLast = (user.work_read[work_id - 1] == "4")
 
     context = {
         'work': work,
@@ -182,7 +182,7 @@ def vote(request, work_id):
     user.save()
 
     # if work.id >= Work.objects.all().order_by("-id")[0].id:
-    if user.work_read[work_id - 1] == "3":
+    if user.work_read[work_id - 1] == "4":
         user.data_entered = True
         user.save()
         recommendselect(request.user)
@@ -192,10 +192,12 @@ def vote(request, work_id):
         while next <= Work.objects.all().order_by("-id")[0].id:
             try:
                 x = Work.objects.get(id=next)
-            except:
+            except Work.DoesNotExist:
                 next += 1
+                user.work_read[next - 1] = "0"
+                user.save()
             else:
-                if int(user.work_read[next-1]) >= 2:
+                if int(user.work_read[next-1]) >= 3:
                     break
                 else:
                     next += 1
@@ -357,8 +359,16 @@ def UserRead(request):
     else:
         X = list(user.work_read)
 
+    """
+    #フォーマット方法の変更
     for work in works:
         X[work.id - 1] = "1"
+    """
+    for work in works:
+        if X[work.id - 1] >= "2":
+            X[work.id - 1] = "2"
+        else:
+            X[work.id - 1] = "1"
 
     isRead = request.POST.getlist('isRead')
 
@@ -369,9 +379,9 @@ def UserRead(request):
 
     for num in isRead:
         #print(num)
-        X[int(num) - 1] = "2"
+        X[int(num) - 1] = "3"
 
-    X[max(map(int, isRead)) - 1] = "3"  # isLastに使いたい
+    X[max(map(int, isRead)) - 1] = "4"  # isLastに使いたい
 
     user.work_read = "".join(X)
     user.save()
@@ -388,7 +398,7 @@ def UserRead(request):
         except:
             first += 1
         else:
-            if int(user.work_read[first-1]) >= 2:
+            if int(user.work_read[first-1]) >= 3:
                 break
             else:
                 first += 1
@@ -403,7 +413,7 @@ def SelectFavoriteView(request):
     #print('selectfavoriteview, user.work_read[:100]',user.work_read[:100])
 
     for work in works:
-        if int(user.work_read[work.id-1]) >= 2:
+        if int(user.work_read[work.id-1]) >= 3:
             read_works.append(work)
 
     return render(request, 'mkdata/select_favorite.html', {'read_works': read_works, 'user': user, })
@@ -416,7 +426,7 @@ def SelectFavoriteAgainView(request):
     #print('selectfavoriteagainview, user.work_read[:100]', user.work_read[:100])
 
     for work in works:
-        if int(user.work_read[work.id-1]) >= 2:
+        if int(user.work_read[work.id-1]) >= 3:
             read_works.append(work)
 
     return render(request, 'mkdata/select_favorite_again.html', {'read_works': read_works, 'user': user, })
@@ -436,11 +446,11 @@ def UserSelected(request):
         return HttpResponseRedirect(reverse('mkdata:selectfavoriteagain', ))
 
     for work in works:
-        if int(X[work.id-1]) >= 2 and ((work.id in isSelected) == False):
-            ###回答しないので1に戻す
-            X[work.id - 1] = '1'
+        if int(X[work.id-1]) >= 3 and ((work.id in isSelected) == False):
+            ###回答しないものを2にする
+            X[work.id - 1] = "2"
 
-    X[max(isSelected) - 1] = "3"  # isLastに使いたい
+    X[max(isSelected) - 1] = "4"  # isLastに使いたい
 
     user.work_read = "".join(X)
     user.save()
@@ -450,11 +460,13 @@ def UserSelected(request):
     first = 1
     while first <= Work.objects.all().order_by("-id")[0].id:
         try:
-            x = Work.objects.get(id=first)
-        except:
+            Work.objects.get(id=first)
+        except Work.DoesNotExist:
             first += 1
+            user.work_read[first - 1] = "0"
+            user.save()
         else:
-            if int(user.work_read[first - 1]) >= 2:
+            if int(user.work_read[first - 1]) >= 3:
                 break
             else:
                 first += 1
@@ -471,7 +483,7 @@ def HaveRead(request, work_id):
     else:
         X = list(user.work_read)
 
-    X[work_id - 1] = "3"  # isLastに使いたい
+    X[work_id - 1] = "4"  # isLastに使いたい
 
     user.work_read = "".join(X)
     user.save()

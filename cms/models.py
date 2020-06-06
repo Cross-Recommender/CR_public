@@ -96,7 +96,8 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
     #default=0:ということは働いてないらしいなこいつ？
     work_recommend = ArrayField(models.IntegerField(default=0), size=5,unique=False,null=True)
 
-    #userが各idの漫画を読んだことがあるかどうかを判定。'0': 未判定, '1': 読んだことなし '2': あり '3':isLast
+    #userが各idの漫画を読んだことがあるかどうかを判定。'0': 未判定, '1': 読んだことなし '2': あり '3':評価する予定（途中逃げの可能性あり） '4':isLast
+    #一度'2'以上になった場合、ずっと'2'以上になる。
     work_read = models.TextField(default="".join(['0']*100000))
 
     ###データは入力済み？

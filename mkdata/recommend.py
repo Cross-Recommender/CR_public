@@ -85,9 +85,9 @@ def recommendselect(user):
         # print(OrderedWork[num], cand_works)
         for i in range(4):
             # print((cand_works[i] in works) == False,user.work_like[cand_works[i]-1] == '0')
-            if (cand_works[i] in works) is False and user.work_like[cand_works[i] - 1] == '0':
-                ###work_readは一時的な記録に過ぎないため, ユーザが読んだかどうかの判定は
-                ###user.work_like[cand_works[i]-1] == '0'で行う
+            if (cand_works[i] in works) is False and user.work_read[cand_works[i] - 1] < '2':
+                ###ユーザが読んだかどうかの判定は
+                ###user.work_read[cand_works[i]-1] < '2'で行う
                 works.append(cand_works[i])
             if len(works) >= 5:
                 break
