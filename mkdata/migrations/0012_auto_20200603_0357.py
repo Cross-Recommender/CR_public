@@ -11,7 +11,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('mkdata', '0013_auto_20200605_1727'),
+        ('mkdata', '0009_auto_20200529_1422'),
     ]
 
     operations = [
