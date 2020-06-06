@@ -104,6 +104,8 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
     data_entered = models.BooleanField(default=False)
     ########
 
+    #work_evaluation = ArrayField(models.IntegerField(default=0), size=5,unique=False,null=True)
+
     objects = UserManager()
 
     EMAIL_FIELD = 'email'
