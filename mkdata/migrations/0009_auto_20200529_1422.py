@@ -8,7 +8,7 @@ def load_fixture(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('mkdata', '0008_auto_20200527_2246'),
+        ('mkdata', '0013_auto_20200605_1727'),
     ]
 
     operations = [

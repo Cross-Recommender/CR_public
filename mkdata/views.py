@@ -23,6 +23,7 @@ from .forms import CollectDataForm, AddWorkForm, StartFreevoteForm#, SelectGenre
 from django.shortcuts import resolve_url
 
 from cms.models import User
+from cms.mixins import OnlyYouMixin
 from .mixins import OnlyRegistererMixin
 
 from .models import Work, AddedWork, try_Work_get
@@ -459,3 +460,21 @@ def UserSelected(request):
                 first += 1
 
     return HttpResponseRedirect(reverse('mkdata:index', args=(first,)))
+
+
+def HaveRead(request, work_id):
+    user = request.user
+    work = Work.objects.get(id=work_id)
+
+    if user.work_read is None:
+        X = ['0'] * 100000
+    else:
+        X = list(user.work_read)
+
+    X[work_id - 1] = "3"  # isLastに使いたい
+
+    user.work_read = "".join(X)
+    user.save()
+
+    return HttpResponseRedirect(reverse('mkdata:index', args=(work_id,)))
+
