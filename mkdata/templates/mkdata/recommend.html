@@ -46,7 +46,7 @@ div.sample  {
                 <ul>
                     {% for work in works %}
                         <div class="tile is-child box">
-                            <p class="title is-4" ><a href={{ work.url }} class = "has-text-black">{{ work.name }}</a>
+                            <p class="title is-4" ><a href={{ work.url }} target="_blank" class = "has-text-black">{{ work.name }}</a>
                             <a class="button is-light media-right" href="{% url 'mkdata:haveread' work.id%}">読んだ</a>
                             </p>
                         </div>
