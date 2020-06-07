@@ -51,6 +51,7 @@ def user_standardize(obj):
             if obj.evaluation_avg is None:
                 obj.evaluation_avg = [0]*20
                 obj.evaluation_std = [0]*20
+            print(obj.evaluation_avg)
             obj.evaluation_avg[i] = data[i][0]
             obj.evaluation_std[i] = data[i][1]
 

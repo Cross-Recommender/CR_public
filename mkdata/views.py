@@ -180,6 +180,8 @@ def vote(request, work_id):
 
             work.like -= user.work_evaluation[index][0]
 
+            print(user.evaluation_avg)
+
             if user.evaluation_std[1] != 0:
                 work.joy -= (user.work_evaluation[index][1]-user.evaluation_avg[1])/user.evaluation_std[1]
                 ###0の場合はどうせ足されている値も0なので考えなくて良い
