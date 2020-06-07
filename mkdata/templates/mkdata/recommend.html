@@ -28,6 +28,16 @@ div.sample  {
 {% endblock %}
 
 {% block content %}
+<br>
+<div class="container">
+    <div class="notification">
+        <ul>
+            <li>作品名をクリックして、詳細をチェック！</li>
+            <li>「読んだ」ボタンを押すと、その作品のデータ入力ができ、さらに別の作品のレコメンドを受ける事ができます。</li>
+        </ul>
+    </div>
+</div>
+
 <section class="section">
     <div class="container">
         <div class="tile is-ancestor">
@@ -36,7 +46,7 @@ div.sample  {
                 <ul>
                     {% for work in works %}
                         <div class="tile is-child box">
-                            <p class="title is-4" >{{ work.name }}
+                            <p class="title is-4" ><a href={{ work.url }} class = "has-text-black">{{ work.name }}</a>
                             <a class="button is-light media-right" href="{% url 'mkdata:haveread' work.id%}">読んだ</a>
                             </p>
                         </div>
