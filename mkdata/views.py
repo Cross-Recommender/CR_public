@@ -28,7 +28,7 @@ from .mixins import OnlyRegistererMixin
 
 from .models import Work, AddedWork, try_Work_get
 
-from .recommend import recommendselect
+from .recommend import recommendselect, user_standardize
 
 from django.contrib import messages
 
@@ -238,6 +238,8 @@ def vote(request, work_id):
     if user.work_read[work_id - 1] == "4":
         user.data_entered = True
         user.save()
+        ###recommend_sortを行う前に, userのデータを標準化, workモデルに反映
+        user_standardize(user)
         recommendselect(request.user)
         return HttpResponseRedirect(reverse('mkdata:recommend', ))
     else:

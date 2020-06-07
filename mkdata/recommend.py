@@ -51,6 +51,11 @@ def user_standardize(obj):
             if obj.evaluation_avg is None:
                 obj.evaluation_avg = [0]*20
                 obj.evaluation_std = [0]*20
+            print(obj.evaluation_avg)
+            print(obj.evaluation_avg)
+            print(obj.evaluation_avg)
+            print(obj.evaluation_avg)
+            print(obj.evaluation_avg)
             obj.evaluation_avg[i] = data[i][0]
             obj.evaluation_std[i] = data[i][1]
 
@@ -156,8 +161,6 @@ def recommendselect(user):
     works = []
     num = 0
 
-    ###recommend_sortを行う前に, userのデータを標準化, workモデルに反映
-    user_standardize(user)
 
     for work in OrderedWork:
         # print(len(works))#なぜか作品が6つ以上表示された時のバグ確認用
