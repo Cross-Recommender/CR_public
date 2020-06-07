@@ -174,7 +174,7 @@ def vote(request, work_id):
             index = user.work_evaluated.index(work_id)
             work.num_of_data -= 1
 
-            if user.evaluation_avg is None:
+            if (user.evaluation_avg == []) or (user.evaluation_avg is None):
                 user.evaluation_avg = [0]*20
                 user.evaluation_std = [0]*20
 

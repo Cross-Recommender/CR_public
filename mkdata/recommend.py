@@ -48,7 +48,7 @@ def user_standardize(obj):
         else:
             data[i][0] = info[i][1]/info[i][0]
             data[i][1] = info[i][2]/info[i][0] - (info[i][1]/info[i][0])**2
-            if obj.evaluation_avg is None:
+            if (obj.evaluation_avg == []) or (obj.evaluation_avg is None):
                 obj.evaluation_avg = [0]*20
                 obj.evaluation_std = [0]*20
             #print(obj.evaluation_avg)
