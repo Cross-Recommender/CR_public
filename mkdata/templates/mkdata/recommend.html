@@ -1,5 +1,21 @@
 {% extends 'mkdata/base.html' %}
 
+<!--
+<style>
+p {
+  margin: 5px;
+  padding: 5px;
+  color: #fff;
+}
+div.sample  {
+     margin : 30px ;
+     padding : 20px ;
+     border : 5px solid maroon ;
+     background-color : lightgreen ;
+}
+</style>
+-->
+
 {% block title %} レコメンド作品一覧 | {% endblock %}
 
 {% block hero %}
@@ -14,6 +30,16 @@
 {% endblock %}
 
 {% block content %}
+<br>
+<div class="container">
+    <div class="notification">
+        <ul>
+            <li>作品名をクリックして、詳細をチェック！(Google検索に飛びます)</li>
+            <li>「読んだ」ボタンを押すと、その作品のデータ入力ができ、さらに別の作品のレコメンドを受ける事ができます。</li>
+        </ul>
+    </div>
+</div>
+
 <section class="section">
     <div class="container">
         <div class="tile is-ancestor">
@@ -22,7 +48,9 @@
                 <ul>
                     {% for work in works %}
                         <div class="tile is-child box">
-                            <p class="title is-4" >{{ work.name }}</p>
+                            <p class="title is-4" ><a href={{ work.url }} target="_blank" class = "has-text-black">{{ work.name }}</a>
+                            <a class="button is-light media-right" href="{% url 'mkdata:haveread' work.id%}">読んだ</a>
+                            </p>
                         </div>
                     {% endfor %}
                 </ul>
@@ -35,16 +63,29 @@
 
 </section>
 
-<section>
+<section class = "section">
     <div class="container">
-        {% if works %}
-        <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-size="large" data-text="{{ user.username }}さんへのオススメ作品は{% for work in works %}「{{ work.name }}」{% endfor %}です！&#010; Cross Recommenderは, あなたにオススメの作品をジャンル横断で紹介するサービスです。" data-url="http://crossrecommender-env.eba-gpgr8k5t.us-east-1.elasticbeanstalk.com/cms/" data-hashtags="私がおすすめされた漫画" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-        {% endif %}
-        <p>上記の結果は、{{ user.username }}さんの読んだことがある漫画に対する好みと、全ユーザーの回答履歴に基づいて算出されており、{{ user.username }}さんが好きな漫画と同様の傾向を持っています。私たちがオススメした漫画を読んだら、ぜひまた評価を教えてください。それをもとに、さらに精度の高いレコメンドを提供いたします。</p>
-        <br>
-        <p>現在私たちは、皆さんにオススメできる作品の数を増やすべく、他の漫画についてもデータを集めています。</p>
-        <p>今回のデータ入力で対象とならなかった漫画で、{{ user.username }}さんが読んだことがある漫画について、ぜひ<a href="{% url 'mkdata:startfreevote' %}">こちら</a>から教えてください。</p>
-        <br>
+        <div class="tile is-ancestor">
+            <div class="tile is-12 is-vertical is-parent">
+                {% if works %}
+                <div class="tile is-child box">
+                    <h2 class="subtitle">Twitterでおすすめ作品をシェアしよう！</h2>
+
+                    <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-size="large" data-text="{{ user.username }}さんへのオススメ作品は{% for work in works %}「{{ work.name }}」{% endfor %}です！&#010; Cross Recommenderでおすすめ作品を見てみよう！" data-url="http://crossrecommender-env.eba-p8hy6ngk.us-east-1.elasticbeanstalk.com/cms" data-hashtags="私がおすすめされた漫画" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+                    <p>（コンテンツブロッカー等を利用している場合ツイートシェアボタンが表示されない場合があります）</p>
+                    {% endif %}
+                </div>
+                <div class="tile is-child box is-primary">
+                    <p>上記の結果は、{{ user.username }}さんの読んだことがある漫画に対する好みと、全ユーザーの回答履歴に基づいて算出されており、{{ user.username }}さんが好きな漫画と同様の傾向を持っています。私たちがオススメした漫画を読んだら、ぜひまた評価を教えてください。それをもとに、さらに精度の高いレコメンドを提供いたします。</p>
+                    <br>
+                    <p>現在私たちは、皆さんにオススメできる作品の数を増やすべく、他の漫画についてもデータを集めています。</p>
+                    <p>今回のデータ入力で対象とならなかった漫画で、{{ user.username }}さんが読んだことがある漫画について、ぜひ<a href="{% url 'mkdata:startfreevote' %}">こちら</a>から教えてください。</p>
+                </div>
+            </div>
+        </div>
     </div>
+
+</div>
 </section>
 {% endblock %}
