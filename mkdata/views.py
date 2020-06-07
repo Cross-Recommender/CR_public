@@ -173,19 +173,38 @@ def vote(request, work_id):
         if work_id in user.work_evaluated:
             index = user.work_evaluated.index(work_id)
             work.num_of_data -= 1
+
+            if user.evaluation_avg is None:
+                user.evaluation_avg = [0]*20
+                user.evaluation_std = [0]*20
+
             work.like -= user.work_evaluation[index][0]
-            work.joy -= user.work_evaluation[index][1]
-            work.anger -= user.work_evaluation[index][2]
-            work.sadness -= user.work_evaluation[index][3]
-            work.fun -= user.work_evaluation[index][4]
-            work.tech_constitution -= user.work_evaluation[index][5]
-            work.tech_story -= user.work_evaluation[index][6]
-            work.tech_character -= user.work_evaluation[index][7]
-            work.tech_speech -= user.work_evaluation[index][8]
-            work.tech_picture -= user.work_evaluation[index][9]
+
+            if user.evaluation_std[1] != 0:
+                work.joy -= (user.work_evaluation[index][1]-user.evaluation_avg[1])/user.evaluation_std[1]
+                ###0の場合はどうせ足されている値も0なので考えなくて良い
+            if user.evaluation_std[2] != 0:
+                work.anger -= (user.work_evaluation[index][2]-user.evaluation_avg[2])/user.evaluation_std[2]
+            if user.evaluation_std[3] != 0:
+                work.sadness -= (user.work_evaluation[index][3]-user.evaluation_avg[3])/user.evaluation_std[3]
+            if user.evaluation_std[4] != 0:
+                work.fun -= (user.work_evaluation[index][4]-user.evaluation_avg[4])/user.evaluation_std[4]
+            if user.evaluation_std[5] != 0:
+                work.tech_constitution -= (user.work_evaluation[index][5]-user.evaluation_avg[5])/user.evaluation_std[5]
+            if user.evaluation_std[6] != 0:
+                work.tech_story -= (user.work_evaluation[index][6]-user.evaluation_avg[6])/user.evaluation_std[6]
+            if user.evaluation_std[7] != 0:
+                work.tech_character -= (user.work_evaluation[index][7]-user.evaluation_avg[7])/user.evaluation_std[7]
+            if user.evaluation_std[8] != 0:
+                work.tech_speech -= (user.work_evaluation[index][8]-user.evaluation_avg[8])/user.evaluation_std[8]
+            if user.evaluation_std[9] != 0:
+                work.tech_picture -= (user.work_evaluation[index][9]-user.evaluation_avg[9])/user.evaluation_std[9]
+
             if work.genre == 2:
-                work.mov_tech_audio -= user.work_evaluation[index][10]
-                work.mov_tech_acting -= user.work_evaluation[index][11]
+                if user.evaluation_std[10] != 0:
+                    work.mov_tech_audio -= (user.work_evaluation[index][10]-user.evaluation_avg[10])/user.evaluation_std[10]
+                if user.evaluation_std[11] != 0:
+                    work.mov_tech_acting -= (user.work_evaluation[index][11]-user.evaluation_avg[11])/user.evaluation_std[11]
 
             user.work_evaluation[index] = evaluate_values
         else:

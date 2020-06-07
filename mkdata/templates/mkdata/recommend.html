@@ -28,6 +28,16 @@ div.sample  {
 {% endblock %}
 
 {% block content %}
+<br>
+<div class="container">
+    <div class="notification">
+        <ul>
+            <li>作品名をクリックして、詳細をチェック！(google検索に飛びます)</li>
+            <li>「読んだ」ボタンを押すと、その作品のデータ入力ができ、さらに別の作品のレコメンドを受ける事ができます。</li>
+        </ul>
+    </div>
+</div>
+
 <section class="section">
     <div class="container">
         <div class="tile is-ancestor">
@@ -36,7 +46,7 @@ div.sample  {
                 <ul>
                     {% for work in works %}
                         <div class="tile is-child box">
-                            <p class="title is-4" >{{ work.name }}
+                            <p class="title is-4" ><a href={{ work.url }} target="_blank" class = "has-text-black">{{ work.name }}</a>
                             <a class="button is-light media-right" href="{% url 'mkdata:haveread' work.id%}">読んだ</a>
                             </p>
                         </div>
@@ -59,7 +69,7 @@ div.sample  {
                 <div class="tile is-child box">
                     <h2 class="subtitle">Twitterでおすすめ作品をシェアしよう！</h2>
 
-                    <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-size="large" data-text="{{ user.username }}さんへのオススメ作品は{% for work in works %}「{{ work.name }}」{% endfor %}です！&#010; Cross Recommenderは, あなたにオススメの作品をジャンル横断で紹介するサービスです。" data-url="http://crossrecommender-env.eba-p8hy6ngk.us-east-1.elasticbeanstalk.com/cms" data-hashtags="私がおすすめされた漫画" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+                    <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-size="large" data-text="{{ user.username }}さんへのオススメ作品は{% for work in works %}「{{ work.name }}」{% endfor %}です！&#010; Cross Recommenderでおすすめ作品を見てみよう！" data-url="http://crossrecommender-env.eba-p8hy6ngk.us-east-1.elasticbeanstalk.com/cms" data-hashtags="私がおすすめされた漫画" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
                     <p>（コンテンツブロッカー等を利用している場合ツイートシェアボタンが表示されない場合があります）</p>
                     {% endif %}
