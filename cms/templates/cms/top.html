@@ -8,6 +8,13 @@
         <div class="container">
             <h1 class="title">Cross Recommender</h1>
             <h2 class="subtitle">新しいお気に入りを見つけよう</h2>
+            <!--educate用-->
+            <!--
+            <h2 class="subtitle has-text-danger">このページは移動しました。</h2>
+            <h2>新ページ: <a href = "http://crossrecommender-env.eba-p8hy6ngk.us-east-1.elasticbeanstalk.com/cms">http://crossrecommender-env.eba-p8hy6ngk.us-east-1.elasticbeanstalk.com/cms</a></h2>
+            <br>
+            -->
+            <!--ここまで-->
             <a href="/cms/infomation">
                 <button class="button is-info is-inverted is-outlined">
                     <strong>More Info</strong>
@@ -43,6 +50,7 @@
 </section>
 {% endblock %}
 
+
 {% block content %}
 <section class="section is-medium">
     <div class="container">
@@ -73,11 +81,29 @@
     <div class="container">
         <div class="has-text-centered">
             <h1 class="title">NEWS</h1>
+        </div>
+        <br>
+        <div class="has-text-left">
             <ul>
                 <li>2020.05.29　version 0.1をリリース。</li>
                 <li>2020.06.06　version 0.2をリリース。レコメンドできる作品数が大幅に増加しました！</li>
+                <li>2020.06.08　version 0.3をリリース。レコメンドできる作品数がさらに増加し, 120作品に。さらに, レコメンド精度が大幅アップ！</li>
             </ul>
         </div>
     </div>
 </section>
+
+<!--educate用-->
+<!--
+<section class="section is-medium">
+    <div class="container">
+        <div class="has-text-centered">
+            <h1 class="title has-text-danger">このページは移動しました</h1>
+            <p>現在こちらのページは更新されていません。</p>
+            <p><a href = "http://crossrecommender-env.eba-p8hy6ngk.us-east-1.elasticbeanstalk.com/cms">こちら</a>をご利用ください。</p>
+            <p>（新規ユーザー登録をお願いします）</p>
+        </div>
+    </div>
+</section>
+-->
 {% endblock %}

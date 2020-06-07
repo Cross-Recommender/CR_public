@@ -96,12 +96,31 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
     #default=0:ということは働いてないらしいなこいつ？
     work_recommend = ArrayField(models.IntegerField(default=0), size=5,unique=False,null=True)
 
-    #userが各idの漫画を読んだことがあるかどうかを判定。'0': 未判定, '1': 読んだことなし '2': あり '3':isLast
+    #userが各idの漫画を読んだことがあるかどうかを判定。'0': 未判定, '1': 読んだことなし '2': あり '3':評価する予定（途中逃げの可能性あり） '4':isLast
+    #一度'2'以上になった場合、ずっと'2'以上になる。
     work_read = models.TextField(default="".join(['0']*100000))
 
     ###データは入力済み？
     data_entered = models.BooleanField(default=False)
     ########
+
+    ###過去に評価した事がある作品のidを格納
+    work_evaluated = ArrayField(models.IntegerField(), size=100000,unique=False,null=True)
+
+    ###work_evaluatedのi番目のidに対応するworkの評価値を格納
+    work_evaluation = ArrayField(
+        ArrayField(
+            models.IntegerField(default=0),
+            size=20,
+            unique=False,
+            null=True
+        ),
+        size=100000,
+        default=list,
+    )
+
+    evaluation_avg = ArrayField(models.FloatField(default=0), size=20,unique=False,null=True,default=list)
+    evaluation_std = ArrayField(models.FloatField(default=0), size=20,unique=False,null=True,default=list)
 
     objects = UserManager()
 

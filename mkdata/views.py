@@ -23,6 +23,7 @@ from .forms import CollectDataForm, AddWorkForm, StartFreevoteForm#, SelectGenre
 from django.shortcuts import resolve_url
 
 from cms.models import User
+from cms.mixins import OnlyYouMixin
 from .mixins import OnlyRegistererMixin
 
 from .models import Work, AddedWork, try_Work_get
@@ -58,7 +59,7 @@ def IndexView(request, work_id):
     template = loader.get_template('mkdata/sampleform.html')
 
     # isLast = (work_id == Work.objects.all().order_by("-id")[0].id)
-    isLast = (user.work_read[work_id - 1] == "3")
+    isLast = (user.work_read[work_id - 1] == "4")
 
     context = {
         'work': work,
@@ -88,7 +89,7 @@ def IndexAgainView(request, work_id):
     template = loader.get_template('mkdata/againform.html')
 
     # isLast = (work_id == Work.objects.all().order_by("-id")[0].id)
-    isLast = (user.work_read[work_id - 1] == "3")
+    isLast = (user.work_read[work_id - 1] == "4")
 
     context = {
         'work': work,
@@ -150,23 +151,76 @@ class ThanksView(TemplateView):
 def vote(request, work_id):
     work = get_object_or_404(Work, pk=work_id)
     user = request.user
-    try:
-        work.num_of_data += 1
-        work.like += int(request.POST['like'])
-        work.joy += int(request.POST["joy"])
-        work.anger += int(request.POST["anger"])
-        work.sadness += int(request.POST["sadness"])
-        work.fun += int(request.POST["fun"])
-        work.tech_constitution += int(request.POST["tech_constitution"])
-        work.tech_story += int(request.POST["tech_story"])
-        work.tech_character += int(request.POST["tech_character"])
-        work.tech_speech += int(request.POST["tech_speech"])
-        work.tech_picture += int(request.POST["tech_picture"])
 
-    except:
-        return HttpResponseRedirect(reverse('mkdata:index_again', args=(work_id,)))
+    ###まずはformの有効性判断&データ取得
+    if work.genre == 1:
+        evaluate_items = ('like', 'joy', 'anger', 'sadness', 'fun', "tech_constitution", "tech_story",
+                          "tech_character", "tech_speech", "tech_picture")
+    else:
+        evaluate_items = ('like', 'joy', 'anger', 'sadness', 'fun', "tech_constitution", "tech_story",
+                          "tech_character", "tech_speech", "tech_picture", 'tech_audio', 'tech_acting')
+
+    evaluate_values = [0]*20
+
+    for i in range(len(evaluate_items)):
+        try:
+            evaluate_values[i] = int(request.POST[evaluate_items[i]])###0-indexedに統一
+        except:
+            return HttpResponseRedirect(reverse('mkdata:index_again', args=(work_id,)))
+
+    ###回答した事があるかどうか, あるならリセットのためにworkからその人分のデータ値を差し引く
+    if user.work_evaluated is not None:
+        if work_id in user.work_evaluated:
+            index = user.work_evaluated.index(work_id)
+            work.num_of_data -= 1
+
+            if user.evaluation_avg is None:
+                user.evaluation_avg = [0]*20
+                user.evaluation_std = [0]*20
+
+            work.like -= user.work_evaluation[index][0]
+
+            if user.evaluation_std[1] != 0:
+                work.joy -= (user.work_evaluation[index][1]-user.evaluation_avg[1])/user.evaluation_std[1]
+                ###0の場合はどうせ足されている値も0なので考えなくて良い
+            if user.evaluation_std[2] != 0:
+                work.anger -= (user.work_evaluation[index][2]-user.evaluation_avg[2])/user.evaluation_std[2]
+            if user.evaluation_std[3] != 0:
+                work.sadness -= (user.work_evaluation[index][3]-user.evaluation_avg[3])/user.evaluation_std[3]
+            if user.evaluation_std[4] != 0:
+                work.fun -= (user.work_evaluation[index][4]-user.evaluation_avg[4])/user.evaluation_std[4]
+            if user.evaluation_std[5] != 0:
+                work.tech_constitution -= (user.work_evaluation[index][5]-user.evaluation_avg[5])/user.evaluation_std[5]
+            if user.evaluation_std[6] != 0:
+                work.tech_story -= (user.work_evaluation[index][6]-user.evaluation_avg[6])/user.evaluation_std[6]
+            if user.evaluation_std[7] != 0:
+                work.tech_character -= (user.work_evaluation[index][7]-user.evaluation_avg[7])/user.evaluation_std[7]
+            if user.evaluation_std[8] != 0:
+                work.tech_speech -= (user.work_evaluation[index][8]-user.evaluation_avg[8])/user.evaluation_std[8]
+            if user.evaluation_std[9] != 0:
+                work.tech_picture -= (user.work_evaluation[index][9]-user.evaluation_avg[9])/user.evaluation_std[9]
+
+            if work.genre == 2:
+                if user.evaluation_std[10] != 0:
+                    work.mov_tech_audio -= (user.work_evaluation[index][10]-user.evaluation_avg[10])/user.evaluation_std[10]
+                if user.evaluation_std[11] != 0:
+                    work.mov_tech_acting -= (user.work_evaluation[index][11]-user.evaluation_avg[11])/user.evaluation_std[11]
+
+            user.work_evaluation[index] = evaluate_values
+        else:
+            user.work_evaluated.append(work_id)
+            user.work_evaluation.append(evaluate_values)
+    else:
+        user.work_evaluated = [work_id]
+        user.work_evaluation = [evaluate_values]
+
+    for i in range(len(user.work_evaluation)):
+        user.work_evaluation[i] = user.work_evaluation[i]+[0]*(20-len(user.work_evaluation[i]))
+    print(user.work_evaluation)
 
     work.save()
+    user.save()
+    #print(user.work_evaluation)
 
     obj = user.work_like
 
@@ -181,7 +235,7 @@ def vote(request, work_id):
     user.save()
 
     # if work.id >= Work.objects.all().order_by("-id")[0].id:
-    if user.work_read[work_id - 1] == "3":
+    if user.work_read[work_id - 1] == "4":
         user.data_entered = True
         user.save()
         recommendselect(request.user)
@@ -191,10 +245,12 @@ def vote(request, work_id):
         while next <= Work.objects.all().order_by("-id")[0].id:
             try:
                 x = Work.objects.get(id=next)
-            except:
+            except Work.DoesNotExist:
                 next += 1
+                user.work_read[next - 1] = "0"
+                user.save()
             else:
-                if int(user.work_read[next-1]) >= 2:
+                if int(user.work_read[next-1]) >= 3:
                     break
                 else:
                     next += 1
@@ -315,6 +371,7 @@ def recommend(request, work_id):
 ###フォーム入力後にすぐにオススメ5作品のページへ飛べるよう改良
 def recommend(request):
     user = request.user
+
     if user.data_entered is None:
         user.data_entered = False
         user.save()
@@ -356,8 +413,16 @@ def UserRead(request):
     else:
         X = list(user.work_read)
 
+    """
+    #フォーマット方法の変更
     for work in works:
         X[work.id - 1] = "1"
+    """
+    for work in works:
+        if X[work.id - 1] >= "2":
+            X[work.id - 1] = "2"
+        else:
+            X[work.id - 1] = "1"
 
     isRead = request.POST.getlist('isRead')
 
@@ -368,9 +433,9 @@ def UserRead(request):
 
     for num in isRead:
         #print(num)
-        X[int(num) - 1] = "2"
+        X[int(num) - 1] = "3"
 
-    X[max(map(int, isRead)) - 1] = "3"  # isLastに使いたい
+    X[max(map(int, isRead)) - 1] = "4"  # isLastに使いたい
 
     user.work_read = "".join(X)
     user.save()
@@ -387,7 +452,7 @@ def UserRead(request):
         except:
             first += 1
         else:
-            if int(user.work_read[first-1]) >= 2:
+            if int(user.work_read[first-1]) >= 3:
                 break
             else:
                 first += 1
@@ -402,7 +467,7 @@ def SelectFavoriteView(request):
     #print('selectfavoriteview, user.work_read[:100]',user.work_read[:100])
 
     for work in works:
-        if int(user.work_read[work.id-1]) >= 2:
+        if int(user.work_read[work.id-1]) >= 3:
             read_works.append(work)
 
     return render(request, 'mkdata/select_favorite.html', {'read_works': read_works, 'user': user, })
@@ -415,7 +480,7 @@ def SelectFavoriteAgainView(request):
     #print('selectfavoriteagainview, user.work_read[:100]', user.work_read[:100])
 
     for work in works:
-        if int(user.work_read[work.id-1]) >= 2:
+        if int(user.work_read[work.id-1]) >= 3:
             read_works.append(work)
 
     return render(request, 'mkdata/select_favorite_again.html', {'read_works': read_works, 'user': user, })
@@ -435,11 +500,11 @@ def UserSelected(request):
         return HttpResponseRedirect(reverse('mkdata:selectfavoriteagain', ))
 
     for work in works:
-        if int(X[work.id-1]) >= 2 and ((work.id in isSelected) == False):
-            ###回答しないので1に戻す
-            X[work.id - 1] = '1'
+        if int(X[work.id-1]) >= 3 and ((work.id in isSelected) == False):
+            ###回答しないものを2にする
+            X[work.id - 1] = "2"
 
-    X[max(isSelected) - 1] = "3"  # isLastに使いたい
+    X[max(isSelected) - 1] = "4"  # isLastに使いたい
 
     user.work_read = "".join(X)
     user.save()
@@ -449,13 +514,49 @@ def UserSelected(request):
     first = 1
     while first <= Work.objects.all().order_by("-id")[0].id:
         try:
-            x = Work.objects.get(id=first)
-        except:
+            Work.objects.get(id=first)
+        except Work.DoesNotExist:
             first += 1
+            user.work_read[first - 1] = "0"
+            user.save()
         else:
-            if int(user.work_read[first - 1]) >= 2:
+            if int(user.work_read[first - 1]) >= 3:
                 break
             else:
                 first += 1
 
     return HttpResponseRedirect(reverse('mkdata:index', args=(first,)))
+
+
+def HaveRead(request, work_id):
+    user = request.user
+    work = Work.objects.get(id=work_id)
+
+    if user.work_read is None:
+        X = ['0'] * 100000
+    else:
+        X = list(user.work_read)
+
+    X[work_id - 1] = "4"  # isLastに使いたい
+
+    user.work_read = "".join(X)
+    user.save()
+
+    return HttpResponseRedirect(reverse('mkdata:index', args=(work_id,)))
+
+
+def binary_search(list, item):
+    left = 0
+    right = len(list) - 1
+
+    while left >= right:
+        mid = (left + right) // 2
+        guess = list[mid]
+        if guess == item:
+            return mid
+        if guess > item:
+            right = mid - 1
+        else:
+            left = mid + 1
+
+    return None
