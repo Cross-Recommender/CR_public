@@ -48,6 +48,10 @@ def user_standardize(obj):
         else:
             data[i][0] = info[i][1]/info[i][0]
             data[i][1] = info[i][2]/info[i][0] - (info[i][1]/info[i][0])**2
+            obj.evaluation_avg[i] = data[i][0]
+            obj.evaluation_std[i] = data[i][1]
+
+    obj.save()
 
     ###標準化したユーザーの評価値を各モデルに加算
     for i, workid in enumerate(obj.work_evaluated):

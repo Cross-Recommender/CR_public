@@ -104,7 +104,10 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
     data_entered = models.BooleanField(default=False)
     ########
 
+    ###過去に評価した事がある作品のidを格納
     work_evaluated = ArrayField(models.IntegerField(), size=100000,unique=False,null=True)
+
+    ###work_evaluatedのi番目のidに対応するworkの評価値を格納
     work_evaluation = ArrayField(
         ArrayField(
             models.IntegerField(default=0),
@@ -115,6 +118,9 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
         size=100000,
         default=list,
     )
+
+    evaluation_avg = ArrayField(models.FloatField(), size=100000,unique=False,null=True)
+    evaluation_std = ArrayField(models.FloatField(), size=100000,unique=False,null=True)
 
     objects = UserManager()
 
