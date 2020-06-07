@@ -35,14 +35,14 @@ def user_standardize(obj):
     info = [[0,0,0] for _ in range(20)]###[その項目の評価数, その項目の評価点合計, その項目の評価点の2乗の合計]
     for i in range(Work.objects.all().order_by("-id")[0].id):
         if int(obj.work_read[i+1]) >= 3:
-            for j in range(20):
+            for j in range(1,20):###0は'like'なので計算の必要なし
                 if obj.work_evaluation[i][j] != 0:
                     info[j][0] += 1
                     info[j][1] += obj.work_evaluation[i][j]
 
     data = [[0,0] for _ in range(20)]###[その項目の平均評価, その項目の標準偏差]
 
-    for i in range(20):
+    for i in range(1,20):###0は'like'なので計算の必要なし
         if data[i][0] == 0:
             pass
         else:
@@ -57,35 +57,41 @@ def user_standardize(obj):
             ###今までの回答有無に関わらずvoteで今までの回答をリセットしたので, ここまでたどり着いたらまた1増やす
             work.num_of_data += 1
 
-            for j in range(20):
-                if obj.work_evaluation[i][j] == 0:###その作品にジャンルには含まれない指標
+            ###work.likeは標準化せずそのまま足す
+            work.like = obj.work_evaluation[i][0]
+
+            for j in range(1,20):###0は'like'なので計算の必要なし
+                if obj.work_evaluation[i][j] == 0:###その作品のジャンルには含まれない指標
                     continue
 
                 ###標準化した値でwork_evaluationを上書き
-                obj.work_evaluation[i][j] = (obj.work_evaluation[i][j] - data[j][0]) / data[j][1]
+                if data[j][1] != 0:
+                    obj.work_evaluation[i][j] = (obj.work_evaluation[i][j] - data[j][0]) / data[j][1]
+                else:
+                    obj.work_evaluation[i][j] = data[j][0]
 
                 ###Workモデルの書き換え
-                if j == 0:
+                if j == 1:
                     work.joy += obj.work_evaluation[i][j]
-                elif j == 1:
-                    work.anger += obj.work_evaluation[i][j]
                 elif j == 2:
-                    work.sadness += obj.work_evaluation[i][j]
+                    work.anger += obj.work_evaluation[i][j]
                 elif j == 3:
-                    work.fun += obj.work_evaluation[i][j]
+                    work.sadness += obj.work_evaluation[i][j]
                 elif j == 4:
-                    work.tech_constitution += obj.work_evaluation[i][j]
+                    work.fun += obj.work_evaluation[i][j]
                 elif j == 5:
-                    work.tech_story += obj.work_evaluation[i][j]
+                    work.tech_constitution += obj.work_evaluation[i][j]
                 elif j == 6:
-                    work.tech_character += obj.work_evaluation[i][j]
+                    work.tech_story += obj.work_evaluation[i][j]
                 elif j == 7:
-                    work.tech_speech += obj.work_evaluation[i][j]
+                    work.tech_character += obj.work_evaluation[i][j]
                 elif j == 8:
-                    work.tech_picture += obj.work_evaluation[i][j]
+                    work.tech_speech += obj.work_evaluation[i][j]
                 elif j == 9:
-                    work.tech_audio += obj.work_evaluation[i][j]
+                    work.tech_picture += obj.work_evaluation[i][j]
                 elif j == 10:
+                    work.tech_audio += obj.work_evaluation[i][j]
+                elif j == 11:
                     work.tech_acting += obj.work_evaluation[i][j]
 
             work.save()

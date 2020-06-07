@@ -154,10 +154,10 @@ def vote(request, work_id):
 
     ###まずはformの有効性判断&データ取得
     if work.genre == 1:
-        evaluate_items = ('joy', 'anger', 'sadness', 'fun', "tech_constitution", "tech_story",
+        evaluate_items = ('like', 'joy', 'anger', 'sadness', 'fun', "tech_constitution", "tech_story",
                           "tech_character", "tech_speech", "tech_picture")
     else:
-        evaluate_items = ('joy', 'anger', 'sadness', 'fun', "tech_constitution", "tech_story",
+        evaluate_items = ('like', 'joy', 'anger', 'sadness', 'fun', "tech_constitution", "tech_story",
                           "tech_character", "tech_speech", "tech_picture", 'tech_audio', 'tech_acting')
 
     evaluate_values = [0]*(len(evaluate_items))
@@ -171,17 +171,18 @@ def vote(request, work_id):
     ###回答した事があるかどうか, あるならリセットのためにworkからその人分のデータ値を差し引く
     if int(user.work_like[work.id - 1]) >= 1:
         work.num_of_data -= 1
-        work.joy -= user.work_evaluate[work_id - 1][0]
-        work.anger -= user.work_evaluate[work_id - 1][1]
-        work.sadness -= user.work_evaluate[work_id - 1][2]
-        work.fun -= user.work_evaluate[work_id - 1][3]
-        work.tech_constitution -= user.work_evaluate[work_id - 1][4]
-        work.tech_story -= user.work_evaluate[work_id - 1][5]
-        work.tech_character -= user.work_evaluate[work_id - 1][6]
-        work.tech_speech -= user.work_evaluate[work_id - 1][7]
-        work.tech_picture -= user.work_evaluate[work_id - 1][8]
-        work.tech_audio -= user.work_evaluate[work_id - 1][9]
-        work.tech_acting -= user.work_evaluate[work_id - 1][10]
+        work.like = user.work_evaluate[work_id - 1][0]
+        work.joy -= user.work_evaluate[work_id - 1][1]
+        work.anger -= user.work_evaluate[work_id - 1][2]
+        work.sadness -= user.work_evaluate[work_id - 1][3]
+        work.fun -= user.work_evaluate[work_id - 1][4]
+        work.tech_constitution -= user.work_evaluate[work_id - 1][5]
+        work.tech_story -= user.work_evaluate[work_id - 1][6]
+        work.tech_character -= user.work_evaluate[work_id - 1][7]
+        work.tech_speech -= user.work_evaluate[work_id - 1][8]
+        work.tech_picture -= user.work_evaluate[work_id - 1][9]
+        work.tech_audio -= user.work_evaluate[work_id - 1][10]
+        work.tech_acting -= user.work_evaluate[work_id - 1][11]
 
     for i in range(len(evaluate_items)):
         user.work_evaluate[work_id-1][i] = evaluate_values[i]
