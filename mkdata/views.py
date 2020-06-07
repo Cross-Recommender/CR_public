@@ -151,23 +151,43 @@ class ThanksView(TemplateView):
 def vote(request, work_id):
     work = get_object_or_404(Work, pk=work_id)
     user = request.user
-    try:
-        work.num_of_data += 1
-        work.like += int(request.POST['like'])
-        work.joy += int(request.POST["joy"])
-        work.anger += int(request.POST["anger"])
-        work.sadness += int(request.POST["sadness"])
-        work.fun += int(request.POST["fun"])
-        work.tech_constitution += int(request.POST["tech_constitution"])
-        work.tech_story += int(request.POST["tech_story"])
-        work.tech_character += int(request.POST["tech_character"])
-        work.tech_speech += int(request.POST["tech_speech"])
-        work.tech_picture += int(request.POST["tech_picture"])
 
-    except:
-        return HttpResponseRedirect(reverse('mkdata:index_again', args=(work_id,)))
+    ###まずはformの有効性判断&データ取得
+    if work.genre == 1:
+        evaluate_items = ('joy', 'anger', 'sadness', 'fun', "tech_constitution", "tech_story",
+                          "tech_character", "tech_speech", "tech_picture")
+    else:
+        evaluate_items = ('joy', 'anger', 'sadness', 'fun', "tech_constitution", "tech_story",
+                          "tech_character", "tech_speech", "tech_picture", 'tech_audio', 'tech_acting')
+
+    evaluate_values = [0]*(len(evaluate_items))
+
+    for i in range(len(evaluate_items)):
+        try:
+            evaluate_values[i] = int(request.POST[evaluate_items[i]])###0-indexedに統一
+        except:
+            return HttpResponseRedirect(reverse('mkdata:index_again', args=(work_id,)))
+
+    ###回答した事があるかどうか, あるならリセットのためにworkからその人分のデータ値を差し引く
+    if int(user.work_like[work.id - 1]) >= 1:
+        work.num_of_data -= 1
+        work.joy -= user.work_evaluate[work_id - 1][0]
+        work.anger -= user.work_evaluate[work_id - 1][1]
+        work.sadness -= user.work_evaluate[work_id - 1][2]
+        work.fun -= user.work_evaluate[work_id - 1][3]
+        work.tech_constitution -= user.work_evaluate[work_id - 1][4]
+        work.tech_story -= user.work_evaluate[work_id - 1][5]
+        work.tech_character -= user.work_evaluate[work_id - 1][6]
+        work.tech_speech -= user.work_evaluate[work_id - 1][7]
+        work.tech_picture -= user.work_evaluate[work_id - 1][8]
+        work.tech_audio -= user.work_evaluate[work_id - 1][9]
+        work.tech_acting -= user.work_evaluate[work_id - 1][10]
+
+    for i in range(len(evaluate_items)):
+        user.work_evaluate[work_id-1][i] = evaluate_values[i]
 
     work.save()
+    user.save()
 
     obj = user.work_like
 
@@ -318,6 +338,7 @@ def recommend(request, work_id):
 ###フォーム入力後にすぐにオススメ5作品のページへ飛べるよう改良
 def recommend(request):
     user = request.user
+
     if user.data_entered is None:
         user.data_entered = False
         user.save()

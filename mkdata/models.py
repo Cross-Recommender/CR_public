@@ -37,6 +37,32 @@ class Work(models.Model):
                            [self.joy,self.anger,self.sadness,self.fun,self.tech_constitution,self.tech_story,self.tech_character,self.tech_speech,self.tech_picture]))
         return average
 
+    '''
+    def get_evaluation_item(self, num):
+        if num == 0:
+            return self.joy
+        elif num == 1:
+            return self.anger
+        elif num == 2:
+            return self.sadness
+        elif num == 3:
+            return self.fun
+        elif num == 4:
+            return self.tech_constitution
+        elif num == 5:
+            return self.tech_story
+        elif num == 6:
+            return self.tech_character
+        elif num == 7:
+            return self.tech_speech
+        elif num == 8:
+            return self.tech_picture
+        elif num == 9:
+            return self.tech_audio
+        elif num == 10:
+            return self.tech_acting
+    '''
+
 def try_Work_get(id):
     try:
         return Work.objects.get(id=id)

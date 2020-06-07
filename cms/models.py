@@ -104,7 +104,15 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
     data_entered = models.BooleanField(default=False)
     ########
 
-    #work_evaluation = ArrayField(models.IntegerField(default=0), size=5,unique=False,null=True)
+    work_evaluation = ArrayField(
+        ArrayField(
+            models.FloatField(default=0),
+            size=20,
+            unique=False,
+            null=True
+        ),
+        size=100000,
+    )
 
     objects = UserManager()
 

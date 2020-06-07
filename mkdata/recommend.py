@@ -29,6 +29,70 @@ def get_std():
     stdopint = list(map(lambda x, y: (x - y ** 2) ** (-1 / 2), avesqupoint, avepoint))
     return stdopint
 
+def user_standardize(obj):
+    ### user.work_evaluationの情報から, 評価した作品に対して, そのユーザの各項目の平均値, 標準偏差を出す
+
+    info = [[0,0,0] for _ in range(20)]###[その項目の評価数, その項目の評価点合計, その項目の評価点の2乗の合計]
+    for i in range(Work.objects.all().order_by("-id")[0].id):
+        if int(obj.work_read[i+1]) >= 3:
+            for j in range(20):
+                if obj.work_evaluation[i][j] != 0:
+                    info[j][0] += 1
+                    info[j][1] += obj.work_evaluation[i][j]
+
+    data = [[0,0] for _ in range(20)]###[その項目の平均評価, その項目の標準偏差]
+
+    for i in range(20):
+        if data[i][0] == 0:
+            pass
+        else:
+            data[i][0] = info[i][1]/info[i][0]
+            data[i][1] = info[i][2]/info[i][0] - (info[i][1]/info[i][0])**2
+
+    ###標準化したユーザーの評価値を各モデルに加算
+    for i in range(Work.objects.all().order_by("-id")[0].id):
+        if int(obj.work_read[i+1]) >= 3:
+            work = Work.objects.get(id = i+1)
+
+            ###今までの回答有無に関わらずvoteで今までの回答をリセットしたので, ここまでたどり着いたらまた1増やす
+            work.num_of_data += 1
+
+            for j in range(20):
+                if obj.work_evaluation[i][j] == 0:###その作品にジャンルには含まれない指標
+                    continue
+
+                ###標準化した値でwork_evaluationを上書き
+                obj.work_evaluation[i][j] = (obj.work_evaluation[i][j] - data[j][0]) / data[j][1]
+
+                ###Workモデルの書き換え
+                if j == 0:
+                    work.joy += obj.work_evaluation[i][j]
+                elif j == 1:
+                    work.anger += obj.work_evaluation[i][j]
+                elif j == 2:
+                    work.sadness += obj.work_evaluation[i][j]
+                elif j == 3:
+                    work.fun += obj.work_evaluation[i][j]
+                elif j == 4:
+                    work.tech_constitution += obj.work_evaluation[i][j]
+                elif j == 5:
+                    work.tech_story += obj.work_evaluation[i][j]
+                elif j == 6:
+                    work.tech_character += obj.work_evaluation[i][j]
+                elif j == 7:
+                    work.tech_speech += obj.work_evaluation[i][j]
+                elif j == 8:
+                    work.tech_picture += obj.work_evaluation[i][j]
+                elif j == 9:
+                    work.tech_audio += obj.work_evaluation[i][j]
+                elif j == 10:
+                    work.tech_acting += obj.work_evaluation[i][j]
+
+            work.save()
+
+    obj.save()
+
+
 
 def recommendsort(obj, n):
     """
@@ -77,6 +141,10 @@ def recommendselect(user):
 
     works = []
     num = 0
+
+    ###recommend_sortを行う前に, userのデータを標準化, workモデルに反映
+    user_standardize(user)
+
     for work in OrderedWork:
         # print(len(works))#なぜか作品が6つ以上表示された時のバグ確認用
         cand_works = recommendsort(work, 5)
