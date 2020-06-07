@@ -27,6 +27,9 @@ class Work(models.Model):
     ###ジャンルを表す　1: 漫画　2: 映画
     genre = models.IntegerField(default=1)
 
+    ### url
+    url = models.CharField(max_length=300)
+
     def __str__(self):
         return self.name
 
