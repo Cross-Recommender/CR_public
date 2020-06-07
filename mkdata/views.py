@@ -160,7 +160,7 @@ def vote(request, work_id):
         evaluate_items = ('like', 'joy', 'anger', 'sadness', 'fun', "tech_constitution", "tech_story",
                           "tech_character", "tech_speech", "tech_picture", 'tech_audio', 'tech_acting')
 
-    evaluate_values = [0]*(len(evaluate_items))
+    evaluate_values = [0]*20
 
     for i in range(len(evaluate_items)):
         try:
@@ -194,6 +194,10 @@ def vote(request, work_id):
     else:
         user.work_evaluated = [work_id]
         user.work_evaluation = [evaluate_values]
+
+    for i in range(len(user.work_evaluation)):
+        user.work_evaluation[i] = user.work_evaluation[i]+[0]*(20-len(user.work_evaluation[i]))
+    print(user.work_evaluation)
 
     work.save()
     user.save()

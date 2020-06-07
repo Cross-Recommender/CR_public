@@ -99,9 +99,9 @@ def user_standardize(obj):
                 elif j == 9:
                     work.tech_picture += val
                 elif j == 10:
-                    work.tech_audio += val
+                    work.mov_tech_audio += val
                 elif j == 11:
-                    work.tech_acting += val
+                    work.mov_tech_acting += val
 
             work.save()
     obj.save()
