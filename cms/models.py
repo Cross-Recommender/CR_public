@@ -119,8 +119,8 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
         default=list,
     )
 
-    evaluation_avg = ArrayField(models.FloatField(), size=100000,unique=False,null=True)
-    evaluation_std = ArrayField(models.FloatField(), size=100000,unique=False,null=True)
+    evaluation_avg = ArrayField(models.FloatField(default = 0), size=20,unique=False,null=True)
+    evaluation_std = ArrayField(models.FloatField(default = 0), size=20,unique=False,null=True)
 
     objects = UserManager()
 
