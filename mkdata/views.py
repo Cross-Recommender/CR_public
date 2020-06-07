@@ -174,11 +174,13 @@ def vote(request, work_id):
             index = user.work_evaluated.index(work_id)
             work.num_of_data -= 1
 
-            if user.evaluation_avg is None:
+            if (user.evaluation_avg == []) or (user.evaluation_avg is None):
                 user.evaluation_avg = [0]*20
                 user.evaluation_std = [0]*20
 
             work.like -= user.work_evaluation[index][0]
+
+            #print(user.evaluation_avg)
 
             if user.evaluation_std[1] != 0:
                 work.joy -= (user.work_evaluation[index][1]-user.evaluation_avg[1])/user.evaluation_std[1]
@@ -216,7 +218,7 @@ def vote(request, work_id):
 
     for i in range(len(user.work_evaluation)):
         user.work_evaluation[i] = user.work_evaluation[i]+[0]*(20-len(user.work_evaluation[i]))
-    print(user.work_evaluation)
+    #print(user.work_evaluation)
 
     work.save()
     user.save()
