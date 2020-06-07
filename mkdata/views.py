@@ -218,7 +218,7 @@ def vote(request, work_id):
 
     for i in range(len(user.work_evaluation)):
         user.work_evaluation[i] = user.work_evaluation[i]+[0]*(20-len(user.work_evaluation[i]))
-    print(user.work_evaluation)
+    #print(user.work_evaluation)
 
     work.save()
     user.save()
