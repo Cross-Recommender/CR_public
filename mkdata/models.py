@@ -28,7 +28,7 @@ class Work(models.Model):
     genre = models.IntegerField(default=1)
 
     ### url
-    url = models.CharField(max_length=300)
+    url = models.CharField(default="0", max_length=300)
 
     def __str__(self):
         return self.name

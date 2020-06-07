@@ -33,69 +33,70 @@ def user_standardize(obj):
     ### user.work_evaluationの情報から, 評価した作品に対して, そのユーザの各項目の平均値, 標準偏差を出す
 
     info = [[0,0,0] for _ in range(20)]###[その項目の評価数, その項目の評価点合計, その項目の評価点の2乗の合計]
-    for i in range(Work.objects.all().order_by("-id")[0].id):
-        if int(obj.work_read[i+1]) >= 3:
-            for j in range(1,20):###0は'like'なので計算の必要なし
-                if obj.work_evaluation[i][j] != 0:
-                    info[j][0] += 1
-                    info[j][1] += obj.work_evaluation[i][j]
+    for i, workid in enumerate(obj.work_evaluated):
+        if int(obj.work_read[workid-1]) >= 3:
+            for j, val in enumerate(obj.work_evaluation[i]):###0は'like'なので計算の必要なし
+                info[j][0] += 1
+                info[j][1] += val
+                info[j][2] += val**2
 
     data = [[0,0] for _ in range(20)]###[その項目の平均評価, その項目の標準偏差]
 
     for i in range(1,20):###0は'like'なので計算の必要なし
-        if data[i][0] == 0:
+        if info[i][0] == 0:
             pass
         else:
             data[i][0] = info[i][1]/info[i][0]
             data[i][1] = info[i][2]/info[i][0] - (info[i][1]/info[i][0])**2
 
     ###標準化したユーザーの評価値を各モデルに加算
-    for i in range(Work.objects.all().order_by("-id")[0].id):
-        if int(obj.work_read[i+1]) >= 3:
-            work = Work.objects.get(id = i+1)
+    for i, workid in enumerate(obj.work_evaluated):
+        if int(obj.work_read[workid-1]) >= 3:
+            work = Work.objects.get(id=workid)
 
             ###今までの回答有無に関わらずvoteで今までの回答をリセットしたので, ここまでたどり着いたらまた1増やす
             work.num_of_data += 1
 
             ###work.likeは標準化せずそのまま足す
-            work.like = obj.work_evaluation[i][0]
+            work.like += obj.work_evaluation[i][0]
 
-            for j in range(1,20):###0は'like'なので計算の必要なし
-                if obj.work_evaluation[i][j] == 0:###その作品のジャンルには含まれない指標
+            for j, val in enumerate(obj.work_evaluation[i]):###0は'like'なので計算の必要なし
+                if val == 0:###その作品のジャンルには含まれない指標
                     continue
 
                 ###標準化した値でwork_evaluationを上書き
+                #work_evaluationは正規化以前の値をそのまま入れておく
+                #2回目以降のstandarizeで壊れるため
                 if data[j][1] != 0:
-                    obj.work_evaluation[i][j] = (obj.work_evaluation[i][j] - data[j][0]) / data[j][1]
+                    val = (val - data[j][0]) / data[j][1]
                 else:
-                    obj.work_evaluation[i][j] = data[j][0]
+                    val = data[j][0]
 
                 ###Workモデルの書き換え
                 if j == 1:
-                    work.joy += obj.work_evaluation[i][j]
+                    work.joy += val
                 elif j == 2:
-                    work.anger += obj.work_evaluation[i][j]
+                    work.anger += val
                 elif j == 3:
-                    work.sadness += obj.work_evaluation[i][j]
+                    work.sadness += val
                 elif j == 4:
-                    work.fun += obj.work_evaluation[i][j]
+                    work.fun += val
                 elif j == 5:
-                    work.tech_constitution += obj.work_evaluation[i][j]
+                    work.tech_constitution += val
                 elif j == 6:
-                    work.tech_story += obj.work_evaluation[i][j]
+                    work.tech_story += val
                 elif j == 7:
-                    work.tech_character += obj.work_evaluation[i][j]
+                    work.tech_character += val
                 elif j == 8:
-                    work.tech_speech += obj.work_evaluation[i][j]
+                    work.tech_speech += val
                 elif j == 9:
-                    work.tech_picture += obj.work_evaluation[i][j]
+                    work.tech_picture += val
                 elif j == 10:
-                    work.tech_audio += obj.work_evaluation[i][j]
+                    work.tech_audio += val
                 elif j == 11:
-                    work.tech_acting += obj.work_evaluation[i][j]
+                    work.tech_acting += val
 
             work.save()
-
     obj.save()
 
 

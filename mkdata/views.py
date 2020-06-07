@@ -169,26 +169,35 @@ def vote(request, work_id):
             return HttpResponseRedirect(reverse('mkdata:index_again', args=(work_id,)))
 
     ###回答した事があるかどうか, あるならリセットのためにworkからその人分のデータ値を差し引く
-    if int(user.work_like[work.id - 1]) >= 1:
-        work.num_of_data -= 1
-        work.like = user.work_evaluate[work_id - 1][0]
-        work.joy -= user.work_evaluate[work_id - 1][1]
-        work.anger -= user.work_evaluate[work_id - 1][2]
-        work.sadness -= user.work_evaluate[work_id - 1][3]
-        work.fun -= user.work_evaluate[work_id - 1][4]
-        work.tech_constitution -= user.work_evaluate[work_id - 1][5]
-        work.tech_story -= user.work_evaluate[work_id - 1][6]
-        work.tech_character -= user.work_evaluate[work_id - 1][7]
-        work.tech_speech -= user.work_evaluate[work_id - 1][8]
-        work.tech_picture -= user.work_evaluate[work_id - 1][9]
-        work.tech_audio -= user.work_evaluate[work_id - 1][10]
-        work.tech_acting -= user.work_evaluate[work_id - 1][11]
+    if user.work_evaluated is not None:
+        if work_id in user.work_evaluated:
+            index = user.work_evaluated.index(work_id)
+            work.num_of_data -= 1
+            work.like -= user.work_evaluation[index][0]
+            work.joy -= user.work_evaluation[index][1]
+            work.anger -= user.work_evaluation[index][2]
+            work.sadness -= user.work_evaluation[index][3]
+            work.fun -= user.work_evaluation[index][4]
+            work.tech_constitution -= user.work_evaluation[index][5]
+            work.tech_story -= user.work_evaluation[index][6]
+            work.tech_character -= user.work_evaluation[index][7]
+            work.tech_speech -= user.work_evaluation[index][8]
+            work.tech_picture -= user.work_evaluation[index][9]
+            if work.genre == 2:
+                work.mov_tech_audio -= user.work_evaluation[index][10]
+                work.mov_tech_acting -= user.work_evaluation[index][11]
 
-    for i in range(len(evaluate_items)):
-        user.work_evaluate[work_id-1][i] = evaluate_values[i]
+            user.work_evaluation[index] = evaluate_values
+        else:
+            user.work_evaluated.append(work_id)
+            user.work_evaluation.append(evaluate_values)
+    else:
+        user.work_evaluated = [work_id]
+        user.work_evaluation = [evaluate_values]
 
     work.save()
     user.save()
+    #print(user.work_evaluation)
 
     obj = user.work_like
 
@@ -512,3 +521,19 @@ def HaveRead(request, work_id):
 
     return HttpResponseRedirect(reverse('mkdata:index', args=(work_id,)))
 
+
+def binary_search(list, item):
+    left = 0
+    right = len(list) - 1
+
+    while left >= right:
+        mid = (left + right) // 2
+        guess = list[mid]
+        if guess == item:
+            return mid
+        if guess > item:
+            right = mid - 1
+        else:
+            left = mid + 1
+
+    return None
