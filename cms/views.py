@@ -88,7 +88,7 @@ class UserCreateAgain(CreateView):
 class GuestCreate(CreateView):
     form_class = GuestCreateForm
     template_name = 'cms/guest.html'
-    success_url = reverse_lazy('cms:top')
+    success_url = reverse_lazy('mkdata:start')
 
     def form_valid(self, form):
         if not self.request.POST.getlist('isOK'):
@@ -103,7 +103,7 @@ class GuestCreate(CreateView):
 class GuestCreateAgain(CreateView):
     form_class = GuestCreateForm
     template_name = 'cms/guestagain.html'
-    success_url = reverse_lazy('cms:top')
+    success_url = reverse_lazy('mkdata:start')
 
     def form_valid(self, form):
         if not self.request.POST.getlist('isOK'):

@@ -10,6 +10,8 @@
         <hr>
         <p class="help">アカウントをお持ちの方へ：ログインは<a href="{% url 'cms:login' %}">こちら</a></p>
         <p class="has-text-danger">乱数長の乱数文字列によるパスワードとemailを作成します。</p>
+        <p class="has-text-danger">ログアウトと同時にゲストアカウントは削除されます。</p>
+        <p class="has-text-danger">正規アカウントをご希望の方は画面上部のボタンよりSign upしてください</p>
         <br>
         <form method="post" action="">
             {% csrf_token %}
