@@ -11,6 +11,7 @@ urlpatterns = [
     path('policy/', views.PolicyView.as_view(), name='policy'),
     path('login/', views.Login.as_view(), name='login'),
     path('logout/', views.Logout.as_view(), name='logout'),
+    path('guestdelete/', views.GuestDelete, name='guestdelete'),
     path('signup/', views.UserCreate.as_view(), name='signup'),
     path('signupagain/', views.UserCreateAgain.as_view(), name='signupagain'),
     path('guest/', views.GuestCreate.as_view(), name='guest'),

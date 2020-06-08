@@ -8,7 +8,7 @@ from django.contrib.auth import get_user_model, login
 from django.contrib.auth.views import (
     LoginView, LogoutView,
 )
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import resolve_url
 from django.urls import reverse_lazy
 from django.views.generic.base import TemplateView
@@ -43,6 +43,19 @@ class Login(LoginView):
 
 class Logout(LogoutView):
     template_name = 'cms/top.html'
+
+def GuestDelete(request):
+    user = request.user
+    print(user)
+    if user.is_authenticated == False:
+        return HttpResponseRedirect(reverse('cms:top', ))
+    if user.is_guest == True:
+        user.delete()
+        return HttpResponseRedirect(reverse('cms:top', ))
+    else:
+        return HttpResponseRedirect(reverse('cms:logout', ))
+
+
 
 class UserCreate(CreateView):
     form_class = UserCreateForm
@@ -80,6 +93,8 @@ class GuestCreate(CreateView):
             return HttpResponseRedirect(reverse('cms:guestagain', ))
         user = form.save()
         login(self.request, user)
+        user.is_guest = True
+        user.save()
         self.object = user
         return HttpResponseRedirect(self.get_success_url())
 
@@ -93,6 +108,8 @@ class GuestCreateAgain(CreateView):
             return HttpResponseRedirect(reverse('cms:guestagain', ))
         user = form.save()
         login(self.request, user)
+        user.is_guest = True
+        user.save()
         self.object = user
         return HttpResponseRedirect(self.get_success_url())
 

@@ -104,10 +104,8 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
     data_entered = models.BooleanField(default=False)
     ########
 
-    """
     #guest判定に使う
     is_guest = models.BooleanField(default=False)
-    """
 
     ###過去に評価した事がある作品のidを格納
     work_evaluated = ArrayField(models.IntegerField(), size=100000,unique=False,null=True)
