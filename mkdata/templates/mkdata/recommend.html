@@ -49,8 +49,8 @@ div.sample  {
                     {% for work in works %}
                         <div class="tile is-child box">
                             <p class="title is-4" ><a href={{ work.url }} target="_blank" class = "has-text-black">{{ work.name }}</a>
-                            <a class="button is-light media-right" href="{% url 'mkdata:haveread' work.id%}">読んだ</a>
-                            </p>
+                            <a class="button is-light media-right" href="{% url 'mkdata:haveread' work.id%}">読んだ</a></p>
+                            <p class = "subtitle is-6">ジャンル: {% if work.genre == 1 %}漫画{% else %}邦画{% endif %}</p>
                         </div>
                     {% endfor %}
                 </ul>
