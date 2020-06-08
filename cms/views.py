@@ -18,7 +18,7 @@ from django.views.generic.edit import (
 
 from .mixins import OnlyYouMixin
 from .forms import (
-    LoginForm, UserCreateForm, UserUpdateForm,
+    LoginForm, UserCreateForm, UserUpdateForm, GuestCreateForm
 )
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
@@ -65,6 +65,32 @@ class UserCreateAgain(CreateView):
     def form_valid(self, form):
         if not self.request.POST.getlist('isOK'):
             return HttpResponseRedirect(reverse('cms:signupagain', ))
+        user = form.save()
+        login(self.request, user)
+        self.object = user
+        return HttpResponseRedirect(self.get_success_url())
+
+class GuestCreate(CreateView):
+    form_class = GuestCreateForm
+    template_name = 'cms/guest.html'
+    success_url = reverse_lazy('cms:top')
+
+    def form_valid(self, form):
+        if not self.request.POST.getlist('isOK'):
+            return HttpResponseRedirect(reverse('cms:guestagain', ))
+        user = form.save()
+        login(self.request, user)
+        self.object = user
+        return HttpResponseRedirect(self.get_success_url())
+
+class GuestCreateAgain(CreateView):
+    form_class = GuestCreateForm
+    template_name = 'cms/guestagain.html'
+    success_url = reverse_lazy('cms:top')
+
+    def form_valid(self, form):
+        if not self.request.POST.getlist('isOK'):
+            return HttpResponseRedirect(reverse('cms:guestagain', ))
         user = form.save()
         login(self.request, user)
         self.object = user
