@@ -1,0 +1,48 @@
+{% extends 'cms/base.html' %}
+
+{% block title %}Signup | {% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container is-mobile">
+        <h1 class="title is-4">ゲスト入場</h1>
+        <h2 class="subtitle is-6">Guest Create</h2>
+        <hr>
+        <p class="help">アカウントをお持ちの方へ：ログインは<a href="{% url 'cms:login' %}">こちら</a></p>
+        <p class="has-text-danger">ログアウトと同時にゲストアカウントは削除されます。</p>
+        <p class="has-text-danger">正規アカウントをご希望の方は画面上部のボタンよりSign upしてください</p>
+        <br>
+        <form method="post" action="">
+            {% csrf_token %}
+            <div class="field">
+                <label class="label">ユーザーネーム</label>
+                <div class="control has-icons-left">
+                    {{ form.username }}
+                    <span class="icon is-small is-left"><i class="fas fa-user"></i></span>
+                </div>
+            </div>
+                    {{ form.email }}
+
+                    {{ form.password1 }}
+
+                    {{ form.password2 }}
+            <br>
+            <div class ="field">
+                <label class="checkbox">
+                    <input type="checkbox" name = "isOK" value = "OK">
+                        <a href="/cms/terms">利用規約</a>に同意します
+                    <br>
+                    <br>
+                </label>
+                <br>
+            </div>
+            <div class="field">
+                <p class="control">
+                    <input type="submit" value="登録" class="button is-success">
+                    <input type="hidden" name="next" value="{{ next }}" >
+                </p>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}

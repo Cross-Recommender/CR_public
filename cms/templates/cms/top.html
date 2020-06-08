@@ -28,6 +28,7 @@
             </a>
             {% endif %}
         </div>
+        <!--
         <div class="container">
             <br>
             <a href="https://forms.gle/76CfeAkMs4fiAN3GA" target="_blank">
@@ -36,12 +37,23 @@
                 </button>
             </a>
         </div>
+        -->
         <div class="container">
             {% if user.is_authenticated %}
             <br>
             <a href="/mkdata/recommend">
                 <button class="button is-info is-inverted is-outlined">
                     <strong>おすすめ作品一覧</strong>
+                </button>
+            </a>
+            {% endif %}
+        </div>
+        <div class="container">
+            {% if not user.is_authenticated %}
+            <br>
+            <a href="/cms/guest">
+                <button class="button is-info is-inverted is-outlined">
+                    <strong>ゲスト入場口</strong>
                 </button>
             </a>
             {% endif %}

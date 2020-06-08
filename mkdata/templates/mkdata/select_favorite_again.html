@@ -14,7 +14,7 @@
         <h2 class="subtitle is-6">Enter data</h2>
         <hr>
         <p class = "has-text-danger">5つの作品を選択してください。</p>
-        <p>次に, {{ user.username }}さんが読んだことがある作品の中で特に好きだったもの5つを選んでください。</p>
+        <p>次に, {{ user.username }}さんが読んだこと・観たことがある作品の中で特に好きだったもの5つを選んでください。</p>
         <form method="post" action="{% url 'mkdata:userselected' %}">
             {% csrf_token %}
             <br>
