@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, PasswordChangeForm
 from django import forms
 import random, string
 
@@ -43,6 +43,28 @@ class GuestCreateForm(UserCreationForm):
         self.fields['password2'].widget = forms.HiddenInput()
         for field in self.fields.values():
             field.widget.attrs['class'] = 'input'
+
+'''
+class GuestToRealUserForm(forms.ModelForm):
+    class Meta:
+        model = UserModel
+        fields = ('username', 'email', 'password1', 'password2')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'input'
+'''
+
+class MyPasswordChangeForm(PasswordChangeForm):
+    """パスワード変更フォーム"""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+        self.fields['old_password'].initial = self.user.Password
+        self.fields['old_password'].widget.render_value = True
 
 class UserUpdateForm(forms.ModelForm):
     class Meta:

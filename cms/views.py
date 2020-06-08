@@ -6,7 +6,7 @@ from django.views.generic.base import TemplateView
 
 from django.contrib.auth import get_user_model, login
 from django.contrib.auth.views import (
-    LoginView, LogoutView,
+    LoginView, LogoutView, PasswordChangeView, PasswordChangeDoneView
 )
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import resolve_url
@@ -25,6 +25,8 @@ from django.views.generic.list import ListView
 from mkdata import models as mkdata_models
 
 from django.urls import reverse
+
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 UserModel = get_user_model()
@@ -112,6 +114,26 @@ class GuestCreateAgain(CreateView):
         user.save()
         self.object = user
         return HttpResponseRedirect(self.get_success_url())
+
+'''
+class GuestToRealUser(UpdateView):
+    model = UserModel
+    form_class = GuestToRealUserForm
+    template_name = 'cms/guest_password_change.html'
+
+    def get_success_url(self):
+        return resolve_url('cms:user_detail', pk=self.kwargs['pk'])
+'''
+
+class GuestPasswordChange(LoginRequiredMixin, PasswordChangeView):
+    """パスワード変更ビュー"""
+    success_url = reverse_lazy('cms:guest_password_change_done')
+    template_name = 'cms/guest_password_change.html'
+
+class GuestPasswordChangeDone(LoginRequiredMixin,PasswordChangeDoneView):
+    """パスワード変更完了"""
+    template_name = 'cms/password_change_done.html'
+
 
 class UserUpdate(OnlyYouMixin, UpdateView):
     model = UserModel
