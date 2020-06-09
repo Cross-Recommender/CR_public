@@ -125,12 +125,19 @@ class GuestToRealUser(UpdateView):
         return resolve_url('cms:user_detail', pk=self.kwargs['pk'])
 '''
 
-class GuestPasswordChange(LoginRequiredMixin, PasswordChangeView):
+class PasswordChange(LoginRequiredMixin, PasswordChangeView):
     """パスワード変更ビュー"""
-    success_url = reverse_lazy('cms:guest_password_change_done')
-    template_name = 'cms/guest_password_change.html'
+    success_url = reverse_lazy('cms:password_change_done')
+    template_name = 'cms/password_change.html'
+    def form_valid(self, form):
+        super(PasswordChange, self).form_valid(form)
+        self.request.user.tmppass = None
+        self.request.user.is_guest = False
+        self.request.user.save()
+        return HttpResponseRedirect(self.get_success_url())
 
-class GuestPasswordChangeDone(LoginRequiredMixin,PasswordChangeDoneView):
+
+class PasswordChangeDone(LoginRequiredMixin,PasswordChangeDoneView):
     """パスワード変更完了"""
     template_name = 'cms/password_change_done.html'
 

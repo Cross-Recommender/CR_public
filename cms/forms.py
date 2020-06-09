@@ -26,7 +26,7 @@ class UserCreateForm(UserCreationForm):
 class GuestCreateForm(UserCreationForm):
     class Meta:
         model = UserModel
-        fields = ('username', 'email', 'password1', 'password2')
+        fields = ('username', 'email', 'password1', 'password2', 'tmppass')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -36,9 +36,12 @@ class GuestCreateForm(UserCreationForm):
         self.fields['password2'].initial = Q
         self.fields['password1'].widget.render_value = True
         self.fields['password2'].widget.render_value = True
+        self.fields['tmppass'].initial = Q
+        self.fields['tmppass'].widget.render_value = True
         self.fields['email'].initial = mail
         self.fields['email'].widget.render_value = True
         self.fields['email'].widget = forms.HiddenInput()
+        self.fields['tmppass'].widget = forms.HiddenInput()
         self.fields['password1'].widget = forms.HiddenInput()
         self.fields['password2'].widget = forms.HiddenInput()
         for field in self.fields.values():
@@ -58,13 +61,16 @@ class GuestToRealUserForm(forms.ModelForm):
 
 class MyPasswordChangeForm(PasswordChangeForm):
     """パスワード変更フォーム"""
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        """
+        print(self.user.tmppass)
+        self.fields['old_password'].initial = self.user.tmppass
+        self.fields['old_password'].widget.render_value = True
+        #self.fields['old_password'].widget = forms.HiddenInput()
+        """
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
-        self.fields['old_password'].initial = self.user.Password
-        self.fields['old_password'].widget.render_value = True
 
 class UserUpdateForm(forms.ModelForm):
     class Meta:
