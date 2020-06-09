@@ -31,7 +31,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 UserModel = get_user_model()
 
-
+'''
 def BeforeTopView(request):
     user = request.user
     if user.is_authenticated == False:
@@ -40,7 +40,7 @@ def BeforeTopView(request):
         return HttpResponseRedirect(reverse('cms:guestdelete', ))
     else:
         return HttpResponseRedirect(reverse('cms:genuine_top', ))
-
+'''
 
 class TopView(TemplateView):
     template_name = 'cms/top.html'

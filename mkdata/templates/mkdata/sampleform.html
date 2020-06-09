@@ -9,7 +9,7 @@
         <h1 class="title is-4">データ入力 作品名: {{ work.name }}</h1>
         <h2 class="subtitle is-6">ジャンル: {% if work.genre == 1 %}漫画{% else %}映画{% endif %}</h2>
         <hr>
-        <p>漫画『{{ work.name }}』について{{ user.username }}さんの評価を教えてください。</p>
+        <p>{% if work.genre == 1 %}漫画{% else %}映画{% endif %}『{{ work.name }}』について{{ user.username }}さんの評価を教えてください。</p>
         <p>以下に記す各尺度について、5段階評価で点数をつけてください。</p>
         <br>
         <li><b>総合的な好み</b></li>

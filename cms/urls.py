@@ -5,10 +5,10 @@ from . import views
 app_name = 'cms'
 
 urlpatterns = [
-    #path('', views.TopView.as_view(), name='top'),
+    path('', views.TopView.as_view(), name='top'),
     ###試しにBeforeTopViewを実装しました。必要ならすぐ消します
-    path('genuine/', views.TopView.as_view(), name='genuine_top'),
-    path('', views.BeforeTopView, name='top'),
+    #path('genuine/', views.TopView.as_view(), name='genuine_top'),
+    #path('', views.BeforeTopView, name='top'),
     ###
     path('infomation/', views.InfomationView.as_view(), name='infomation'),
     path('terms/', views.TermsView.as_view(), name='terms'),
