@@ -32,8 +32,26 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 UserModel = get_user_model()
 
 
+def BeforeTopView(request):
+    user = request.user
+    if user.is_authenticated == False:
+        return HttpResponseRedirect(reverse('cms:genuine_top', ))
+    elif user.is_guest == True:
+        return HttpResponseRedirect(reverse('cms:guestdelete', ))
+    else:
+        return HttpResponseRedirect(reverse('cms:genuine_top', ))
+
+
 class TopView(TemplateView):
     template_name = 'cms/top.html'
+
+    '''
+    def post(self, request, *args, **kwargs):
+        user = self.request.user
+        if user.is_guest:
+            user.delete()
+    '''
+
 
 class InfomationView(TemplateView):
     template_name = 'cms/infomation.html'

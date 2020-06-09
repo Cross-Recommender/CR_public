@@ -44,7 +44,8 @@
                     {% else %}
                     <!--<a class="navbar-item is-grey" href="#">About</a>-->
                     <div class="buttons">
-                        <a class="button is-info navbar-item" href="{% url 'cms:signup' %}"><strong>Sign up</strong></a>
+                        <a class="button is-info navbar-item" href="{% url 'cms:guest' %}"><strong>Create Guest Account</strong></a>
+                        <a class="button is-success navbar-item" href="{% url 'cms:signup' %}"><strong>Sign up</strong></a>
                         <a class="button is-light navbar-item" href="{% url 'cms:login' %}"><strong>Log in</strong></a>
                     </div>
                     {% endif %}

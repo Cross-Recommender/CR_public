@@ -67,6 +67,20 @@ div.sample  {
     <div class="container">
         <div class="tile is-ancestor">
             <div class="tile is-12 is-vertical is-parent">
+                {% if user.is_guest %}
+                <div class="tile is-child box">
+                    <h2 class="subtitle">正規ユーザー登録しておすすめ作品一覧を保存しよう！</h2>
+                    <p>
+                        このレコメンド結果は、ゲストユーザーからログアウトすると閲覧できなくなります。保存して次回以降閲覧できるようにするには
+                        <a href="/cms/password_change">こちら</a>
+                        から正規ユーザー登録してください。
+                    </p>
+                    <p>
+                        正規ユーザー登録すると、今回入力した作品についてのデータは保存され、いつでもレコメンド情報を閲覧できる他、
+                        次回以降のレコメンドにも今回入力したデータが反映されます。
+                    </p>
+                </div>
+                {% endif %}
                 {% if works %}
                 <div class="tile is-child box">
                     <h2 class="subtitle">Twitterでおすすめ作品をシェアしよう！</h2>
@@ -74,8 +88,8 @@ div.sample  {
                     <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-size="large" data-text="{{ user.username }}さんへのオススメ作品は{% for work in works %}「{{ work.name }}」{% endfor %}です！&#010; Cross Recommenderでおすすめ作品を見てみよう！" data-url="http://crossrecommender-env.eba-p8hy6ngk.us-east-1.elasticbeanstalk.com/cms" data-hashtags="新しいお気に入りを見つけよう" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
                     <p>（コンテンツブロッカー等を利用している場合ツイートシェアボタンが表示されない場合があります）</p>
-                    {% endif %}
                 </div>
+                {% endif %}
                 <div class="tile is-child box is-primary">
                     <p>上記の結果は、{{ user.username }}さんの読んだことがある漫画に対する好みと、全ユーザーの回答履歴に基づいて算出されており、{{ user.username }}さんが好きな漫画と同様の傾向を持っています。私たちがオススメした漫画を読んだら、ぜひまた評価を教えてください。それをもとに、さらに精度の高いレコメンドを提供いたします。</p>
                     <br>
