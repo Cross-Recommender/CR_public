@@ -13,9 +13,9 @@
         <h1 class="title is-4">データ入力</h1>
         <h2 class="subtitle is-6">Enter data</h2>
         <hr>
-        <p>ここでは, {{ user.username }}さんにオススメな作品をご紹介するために, {{ user.username }}さんが読んだことがある漫画について入力していただきます。</p>
-        <p>まずは, 以下の中から{{ user.username }}さんが読んだことがある漫画<b>全てに</b>チェックをつけてください。</p>
-        <p><strong><font color = "red">この一覧のうち、{{ user.username }}さんが触れたことのない作品からおすすめされますので、全ての作品を読んだことがある場合おすすめ作品が表示されません。ご注意ください。</font></strong></p>
+        <p>ここでは, {{ user.username }}さんにオススメな作品をご紹介するために, {{ user.username }}さんが読んだことがある漫画・邦画について入力していただきます。</p>
+        <p>まずは, 以下の中から{{ user.username }}さんが触れたことがある漫画・邦画<b>全てに</b>チェックをつけてください。</p>
+        <p><strong><font color = "red">この一覧のうち、{{ user.username }}さんが触れたことのない作品からおすすめされますので、全ての作品に触れたことがある場合おすすめ作品が表示されません。ご注意ください。</font></strong></p>
         <form method="post" action="{% url 'mkdata:userread'%}">
             {% csrf_token %}
             <br>

@@ -15,7 +15,15 @@
                     <h1 class="title">
                         {{ request.user.username }}
                     </h1>
-                    
+                    {% if request.user.is_guest %}
+                    <a href="{% url 'cms:password_change' %}">
+                        <button class="button is-small is-danger is-inverted is-outlined">
+                            <span class="icon is-small is-left"><i class="fas fa-user-edit"></i></span>
+                            <strong>正規ユーザになる</strong>
+                        </button>
+                    </a>
+
+                    {% else %}
                     <a href="{% url 'cms:user_update' request.user.pk %}">
                         <button class="button is-small is-info is-inverted is-outlined">
                             <span class="icon is-small is-left"><i class="fas fa-user-edit"></i></span>
@@ -28,7 +36,13 @@
                             <strong>アカウントを削除する</strong>
                         </button>
                     </a>
-                    
+                    <a href="{% url 'cms:password_change' %}">
+                        <button class="button is-small is-danger is-inverted is-outlined">
+                            <span class="icon is-small is-left"><i class="fas fa-user-edit"></i></span>
+                            <strong>パスワードを変更する</strong>
+                        </button>
+                    </a>
+                    {% endif %}
                 </div>
             </div>
         </div>

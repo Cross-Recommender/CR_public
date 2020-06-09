@@ -106,6 +106,7 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
 
     #guest判定に使う
     is_guest = models.BooleanField(default=False)
+    tmppass = models.TextField(default=None, null=True)
 
     ###過去に評価した事がある作品のidを格納
     work_evaluated = ArrayField(models.IntegerField(), size=100000,unique=False,null=True)
