@@ -26,6 +26,12 @@
                     <strong>データ入力はこちら</strong>
                 </button>
             </a>
+            {% else %}
+            <a href="/cms/login">
+                <button class="button is-info is-inverted is-outlined">
+                    <strong>Login</strong>
+                </button>
+            </a>
             {% endif %}
         </div>
         <!--
@@ -38,16 +44,42 @@
             </a>
         </div>
         -->
+        {% if user.is_authenticated %}
         <div class="container">
-            {% if user.is_authenticated %}
             <br>
             <a href="/mkdata/recommend">
                 <button class="button is-info is-inverted is-outlined">
                     <strong>おすすめ作品一覧</strong>
                 </button>
             </a>
-            {% endif %}
         </div>
+            {% if user.is_guest %}
+            <br>
+            <div class="container has-text-danger">
+            ゲストログイン中です。<a href="/cms/password_change" class="has-text-info">こちら</a>からパスワードを設定してください。現在ログアウト後の再ログインができない状態です。
+            </div>
+            {% endif %}
+        {% else %}
+        <div class="container">
+            <br>
+            <a href="/cms/guest">
+                <button class="button is-info is-inverted is-outlined">
+                    <strong>ゲストアカウント作成</strong>
+                </button>
+            </a>
+            <p>メールアドレス、パスワードの設定なしでご利用いただけます。</p>
+        </div>
+        <div class="container">
+            <br>
+            <a href="/cms/signup">
+                <button class="button is-success is-inverted is-outlined">
+                    <strong>Sign Up</strong>
+                </button>
+            </a>
+            <p>正規アカウントを作成する場合はこちら。</p>
+        </div>
+        {% endif %}
+        <!--
         <div class="container">
             {% if not user.is_authenticated %}
             <br>
@@ -58,6 +90,7 @@
             </a>
             {% endif %}
         </div>
+        -->
     </div>
 </section>
 {% endblock %}
@@ -101,6 +134,7 @@
                 <li>2020.06.06　version 0.2をリリース。レコメンドできる作品数が大幅に増加しました！</li>
                 <li>2020.06.08　version 0.3をリリース。レコメンドできる作品数がさらに増加し, 120作品に。さらに, レコメンド精度が大幅アップ！</li>
                 <li>2020.06.09　version 1.0をリリース。ついに邦画作品のレコメンド&データ入力が解禁！</li>
+                <li>2020.06.10　version 1.1をリリース。面倒なユーザー登録なく、ゲストとしてサービスが利用できるようになりました！</li>
             </ul>
         </div>
     </div>
