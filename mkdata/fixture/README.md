@@ -1,0 +1,1 @@
+All files in this directory has benn deleted.
